@@ -667,7 +667,7 @@ const COMMON_Q = {
 
 /* ══════════ 상태 ══════════ */
 const LV_ORDER=['담당','선임','책임','수석'];
-let S = { job:'', level:'', includeLower:false, checkedQ:{}, aiQ:null, aiQMeta:null, aiCtx:'', qNum:3, customQ:'', activeCand:null, resume:null, resumeQ:null, analysis:null, apiOpen:false, ratings:{}, notes:{}, grade:'' };
+let S = { job:'', level:'', includeLower:false, checkedQ:{}, aiQ:null, aiQMeta:null, aiCtx:'', qNum:3, customQ:'', activeCand:null, resume:null, resumeQ:null, analysis:null, ratings:{}, notes:{}, grade:'' };
 
 /* ══════════ 유틸 ══════════ */
 const $=id=>document.getElementById(id);
@@ -761,38 +761,10 @@ function compCard(c,badge,sec,i){
   <div class="df">${esc(c.def)}</div>${indHtml}
   <div style="margin-top:10px">${qs.map((x,j)=>qItemHtml(sec,i,j,x.q,x.f,c.name)).join('')}</div></div>`;
 }
-function apiPanelHtml(){
-  const mode=CFG.url?'프록시 서버 연결':'Claude 내장';
-  const dot=CFG.url?'🟢':'⚪';
-  return `<div class="card" style="border:1.5px solid var(--amber);background:#FDFBF5">
-    <details ${S.apiOpen?'open':''} ontoggle="S.apiOpen=this.open">
-      <summary style="cursor:pointer;font-weight:700;font-size:.95rem;list-style:none">⚙ AI 연결 설정 &nbsp;<span class="tag a">${dot} 현재: ${mode}</span> <span class="hint" style="font-weight:400">— AI 질문 생성이 실패하면 여기서 프록시를 설정하세요 (클릭해서 펼치기)</span></summary>
-      <div style="margin-top:14px;display:grid;gap:9px;max-width:620px">
-        <div><label class="fld">프록시 서버 URL <span style="font-weight:400">(인재경영팀에서 안내받은 주소 — 한 번 적용하면 이 브라우저에 저장됩니다)</span></label>
-        <input type="text" id="cfgUrl" placeholder="예: https://gb-interview.your-team.workers.dev" value="${esc(CFG.url)}"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn primary sm" onclick="saveCfg()">적용</button>
-          <button class="btn plain sm" onclick="resetCfg()">기본으로</button>
-          <button class="btn ghost sm" onclick="testCfg()" id="btnTestCfg">연결 테스트</button>
-          <span class="hint" id="cfgStat" style="align-self:center"></span>
-        </div>
-        <p class="hint">이 앱은 API 키를 다루지 않습니다. 키는 프록시 서버에만 보관되며, 사용자는 위 주소만 입력하면 됩니다.</p>
-      </div>
-    </details></div>`;
-}
-async function testCfg(){
-  const b=$('btnTestCfg'),st=$('cfgStat');
-  b.disabled=true;b.innerHTML='<span class="spin" style="border-color:var(--forest);border-top-color:transparent"></span>테스트 중…';st.textContent='';
-  try{
-    const t=await callClaude('연결 테스트입니다. "OK"라고만 답해 주세요.');
-    st.textContent='✅ 연결 성공 — AI 기능을 사용할 수 있습니다'+(t?'':'');
-  }catch(e){st.textContent='❌ 연결 실패: '+(e.message==='ENV'?'서버에 닿지 않습니다. 키/URL을 확인해 주세요.':e.message);}
-  b.disabled=false;b.textContent='연결 테스트';
-}
 function renderQuest(){
   const box=$('questBody');
   QREG={};
-  if(!S.job||!S.level){box.innerHTML=apiPanelHtml()+'<p class="hint" style="padding:30px 0;text-align:center">직무와 직급을 선택해 주세요.</p>';return;}
+  if(!S.job||!S.level){box.innerHTML='<p class="hint" style="padding:30px 0;text-align:center">직무와 직급을 선택해 주세요.</p>';return;}
   const jc=jobComps(S.job,S.level,S.includeLower);
   const rc=roleComps(S.level,S.includeLower);
   const jinfo=JOBS[S.job];
@@ -847,7 +819,6 @@ function renderQuest(){
     ${aiStatusHtml()}
   </div>
   </div></div>`;
-  h+=apiPanelHtml();
   if(S.resumeQ){
     const rq=S.resumeQ;
     h+=`<div class="comp" style="border-left:4px solid var(--amber)"><div class="hd"><span class="tag a">이력서</span><span class="nm">이력서 기반 질문</span></div>
@@ -870,20 +841,8 @@ function renderQuest(){
 }
 
 /* ══════════ AI 질문 생성 ══════════ */
-const ENV_MSG='AI 서버에 연결할 수 없습니다. "⚙ AI 연결 설정"에서 인재경영팀이 안내한 프록시 서버 URL을 입력한 뒤 다시 시도해 주세요.';
-let CFG={url:DEFAULT_PROXY};
-async function saveCfg(){
-  CFG.url=($('cfgUrl')?.value||'').trim();
-  try{const st=await store();if(CFG.url)await st.set('cfgurl',CFG.url);else await st.delete('cfgurl').catch(()=>{});}catch(e){}
-  renderQuest();toast(CFG.url?'프록시 연결을 적용했습니다 — 이 브라우저에 저장되어 다음에도 유지됩니다':'프록시 설정을 해제했습니다');
-}
-async function resetCfg(){
-  CFG.url=DEFAULT_PROXY;
-  try{const st=await store();await st.delete('cfgurl').catch(()=>{});}catch(e){}
-  renderQuest();toast(DEFAULT_PROXY?'배포 기본 프록시로 되돌렸습니다':'기본(Claude 내장) 연결로 되돌렸습니다');
-}
-/* 저장된 프록시 URL 자동 로드 */
-(async()=>{try{const st=await store();const g=await st.get('cfgurl');if(g&&g.value)CFG.url=g.value;}catch(e){}})();
+const ENV_MSG='AI 서버에 연결할 수 없습니다. 네트워크 상태를 확인한 뒤 다시 시도하고, 계속 실패하면 인재경영팀(관리자)에게 문의해 주세요.';
+const CFG={url:DEFAULT_PROXY};
 async function callClaude(content){
   const body=JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content}]});
   let endpoint='https://api.anthropic.com/v1/messages';
@@ -1349,12 +1308,13 @@ $('btnSave').onclick=async()=>{
     toast(PERSIST!=='session'?'보관함에 저장되었습니다'+(S.activeCand?' · 대상자에 평가표가 연결되었습니다':''):'세션에 임시 저장되었습니다 — 백업(JSON)으로 파일 보관을 권장합니다');}
   catch(e){console.error(e);toast('저장에 실패했습니다');}
 };
-$('btnClear').onclick=()=>{
-  ['fName','fDept','fReason','fInterviewer','fWriter','cJob','cOrg','cCo','cSW','cCEO'].forEach(i=>$(i).value='');
-  S.ratings={};S.notes={};S.grade='';S.checkedQ={};S.analysis=null;
+function resetEvalForm(){
+  ['fName','fDept','fReason','fInterviewer','fWriter','cJob','cOrg','cCo','cSW','cCEO'].forEach(i=>{const el=$(i);if(el)el.value='';});
+  S.ratings={};S.notes={};S.grade='';S.checkedQ={};S.analysis=null;S.customQ='';
   document.querySelectorAll('#gradeBar button').forEach(x=>x.classList.remove('on'));
-  renderEvalComps();toast('새 평가를 시작합니다');
-};
+  renderEvalComps();
+}
+$('btnClear').onclick=()=>{resetEvalForm();toast('새 평가를 시작합니다');};
 /* ── 저장소 래퍼: 영구 저장 불가 시 세션 임시 저장으로 대체 ── */
 const memStore={m:{},
  async get(k){if(!(k in this.m))throw new Error('not found');return{key:k,value:this.m[k]};},
@@ -1635,17 +1595,25 @@ async function renderCand(){
 async function startCand(k){
   try{
     const st=await store();const g=await st.get(k);const c=JSON.parse(g.value);
+    /* 완료된 대상자: 저장된 평가표를 열람 모드로 불러오기 */
+    if(c.status==='완료'&&c.evalKey){
+      S.activeCand=null;
+      await loadEval(c.evalKey);
+      return;
+    }
     S.activeCand=k;
+    /* 이전 지원자의 평가 기록 자동 초기화 (점수·메모·코멘트·판정·분석) */
+    resetEvalForm();
     /* 직무·직급 자동 적용 */
-    S.job=c.job;S.level=c.level;S.aiQ=null;S.aiQMeta=null;S.resumeQ=null;S.checkedQ={};S.customQ='';
+    S.job=c.job;S.level=c.level;S.aiQ=null;S.aiQMeta=null;S.resume=null;S.resumeQ=null;S.aiCtx='';
     selJob.value=c.job;
     document.querySelectorAll('#lvBtns button').forEach(x=>x.classList.toggle('on',x.dataset.lv===c.level));
     /* 평가표 기본정보 자동 입력 */
     $('fName').value=c.name;$('fDept').value=c.dept||'';$('fRole').value=c.job;$('fLevel').value=c.level;
-    if(c.time)$('fDate').value=c.time.slice(0,10);
+    $('fDate').value=c.time?c.time.slice(0,10):new Date().toISOString().slice(0,10);
     renderQuest();
     go('guide');
-    toast(c.name+'님 면접 준비 — '+c.job+' '+c.level+' 기준으로 자동 설정되었습니다. 가이드 확인 후 ③ 질문으로 이동하세요.');
+    toast(c.name+'님 면접 준비 — 이전 평가 기록은 초기화되었고, '+c.job+' '+c.level+' 기준으로 자동 설정되었습니다.');
   }catch(e){toast('대상자 정보를 불러오지 못했습니다');}
 }
 async function completeCand(k){
@@ -1659,7 +1627,8 @@ async function completeCand(k){
     c.status='완료';c.evalKey=evalKey;
     await st.set(k,JSON.stringify(c));
     S.activeCand=null;
-    toast(c.name+'님 면접 완료 — 평가표가 보관함에 저장되고 대상자에 연결되었습니다');
+    resetEvalForm();
+    toast(c.name+'님 면접 완료 — 평가표가 저장·연결되었고, 다음 면접을 위해 평가 화면이 초기화되었습니다');
     renderCand();go('cand');
   }catch(e){console.error(e);toast('완료 처리에 실패했습니다');}
 }
