@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GB 채용 면접 에이전트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F2B33;         /* 본문 잉크 */
+  --paper:#F6F7F5;       /* 배경 */
+  --card:#FFFFFF;
+  --forest:#155E4E;      /* 주 색상: 서가 그린 */
+  --forest-dk:#0E4237;
+  --forest-lt:#E4EFEA;
+  --amber:#C8951F;       /* 평가/강조 */
+  --line:#D9DED9;
+  --muted:#6B7671;
+  --red:#A83A2E;
+  --radius:10px;
+  font-size:15px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+.serif{font-family:'Noto Serif KR','Noto Sans KR',serif}
+
+/* ── 레이아웃: 좌측 목차 레일 ── */
+.shell{display:flex;min-height:100vh}
+.rail{width:220px;background:var(--forest-dk);color:#EDF3F0;flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.rail-brand{padding:26px 20px 18px;border-bottom:1px solid rgba(255,255,255,.14)}
+.rail-brand h1{font-family:'Noto Serif KR',serif;font-weight:900;font-size:1.25rem;letter-spacing:-.02em;line-height:1.3}
+.rail-brand p{font-size:.72rem;opacity:.65;margin-top:4px;letter-spacing:.08em}
+.rail-steps{flex:1;padding:14px 0}
+.rail-step{display:flex;align-items:center;gap:12px;width:100%;padding:13px 20px;background:none;border:none;color:inherit;font:inherit;font-size:.92rem;cursor:pointer;text-align:left;opacity:.62;border-left:3px solid transparent;transition:all .15s}
+.rail-step:hover{opacity:.9}
+.rail-step.on{opacity:1;background:rgba(255,255,255,.07);border-left-color:var(--amber);font-weight:700}
+.rail-step .num{font-family:'Noto Serif KR',serif;font-weight:900;font-size:1.05rem;width:20px;color:var(--amber)}
+.rail-foot{padding:16px 20px;font-size:.7rem;opacity:.5;line-height:1.5}
+main{flex:1;padding:34px 44px 90px;max-width:1060px}
+
+/* ── 공통 요소 ── */
+h2.page-title{font-family:'Noto Serif KR',serif;font-weight:900;font-size:1.7rem;letter-spacing:-.02em;margin-bottom:6px}
+.page-sub{color:var(--muted);font-size:.92rem;margin-bottom:26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px}
+.card h3{font-size:1.02rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:.03em}
+.tag.g{background:var(--forest-lt);color:var(--forest)}
+.tag.a{background:#F6EDD8;color:#8A6510}
+.tag.r{background:#F7E3E0;color:var(--red)}
+.tag.n{background:#E8EAEE;color:#4A5361}
+button.btn{font:inherit;font-weight:700;border:none;border-radius:8px;padding:10px 18px;cursor:pointer;transition:filter .12s}
+button.btn:hover{filter:brightness(1.08)}
+.btn.primary{background:var(--forest);color:#fff}
+.btn.ghost{background:#fff;border:1.5px solid var(--forest);color:var(--forest)}
+.btn.amber{background:var(--amber);color:#fff}
+.btn.plain{background:#EDEFEC;color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:6px 12px;font-size:.82rem}
+select,input[type=text],input[type=date],textarea{font:inherit;border:1.5px solid var(--line);border-radius:8px;padding:9px 12px;background:#fff;color:var(--ink);width:100%}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--forest);outline-offset:1px;border-color:var(--forest)}
+textarea{resize:vertical;min-height:76px;line-height:1.55}
+label.fld{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.hint{font-size:.8rem;color:var(--muted)}
+details.fold{border-top:1px dashed var(--line);margin-top:8px;padding-top:8px}
+details.fold summary{cursor:pointer;font-size:.82rem;color:var(--forest);font-weight:700;list-style:none}
+details.fold summary::before{content:'▸ ';font-size:.75rem}
+details.fold[open] summary::before{content:'▾ '}
+details.fold ul{margin:8px 0 2px 18px;font-size:.86rem;color:#3C4640}
+details.fold li{margin-bottom:3px}
+
+/* ── 가이드 페이지 ── */
+.flow{display:flex;gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.flow>div{flex:1;padding:16px 18px;background:#fff}
+.flow>div+div{border-left:1px solid var(--line)}
+.flow b{display:block;font-size:.85rem;color:var(--forest)}
+.flow .t{font-family:'Noto Serif KR',serif;font-weight:900;font-size:1.4rem;margin:2px 0}
+.flow small{color:var(--muted);font-size:.78rem;line-height:1.45;display:block}
+.script{background:#FBFBF9;border:1px solid var(--line);border-left:4px solid var(--forest);border-radius:6px;padding:14px 16px;font-size:.9rem;white-space:pre-line;line-height:1.7}
+ul.dot{margin-left:19px;font-size:.9rem}
+ul.dot li{margin-bottom:6px}
+.yesno{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.yesno .col{border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;background:#fff}
+.yesno .col.no{border-color:#E4C7C3;background:#FDF8F7}
+.yesno h4{font-size:.95rem;margin-bottom:10px}
+.lawbox{background:#FDF6E9;border:1px solid #EAD9AE;border-radius:var(--radius);padding:16px 18px;font-size:.88rem}
+
+/* ── 역량/질문 페이지 ── */
+.selbar{display:grid;grid-template-columns:1.3fr 1fr auto;gap:14px;align-items:end;margin-bottom:20px}
+.lvbtns{display:flex;gap:6px}
+.lvbtns button{flex:1;font:inherit;font-weight:700;padding:9px 0;border:1.5px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;color:var(--muted)}
+.lvbtns button.on{background:var(--forest);border-color:var(--forest);color:#fff}
+.comp{border:1px solid var(--line);border-radius:var(--radius);background:#fff;padding:15px 18px;margin-bottom:10px}
+.comp .hd{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.comp .nm{font-weight:700;font-size:.98rem}
+.comp .df{font-size:.86rem;color:#47524C;margin-top:5px}
+.qitem{display:flex;gap:10px;align-items:flex-start;padding:9px 4px;border-bottom:1px dashed var(--line)}
+.qitem:last-child{border-bottom:none}
+.qitem input[type=checkbox]{width:17px;height:17px;margin-top:4px;accent-color:var(--forest);flex-shrink:0;cursor:pointer}
+.qitem .qt{font-size:.92rem}
+.qitem .ft{font-size:.8rem;color:var(--muted);margin-top:2px}
+.qitem .ft::before{content:'↳ 꼬리질문 · '}
+.aibox{border:1.5px dashed var(--forest);background:var(--forest-lt);border-radius:var(--radius);padding:18px 20px;margin:18px 0}
+.spin{display:inline-block;width:15px;height:15px;border:2.5px solid #fff;border-top-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-3px;margin-right:7px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ── 평가표 ── */
+.rate{display:flex;gap:5px}
+.rate button{width:34px;height:34px;border:1.5px solid var(--line);background:#fff;border-radius:7px;font:inherit;font-weight:700;cursor:pointer;color:var(--muted)}
+.rate button.on{background:var(--amber);border-color:var(--amber);color:#fff}
+.rate button.na{border-color:#DCC4C0;color:var(--red)}
+.rate button.on-na{background:var(--red);border-color:var(--red);color:#fff}
+.evrow{display:grid;grid-template-columns:1fr 170px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
+.gradebar{display:flex;gap:8px;flex-wrap:wrap}
+.gradebar button{font:inherit;font-weight:700;font-size:.88rem;padding:10px 14px;border:1.5px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;color:var(--muted);flex:1;min-width:150px;line-height:1.45}
+.gradebar button.on{background:var(--forest);border-color:var(--forest);color:#fff}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 22px;border-radius:30px;font-size:.88rem;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+.toast.show{opacity:1}
+
+/* ── 보관함 ── */
+.saved{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;margin-bottom:10px}
+.saved b{font-size:.95rem}
+.saved .meta{font-size:.8rem;color:var(--muted)}
+
+/* ── 인쇄 양식 ── */
+#printArea{display:none}
+@media print{
+  body{background:#fff}
+  .shell,.toast{display:none!important}
+  #printArea{display:block;position:static;width:100%;background:#fff;color:#000;font-size:10.5pt;padding:0}
+  @page{size:A4;margin:12mm}
+  .p-title{font-family:'Noto Serif KR',serif;text-align:center;font-weight:900;font-size:15pt;border:2px solid #000;background:#E8E4D8;padding:6px 30px;display:table;margin:0 auto 18px}
+  table.p{width:100%;border-collapse:collapse;margin-bottom:14px}
+  table.p th,table.p td{border:1px solid #444;padding:6px 8px;vertical-align:top;text-align:left}
+  table.p th{background:#DDE1E6;font-weight:700;text-align:center;white-space:nowrap}
+  .p-sec{font-weight:900;margin:14px 0 6px;font-size:11.5pt}
+  .p-pre{white-space:pre-wrap;min-height:34px}
+  .p-grade{border:1px solid #444;background:#E8F1F5;padding:10px;text-align:center;font-weight:700;letter-spacing:.02em}
+  .pagebreak{page-break-before:always}
+}
+@media (max-width:860px){
+  .shell{flex-direction:column}
+  .rail{width:100%;height:auto;position:static;flex-direction:column}
+  .rail-steps{display:flex;padding:0;overflow-x:auto}
+  .rail-step{border-left:none;border-bottom:3px solid transparent;white-space:nowrap}
+  .rail-step.on{border-bottom-color:var(--amber)}
+  .rail-foot{display:none}
+  main{padding:22px 16px 70px}
+  .selbar,.grid2,.grid3,.yesno{grid-template-columns:1fr}
+  .flow{flex-direction:column}
+  .flow>div+div{border-left:none;border-top:1px solid var(--line)}
+  .evrow{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="rail">
+  <div class="rail-brand">
+    <h1>GB 채용 면접<br>에이전트</h1>
+    <p>INTERVIEW ASSISTANT · 2026</p>
+  </div>
+  <div class="rail-steps">
+    <button class="rail-step on" data-page="cand"><span class="num">一</span>면접 대상자</button>
+    <button class="rail-step" data-page="guide"><span class="num">二</span>면접 가이드</button>
+    <button class="rail-step" data-page="quest"><span class="num">三</span>역량 · 질문 생성</button>
+    <button class="rail-step" data-page="eval"><span class="num">四</span>면접 평가표</button>
+    <button class="rail-step" data-page="box"><span class="num">五</span>평가 보관함</button>
+  </div>
+  <div class="rail-foot">GB 역량사전 v2 · 직무역량사전 v3 기반<br>채용절차법 제4조 준수</div>
+</nav>
+
+<main>
+<!-- ═══════════ ⓪ 면접 대상자 ═══════════ -->
+<section id="page-cand">
+  <h2 class="page-title">면접 대상자</h2>
+  <p class="page-sub">면접 볼 지원자를 등록해 두세요. <b>이름(또는 ▶ 면접 시작)을 클릭하면 직무·직급이 자동 적용</b>되어 가이드 → 질문 생성 순서로 바로 진행됩니다.</p>
+
+  <div class="card">
+    <h3><span class="tag g">등록</span>대상자 등록</h3>
+    <div class="grid3">
+      <div><label class="fld">면접 대상자 성명 *</label><input type="text" id="cdName" placeholder="홍길동"></div>
+      <div><label class="fld">채용부서/채용팀</label><input type="text" id="cdDept" placeholder="예: 인재경영팀"></div>
+      <div><label class="fld">직무 *</label><select id="cdJob"></select></div>
+      <div><label class="fld">직급 *</label><select id="cdLevel"><option value="">선택…</option><option>담당</option><option>선임</option><option>책임</option><option>수석</option></select></div>
+      <div><label class="fld">면접 시간</label><input type="datetime-local" id="cdTime"></div>
+      <div><label class="fld">면접 장소</label><input type="text" id="cdPlace" placeholder="예: 본사 3층 회의실 A"></div>
+    </div>
+    <div style="margin-top:14px"><button class="btn primary" id="btnAddCand">+ 대상자 등록</button></div>
+  </div>
+
+  <div id="candList"><p class="hint">등록된 면접 대상자가 없습니다.</p></div>
+</section>
+
+<!-- ═══════════ ① 면접 가이드 ═══════════ -->
+<section id="page-guide" hidden>
+  <h2 class="page-title">채용 면접 가이드</h2>
+  <p class="page-sub">지원자는 미래의 우리 가족 혹은 고객이 될 수 있습니다. 성심껏 면접에 임해 주세요. · 총 소요시간 40분 내외</p>
+
+  <div class="flow">
+    <div><b>오프닝</b><div class="t serif">3분</div><small>편안한 분위기 조성, 면접관 소개, 진행 안내</small></div>
+    <div><b>보유역량 · 직무역량</b><div class="t serif">약 30분~40분</div><small>직무 역량은 현업 중심으로, 관계·조직 적합성은 리더/인사담당자가 평가</small></div>
+    <div><b>클로징</b><div class="t serif">3분</div><small>자유 발언 기회 제공, 감사 인사, 결과 안내</small></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag g">준비</span>면접 전 체크리스트</h3>
+    <ul class="dot">
+      <li>면접 복장은 자율이며, <b>단정한 복장</b>으로 참석합니다.</li>
+      <li>면접 전 <b>지원자의 지원서를 반드시 검토</b>한 후 면접에 임해 주세요.</li>
+      <li>정시 진행을 위해 <b>5분 전 면접 장소에 착석</b>해 주세요.</li>
+      <li>노트북으로 면접 과정을 기록할 수 있음을 지원자에게 안내하고 사전 양해를 구해 주세요.</li>
+    </ul>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="tag g">오프닝</span>인사말 예시</h3>
+      <div class="script">안녕하세요? ㅇㅇㅇ님, 만나서 반갑습니다. 먼저 그레이트북스에 지원해 주셔서 감사합니다.
+면접관부터 소개를 드리겠습니다. 저는 그레이트북스에서 ㅇㅇ업무를 담당하고 있는 ㅇㅇㅇ입니다.
+오늘 면접은 짧게는 40분, 길게는 50분 정도 진행될 예정이고, 질문에 대해서 편안한 마음으로 ㅇㅇㅇ님의 생각을 그대로 말씀해 주시면 감사하겠습니다.
+궁금한 내용은 편하게 질문해 주셔도 되고, 마지막에 별도 시간을 드릴 예정입니다.
+네, 그럼 본격적으로 면접을 시작하겠습니다. 자기소개 먼저 부탁드리겠습니다.</div>
+      <details class="fold"><summary>오프닝 유의사항</summary><ul>
+        <li>반말은 지양하고, 지원자의 이름을 'ㅇㅇㅇ님'으로 정확히 불러 주세요.</li>
+        <li>교통·날씨·식사 등 가벼운 질문으로 긴장을 풀어 주세요.</li>
+        <li>면접 소요시간과 구조를 간략히 안내해 주세요.</li>
+        <li>면접 말미에 자유 발언 기회가 있음을 안내해 주세요.</li>
+        <li>지원자가 시작할 준비가 되었는지 확인 후 시작해 주세요.</li>
+      </ul></details>
+    </div>
+    <div class="card">
+      <h3><span class="tag g">클로징</span>마무리 예시</h3>
+      <div class="script">ㅇㅇㅇ님, 마지막으로 하고 싶은 이야기나 궁금한 점이 있으면 말씀해 주세요.
+귀한 시간 함께해 주시고 성실히 답변해 주셔서 감사드립니다.
+면접 결과는 내부적으로 조율하여 가능한 한 빠르게 안내드리도록 하겠습니다.
+편안하게 돌아가시기를 바라며, 이것으로 면접을 마치겠습니다. 수고하셨습니다.</div>
+      <details class="fold"><summary>클로징 유의사항 &amp; 평가표 제출</summary><ul>
+        <li>불편한 질문이 있었다면 양해를 구하고, 감정이 상한 상태로 퇴실하지 않도록 배려해 주세요.</li>
+        <li>궁금한 점·하고 싶은 말이 있는지 확인 후 마무리합니다.</li>
+        <li>면접 완료 후 <b>평가표를 작성하여 인재경영팀에 제출</b>합니다. → 이 앱의 <b>③ 면접 평가표</b>에서 작성·PDF 저장이 가능합니다.</li>
+      </ul></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag r">주의</span>면접 진행 중 유의사항 · 채용절차법</h3>
+    <div class="lawbox" style="margin-bottom:12px">
+      <b>「채용절차의 공정화에 관한 법률」 제4조 3항</b> — 직무 수행과 무관한 개인정보(용모·키·체중 등 신체 조건, 출신지역, 혼인 여부, 재산, 직계존비속·형제자매의 학력·직업·재산)를 요구·수집하는 것은 위법이며 <b>위반 시 500만원 과태료</b>가 부과됩니다.
+    </div>
+    <ul class="dot">
+      <li>개인·가족사, 성별, 나이, 단점·치부를 부각해 수치심을 주는 질문은 불법입니다. 정치 성향, 성차별적 질문도 금지입니다.</li>
+      <li>면접 중 부정적 피드백(표정·눈빛·태도 포함)을 주지 않도록 유의해 주세요. 지원자에게 그레이트북스에 대한 좋은 기억을 남겨 주세요.</li>
+      <li>면접의 목적은 역량 파악입니다. <b>훈계는 지양</b>해 주세요.</li>
+    </ul>
+  </div>
+
+  <div class="yesno">
+    <div class="col">
+      <h4>✅ 이런 질문은 YES</h4>
+      <ul class="dot" style="font-size:.87rem">
+        <li>본인이 회사를 선택할 때 중요하게 생각하는 3가지는 무엇입니까?</li>
+        <li>최근 성공/실패 경험과 그를 통해 배운 점은 무엇입니까?</li>
+        <li>업무와 관련하여 상사와 의견이 다를 경우 어떻게 대응하시겠습니까?</li>
+        <li>가장 의미 있었던 프로젝트나 경험에 대해 말씀해 주세요.</li>
+        <li>가장 최근 자기계발을 위해 노력한 경험이 있다면 무엇입니까?</li>
+        <li>입사하게 된다면 어떻게 일을 하고 싶으신가요?</li>
+      </ul>
+    </div>
+    <div class="col no">
+      <h4>🚫 이런 질문은 NO</h4>
+      <ul class="dot" style="font-size:.87rem">
+        <li>타사와 동시 합격한다면 어느 회사에 입사하실 건가요?</li>
+        <li>야근이 많은 직무인데 괜찮은가요?</li>
+        <li>ㅇㅇ회사는 업무를 어떻게 하던가요?</li>
+        <li>ㅇㅇ학교 나오셨나요? 좋은 학교죠?</li>
+        <li>부모님은 무엇을 하시나요? / 가족 관계가 어떻게 되세요?</li>
+        <li>스펙이 다른 분들에 비해 안 좋네요.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:22px;text-align:right">
+    <button class="btn primary" onclick="go('quest')">다음 · 역량과 질문 준비하기 →</button>
+  </div>
+</section>
+
+<!-- ═══════════ ② 역량 · 질문 ═══════════ -->
+<section id="page-quest" hidden>
+  <h2 class="page-title">역량 · 면접 질문 생성</h2>
+  <p class="page-sub">채용 직무와 직급을 선택하면 전사공통 → 역할 → 직무 역량과 검증 질문을 자동 구성합니다. 사용할 질문에 체크하면 평가표에 연동됩니다.</p>
+
+  <div class="card" style="display:flex;align-items:center;gap:14px;padding:11px 18px;flex-wrap:wrap">
+    <b style="font-size:.9rem">⏱ 면접 타이머</b>
+    <span id="timerDisp" class="serif" style="font-weight:900;font-size:1.25rem;min-width:74px">00:00</span>
+    <button class="btn ghost sm" id="btnTimer">시작</button>
+    <button class="btn plain sm" id="btnTimerReset">리셋</button>
+    <span class="hint">권장 40분 · 35분부터 주황, 45분 초과 시 빨강으로 표시됩니다</span>
+  </div>
+
+  <div class="selbar">
+    <div><label class="fld">채용 직무</label><select id="selJob"></select></div>
+    <div><label class="fld">채용 직급</label>
+      <div class="lvbtns" id="lvBtns">
+        <button data-lv="담당">담당</button><button data-lv="선임">선임</button><button data-lv="책임">책임</button><button data-lv="수석">수석</button>
+      </div>
+    </div>
+    <div><label class="fld">&nbsp;</label>
+      <div style="display:flex;align-items:center;gap:12px">
+        <label style="display:flex;align-items:center;gap:7px;font-size:.85rem;cursor:pointer;padding:9px 0;white-space:nowrap">
+          <input type="checkbox" id="chkLower" style="width:16px;height:16px;accent-color:var(--forest)"> 하위 직급 역량 포함
+        </label>
+        <button class="btn plain sm" id="btnResetQuest" title="선택·질문·체크를 모두 초기화합니다">↺ 초기화</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="questBody"><p class="hint" style="padding:30px 0;text-align:center">직무와 직급을 선택해 주세요.</p></div>
+</section>
+
+<!-- ═══════════ ③ 평가표 ═══════════ -->
+<section id="page-eval" hidden>
+  <h2 class="page-title">실무진 면접 요약표</h2>
+  <p class="page-sub">면접 종료 후 작성하여 인재경영팀에 제출합니다. 작성 후 인쇄 버튼으로 PDF 저장이 가능합니다.</p>
+
+  <div id="candBanner"></div>
+
+  <div class="card">
+    <h3><span class="tag n">기본</span>지원자 · 채용 정보</h3>
+    <div class="grid3">
+      <div><label class="fld">지원자 성명</label><input type="text" id="fName" placeholder="홍길동"></div>
+      <div><label class="fld">채용부서</label><input type="text" id="fDept" placeholder="예: 인재경영팀"></div>
+      <div><label class="fld">담당업무</label><input type="text" id="fRole" placeholder="예: 인사 (직무 선택 시 자동)"></div>
+      <div><label class="fld">고용형태</label><select id="fType"><option>정규직</option><option>계약직</option><option>인턴</option><option>파견/도급</option><option>프리랜서</option></select></div>
+      <div><label class="fld">면접 일정</label><input type="date" id="fDate"></div>
+      <div><label class="fld">채용 직급</label><input type="text" id="fLevel" readonly placeholder="② 단계에서 선택"></div>
+      <div style="grid-column:1/-1"><label class="fld">채용사유</label><input type="text" id="fReason" placeholder="예: 결원 충원 / 신규 사업 확대에 따른 증원"></div>
+      <div><label class="fld">면접자 (실무진)</label><input type="text" id="fInterviewer" placeholder="예: 김책임, 이수석"></div>
+      <div><label class="fld">면접 요약표 작성</label><input type="text" id="fWriter" placeholder="작성자 성명"></div>
+    </div>
+  </div>
+
+  <div class="card" id="usedQCard" hidden></div>
+
+  <div class="card">
+    <h3><span class="tag a">평가</span>역량 평가</h3>
+    <details class="fold" style="border:none;margin:0 0 12px;padding:0"><summary>점수 기준 보기 (모든 면접관이 같은 척도로 평가해 주세요)</summary>
+      <ul style="margin:8px 0 4px 18px;font-size:.85rem;color:#3C4640;line-height:1.7">
+        <li><b>5 탁월</b> — 행동지표 수준을 넘어서는 구체적 성공 사례를 여러 개 제시함</li>
+        <li><b>4 우수</b> — 행동지표에 부합하는 구체적 사례(상황–행동–결과)를 제시함</li>
+        <li><b>3 보통</b> — 관련 경험은 있으나 구체성이나 본인 주도성이 일부 부족함</li>
+        <li><b>2 미흡</b> — 경험이 피상적이거나 답변이 타인 주도·일반론에 그침</li>
+        <li><b>1 부족</b> — 관련 경험과 이해가 확인되지 않음</li>
+        <li><b>0 경험없음</b> (직무 역량만) — 해당 경험 자체가 없음. 사유·대체 경험을 메모에 기재</li>
+      </ul></details>
+    <div id="evalComps"><p class="hint">② 단계에서 직무·직급을 선택하면 평가 대상 역량이 자동으로 구성됩니다.</p></div>
+  </div>
+
+  <div class="card" id="scoreCard" hidden></div>
+
+  <div class="card">
+    <h3><span class="tag g">코멘트</span>면접 평가 코멘트</h3>
+    <div style="display:grid;gap:14px">
+      <div><label class="fld">업무(직무) 적합성 — 채용 포지션에 맞는 직무역량 보유 여부 / 필요한 업무 스킬 보유 여부</label><textarea id="cJob"></textarea></div>
+      <div><label class="fld">조직 적합성 — 조직 내 팀원, 협업 부서, 업무관련자와 문제없이 업무 수행이 가능한 인재인지</label><textarea id="cOrg"></textarea></div>
+      <div><label class="fld">회사 적합성 — 핵심가치 부합 여부 (창의적 사고 / 소통과 협업 / 고객중심 / 긍정과 열정)</label><textarea id="cCo"></textarea></div>
+      <div><label class="fld">면접 대상자의 장점과 단점</label><textarea id="cSW"></textarea></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn ghost sm" id="btnAIComment">🪄 AI 코멘트 초안 생성 (평가 점수·메모 기반)</button>
+      <span class="hint" id="aiCommentStat"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag n">인계</span>대표이사 면접 시 고려 · 평가 요청사항</h3>
+    <textarea id="cCEO" placeholder="예: 실무 역량은 충분히 검증됨. 장기 근속 의지와 리더십 잠재력 확인 요청."></textarea>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag a">종합</span>종합 판정</h3>
+    <div class="gradebar" id="gradeBar">
+      <button data-g="S">S. 꼭 채용하고 싶다</button>
+      <button data-g="A">A. 보통 이상이다</button>
+      <button data-g="B">B. 평범하다</button>
+      <button data-g="C">C. 지원팀에는<br>부적격자이다</button>
+      <button data-g="D">D. 절대 채용하고<br>싶지 않다</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag g">분석</span>면접 후 지원자 종합 분석 (AI)</h3>
+    <p class="hint" style="margin-bottom:12px">역량 점수·메모·코멘트를 근거로 강점, 리스크, 2차(대표이사) 면접 검증 포인트, 온보딩 제안을 정리합니다. AI 참고 자료이며 최종 판단은 면접관의 몫입니다.</p>
+    <button class="btn primary" id="btnAnalyze">지원자 분석 리포트 생성</button>
+    <span class="hint" id="anStat" style="margin-left:8px"></span>
+    <div id="analysisBody" style="margin-top:14px"></div>
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+    <button class="btn primary" id="btnPrint">🖨 인쇄 · PDF 저장</button>
+    <button class="btn amber" id="btnSave">💾 보관함에 저장</button>
+    <button class="btn plain" id="btnClear">새 평가 시작</button>
+  </div>
+</section>
+
+<!-- ═══════════ ④ 보관함 ═══════════ -->
+<section id="page-box" hidden>
+  <h2 class="page-title">평가 보관함 <span class="tag r" style="vertical-align:middle">담당자 전용</span></h2>
+  <p class="page-sub">저장된 면접 평가를 불러오거나 삭제할 수 있습니다. 비밀번호를 입력해야 접근할 수 있습니다.</p>
+  <div id="boxGate"></div>
+  <div id="boxList" hidden></div>
+</section>
+</main>
+</div>
+
+<div id="printArea"></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ══════════ 배포 설정 ══════════ */
+/* Netlify 배포 시 '/api/claude'(동일 서버의 프록시 함수)가 자동 사용됩니다.
+   별도 프록시를 쓰려면 해당 URL로 변경하세요.                                            */
+const DEFAULT_PROXY='/api/claude';
+
+/* ══════════ 데이터 ══════════ */
+const JOBS = {"개발":{"slogan":"아이의 책육아 성장을 지원하는 남다른 콘텐츠를 만든다","comps":[{"level":"수석(리더급)","name":"중장기 포트폴리오 수립","def":"유아동 시장 트렌드와 고객 이해를 바탕으로 신규 아이템을 발굴하고, 중기 제품 포트폴리오를 설계하여 경쟁력 있는 제품 라인업을 구축하는 역량","ind":["유아동 시장 트렌드와 고객 니즈를 분석하여 신규 아이템 발굴 기회를 도출할 수 있다.","발굴된 아이템의 시장성·경쟁력·수익성을 검토하여 개발 여부를 판단할 수 있다.","중기 제품 포트폴리오를 설계하고 제품 라인업의 균형과 완성도를 높일 수 있다.","제품별 개발 우선순위를 설정하고 중기 개발 로드맵을 수립할 수 있다.","로드맵 실행 과정을 모니터링하고 시장 변화에 따라 유연하게 조정할 수 있다.","기존 제품 라인업과의 차별성과 보완성을 검토하여 포트폴리오 완성도를 높일 수 있다."]},{"level":"수석(리더급)","name":"제품 기획","def":"신규 아이템을 발굴하고, 선정된 아이템을 차별화된 콘셉트와 구성으로 기획·구현하는 역량","ind":["유아동 시장과 고객 니즈를 분석하여 신규 아이템 발굴 기회를 도출할 수 있다.","발굴된 아이템의 타깃 고객·시장성·경쟁력을 검토하여 개발 방향을 설정할 수 있다.","선정된 아이템을 차별화된 콘셉트와 구성으로 기획하고 제품화 방안을 구체화할 수 있다.","제품 기획안을 작성하고 경영진 및 유관부서에 명확하게 제시할 수 있다.","기획 단계에서 편집·디자인·마케팅 등 유관부서와 협업하여 제품 완성도를 높일 수 있다.","출시 후 제품 성과와 고객 반응을 분석하고 차기 기획에 반영할 수 있다."]},{"level":"수석(리더급)","name":"개발 PM","def":"개발에 필요한 인력과 일정을 계획하고 그에 따른 저자와 외주자 구축, 개발 비용과 산출물의 품질을 검수·관리하는 역량. 개발 과정 내 프로젝트 참여자와 부단히 소통하며 리드하는 역량 포함.","ind":["제품 개발에 필요한 인력과 예산을 계획하고 효율적으로 배분할 수 있다.","전체 편집 일정을 수립하고 단계별 마일스톤을 설정하여 진행 상황을 관리할 수 있다.","저자·외주자별 진행 상황을 파악하고 납기 지연 리스크를 선제적으로 관리할 수 있다.","개발 비용을 예산 범위 내에서 관리하고 비용 초과 시 원인을 분석하여 조정할 수 있다.","산출물의 품질을 기획 의도와 편집 기준에 따라 검수하고 최종 완성도를 확인할 수 있다.","개발 과정에서 발생하는 이슈를 파악하고 우선순위에 따라 신속하게 해결할 수 있다."]},{"level":"수석(리더급)","name":"제품 구성 요소 기획","def":"전집의 구성 요소와 콘텐츠를 기획하고 권별 주제와 권목록을 완성도 있게 높이는 역량","ind":["출시될 제품의 전집 구성 요소(권수·주제·콘텐츠 유형 등)를 기획하고 확정할 수 있다.","전집 내 권별 주제와 콘텐츠 구성의 연계성을 검토하여 일관된 완성도를 유지할 수 있다.","타깃 연령과 고객 니즈를 반영하여 각 권의 주제와 콘텐츠 방향을 설정할 수 있다.","중기 제품 포트폴리오 관점에서 기존 제품 라인업과의 차별성과 보완성을 검토할 수 있다.","제품 구성 요소 기획안을 팀 내외에 명확하게 제시하고 피드백을 반영하여 완성도를 높일 수 있다.","제품 구성 요소 변경 시 영향도를 파악하고 관련 부서에 공유하여 조율할 수 있다."]},{"level":"책임","name":"개발 콘셉트 설정","def":"확정 원고를 출판하기 위하여 고객을 타깃으로 한 장르 특성과 핵심 콘셉트를 정하고, 해당 제품의 편집 방향을 수립하는 역량","ind":["타깃 고객(연령·성향 등)을 분석하여 제품의 핵심 콘셉트와 장르 방향을 설정할 수 있다.","확정 원고의 특성을 파악하고 이를 반영한 편집 방향과 표현 방식을 결정할 수 있다.","콘셉트에 부합하는 제품의 전반적인 톤앤매너(디자인·문체·구성 등)를 설정하고 팀 내에 공유할 수 있다.","유사 경쟁 제품과의 차별화 포인트를 도출하여 콘셉트에 반영할 수 있다.","설정된 콘셉트가 전집 전체에 일관되게 적용될 수 있도록 편집 기준을 수립하고 관리할 수 있다.","콘셉트 설정 과정에서 유관부서(마케팅·영업 등)의 의견을 수렴하고 최종 방향을 확정할 수 있다."]},{"level":"책임","name":"원고 기획 및 개발","def":"기획 방향에 맞는 원고 기획 및 수정 방향을 제시하고, 창의적인 아이디어를 제안하고 완성도 있는 원고를 산출하는 역량","ind":["제품 컨셉을 이해하고 이를 해당권의 주제를 통해 구현하는 과정을 알고 있다.","원고의 내용을 어떻게 구성할 것인가를 정리할 수 있다.(원고 구성안을 작성할 수 있다)","집필된 원고를 검토하여 기획의도에 맞는지 평가하고 필요하면 필자에게 수정해야 할 요청을 정확하게 전달할 수 있다.","권별 주제와 콘텐츠 구성의 연계성을 검토하여 전집 내 권별 균형을 확인할 수 있다.","원고 검토 결과를 바탕으로 수정 방향과 우선순위를 정리하여 팀 내에 공유할 수 있다.","유사 출판물과 비교하여 원고의 차별성과 완성도를 평가할 수 있다."]},{"level":"책임","name":"부가 콘텐츠 기획, 개발","def":"제품 구성에 포함되는 음원·영상 등의 콘텐츠를 기획·개발하고, 공정에 따라 세이펜·음원·영상 업체 등에 발주하며 제작 과정을 감독하고 최종 결과물을 검수하는 역량","ind":["제품 콘셉트에 맞는 음원·영상 등 부속 콘텐츠의 방향과 구성을 기획할 수 있다.","부속 콘텐츠 제작에 적합한 업체(세이펜·음원·영상 등)를 선정하고 발주할 수 있다.","제작 공정별 진행 상황을 모니터링하고 일정 내 완료될 수 있도록 관리할 수 있다.","제작 중간 결과물을 검토하고 기획 의도에 맞지 않는 부분에 대해 수정 방향을 제시할 수 있다.","최종 결과물을 기획 의도·품질 기준에 따라 검수하고 수정·보완 사항을 도출할 수 있다.","부속 콘텐츠 제작 비용을 관리하고 예산 범위 내에서 품질을 최적화할 수 있다."]},{"level":"책임","name":"제작공정 관리","def":"제작 관련 내용을 협의하여 제작업체에 발주하고, 제작 진행을 파악하여 최종 생산된 제품을 검수하는 역량","ind":["제품 기획에 따라 제작 사양을 확정하고 제작팀에 명확하게 전달할 수 있다.","제작팀과 제작 일정을 협의하고 공정별 진행 상황을 주기적으로 확인할 수 있다.","제작 과정에서 발생하는 품질 이슈를 파악하고 제작팀과 협의하여 신속하게 해결할 수 있다.","제작 일정 변경 시 영향도를 파악하고 유관부서에 공유하여 대응 방안을 마련할 수 있다.","중간 결과물을 검토하여 기획 의도에 맞지 않는 부분을 제작팀에 피드백할 수 있다.","최종 생산된 제품을 기획 의도·품질 기준에 따라 검수하고 수정·보완 사항을 도출할 수 있다."]},{"level":"책임","name":"외서 발굴 및 저작권 관리","def":"경쟁력 있는 외서를 발굴하고 국내외 저작권 관련 법규를 파악하여 출판권 설정 계약을 하고 출판 후 저작권 관리하는 역량","ind":["해외 출판의 흐름을 파악하고, 자사 타깃에 만든 외서를 발굴할 수 있다.","국내외 저작권 관련 법규를 파악하고 출판권 설정 계약 시 주요 조항을 검토할 수 있다.","저작권자(작가·에이전시)와 출판권 계약을 협의하고 계약서를 작성·관리할 수 있다.","출판 후 저작권 유효기간과 계약 조건을 관리하고 갱신 여부를 판단할 수 있다.","에이전시와 작가에게 계약 조건에 따라 로열티를 정확하게 정산하고 지급할 수 있다.","저작권 침해 사례를 모니터링하고 문제 발생 시 법적 대응 방향을 검토할 수 있다."]},{"level":"선임","name":"원고 기획 및 검토","def":"제품 콘셉트와 권별 주제를 이해하고 원고 구성을 기획하며, 집필 원고가 기획 의도에 부합하는지 검토, 평가하여 수정 방향을 도출하는 역량","ind":["제품 컨셉을 이해하고 이를 해당권의 주제를 통해 구현하는 과정을 알고 있다.","원고의 내용을 어떻게 구성할 것인가를 정리할 수 있다.(원고 구성안을 작성할 수 있다)","집필된 원고를 검토하여 기획의도에 맞는지 평가하고 필요하면 필자에게 수정해야 할 요청을 정확하게 전달할 수 있다.","권별 주제와 콘텐츠 구성의 연계성을 검토하여 전집 내 권별 균형을 확인할 수 있다.","유사 출판물과 비교하여 원고의 차별성과 완성도를 평가할 수 있다.","원고 검토 이력을 체계적으로 관리하고 최종 확정본까지 버전을 관리할 수 있다."]},{"level":"선임","name":"저자·원고 관리","def":"필자에게 기획 및 편집 의도를 제대로 전달하고, 집필 과정에서 활발히 소통하며, 기획 의도에 맞지 않는 원고를 수정하고 문장 구성·표현을 바로잡아 최종 원고를 완성하는 역량","ind":["필자가 원고를 잘 집필할 수 있도록 기획 및 편집의도를 전달하고 집필과정에 소통할 수 있다.","필자의 원고가 기획의도에 맞지 않는다면 이를 수정하고 문장구성이나 표현을 바로잡는 능력이 있다.","집필된 원고를 검토하여 기획의도에 맞는지 평가하고 필요하면 필자에게 수정 요청을 정확하게 전달할 수 있다.","저자별 집필 일정을 관리하고 납기 지연 발생 시 원인을 파악하여 대응 방안을 마련할 수 있다.","다수의 저자·외주자를 동시에 관리하며 각각의 진행 상황을 체계적으로 파악할 수 있다.","저자와의 커뮤니케이션 이력을 정리하고 주요 합의 사항을 문서화하여 관리할 수 있다."]},{"level":"선임","name":"권별 기획 및 면 기획","def":"원고의 특성과 가독성을 고려하여 시각적 표현을 구상하고, 편집 자료를 바탕으로 판면을 구성하며 면별 디자인과 제작 사양을 결정하는 역량","ind":["필자의 원고가 시각적으로 어떻게 표현되어야 할 것인지 구상할 수 있다.","원고의 특성과 가독성을 고려하여 기획에 부합하는 책의 체재와 판면을 구성하고, 수집·가공한 편집자료(텍스트·이미지 등)를 바탕으로 면별 디자인을 구상하고 제작 사양을 결정할 수 있다.","편집 원칙을 수립하고 전집 내 일관된 편집 기준이 적용될 수 있도록 관리할 수 있다.","편집 기획 의도를 디자이너에게 명확하게 전달하고 결과물을 기준에 맞게 검토할 수 있다.","편집 자료(텍스트·이미지·그래픽 등)를 수집·가공하여 원고 내용에 적합하게 배치할 수 있다.","면별 디자인 구성이 제품 콘셉트 및 타깃 독자에게 적합한지 평가할 수 있다."]},{"level":"선임","name":"제작 협업 및 \n시장 인사이트","def":"권별 기획부터 면별 레이아웃 구상 등을 디자인실과 논의해 제작 일정을 계획·실행하고, 영유아 제품 시장의 흐름과 시기별 변화를 파악하여 새로운 제품 기획에 반영하는 역량","ind":["권별 기획에서부터 면별 디자인 구상까지를 바탕으로 유관부서와 협업을 통해 제작 일정을 계획하고 이를 실행에 옮길 수 있다."]},{"level":"담당","name":"원고 교정·교열","def":"맞춤법 원칙과 출판사 교정원칙에 따라 원고를 교정하고, 문장 가독성을 고려한 교열과 함께 제목 뽑기·목차 정리·핵심 키워드 요약 등 원고를 완성도 있게 정리하는 역량","ind":["맞춤법 원칙과 교정 원칙에 따라 원고를 대조하여 잘못된 부분을 바로잡을 수 있다.","문장 가독성을 고려한 교열을 수행하고 어색한 표현을 자연스럽게 수정할 수 있다.","여러 방식의 글 서술을 보고 주제와 적합한 글 구성 및 문장 완성도의 수준을 파악할 수 있다.","적합한 제목 뽑기, 목차 정리하기 등을 할 수 있다.","글의 내용을 한두 문장으로 요약하고 핵심 키워드로 제시할 수 있다.","교정·교열 후 수정 내용을 원고에 명확하게 표기하고 담당자에게 전달할 수 있다."]},{"level":"담당","name":"편집 실무 이해","def":"편집 지침에 따라 면별 편집 요소를 파악·확인하고, 책의 사양별 특징과 기획의도의 연관성을 이해하여 편집 실무를 수행하는 역량","ind":["편집 지침에 따른 각 면별 편집 요소를 파악하고 확인할 수 있다.","책의 사양별 특징을 알고 각각의 사양이 책의 기획의도와 어떻게 연관되는지 이해할 수 있다.","원고의 레이아웃 구성 요소(텍스트·이미지 배치 등)를 파악하고 편집 기준에 맞게 작업할 수 있다.","편집 툴(InDesign 등)을 활용하여 기본적인 편집 작업을 수행할 수 있다.","편집 완료된 결과물을 편집 지침과 대조하여 누락·오류 여부를 검토할 수 있다.","편집 과정에서 발생하는 문제를 상위자에게 정확하게 보고하고 해결 방향을 확인할 수 있다."]},{"level":"담당","name":"제품·시장 기초 이해","def":"영유아 그림책 이론서·해설서를 통독하고 유명 작가의 작품 특징을 이해하며, 기준 영유아제품을 주제별·영역별로 조사·분석하고 판매자의 연령별 상담법과 고객 특성을 파악하는 역량","ind":["영유아 그림책에 대한 이론서·해설서 등을 5권 이상 통독하고 출간된 국내외 유명작가의 작품 특징을 설명할 수 있다.","기준 영유아제품을 주제별·영역별로 조사·수집하고 그 특징(장단점)을 분석할 수 있다.","판매자의 제품별·연령별 상담과정(상담법)을 이해할 수 있다.","그림책의 그림 제작과정, 글과 그림의 조율방법, 그림의 기법적 특징 등을 알고 있다.","영유아 발달 단계별 콘텐츠 특성과 연령별 적합한 제품 유형을 설명할 수 있다.","경쟁사 주요 제품의 구성·특징·가격대를 파악하고 자사 제품과 비교하여 설명할 수 있다."]},{"level":"담당","name":"제작 및 매체 이해","def":"책의 제작과정(인쇄·제본·코팅 등)과 그림책의 제작 기법을 이해하고, 음악·영상 등 책과 연관된 부속 매체의 특성과 제작과정을 파악하는 역량","ind":["책의 제작과정, 인쇄·제본·코팅 등을 알고 각각의 제작 원리를 파악하고 있다.","음악·영상 등 책과 연관된 매체의 특성을 이해하고 각각의 제작과정을 알고 있다.(세이펜·녹음과정 포함)","그림책의 그림 제작과정과 글과 그림의 조율방법, 기법적 특징 등을 알고 있다.","제작 단계별 담당 업체와 역할을 파악하고 진행 상황을 확인할 수 있다.","제작 결과물을 기획 의도 및 사양과 대조하여 기초적인 검수를 수행할 수 있다.","부속 매체(음원·영상 등) 제작 시 필요한 기초 자료를 준비하고 업체와 소통할 수 있다."]}]},"북디자인":{"slogan":"그림책의 가치를 시각적으로 극대화한다","comps":[{"level":"수석(리더급)","name":"디자인 컨셉 도출","def":"디자인 기획·시안·프로젝트 진행을 거쳐 시각화된 최종 디자인 컨셉을 도출하고, 브랜드 아이덴티티와의 일관성을 유지하며 그림책의 가치를 극대화하는 역량","ind":["프로젝트 기획 의도와 타깃 독자를 분석하여 시각적 방향성과 디자인 컨셉을 도출할 수 있다.","디자인 기획·시안·프로젝트 진행 과정을 종합하여 최종 디자인 컨셉을 확정할 수 있다.","도출된 컨셉이 브랜드 아이덴티티와 일관성을 유지하는지 검토하고 조정할 수 있다.","그림책의 스토리·그림·텍스트가 시각적으로 조화롭게 구현될 수 있도록 컨셉 방향을 제시할 수 있다.","확정된 디자인 컨셉을 팀원 및 유관부서에 명확하게 전달하고 공감대를 형성할 수 있다.","컨셉 실행 과정에서 발생하는 이슈를 파악하고 컨셉의 완성도를 유지하며 조정할 수 있다."]},{"level":"수석(리더급)","name":"디자인 프로젝트 기획","def":"디자인 프로젝트의 목적·내용·일정·요구사항을 파악하여 전체 디자인 프로세스를 구성하고 총괄하는 역량","ind":["프로젝트의 목적과 요구사항을 파악하고 전체 디자인 프로세스를 설계할 수 있다.","프로젝트별 디자인 일정을 수립하고 단계별 마일스톤을 설정하여 관리할 수 있다.","프로젝트 수행에 필요한 인력과 자원을 파악하고 효율적으로 배분할 수 있다.","프로젝트 진행 상황을 주기적으로 점검하고 이슈 발생 시 신속하게 대응할 수 있다.","유관부서(편집·마케팅 등)와 프로젝트 요구사항을 협의하고 디자인 방향을 조율할 수 있다.","다수의 프로젝트를 동시에 관리하며 우선순위를 설정하고 일정을 조정할 수 있다."]},{"level":"수석(리더급)","name":"디자인 조직 관리","def":"크리에이티브 조직의 회사 내 역할과 부서·팀의 방향성을 제시하고, 팀원의 역량 개발과 성과를 관리하는 역량 및 외주디자이너 관리 역량","ind":["회사 전략과 미션에 부합하는 디자인 부서의 역할과 방향성을 수립하고 팀원과 공유할 수 있다.","팀원별 강점과 성장 가능성을 파악하고 역량 개발 방향을 제시할 수 있다.","팀원의 업무를 적절하게 배분하고 성과를 주기적으로 점검하여 피드백할 수 있다.","디자인 부서의 연간 목표를 수립하고 목표 달성을 위한 실행 계획을 구체화할 수 있다.","크리에이티브 조직의 특성을 이해하고 팀원의 창의성과 자율성을 극대화하는 환경을 조성할 수 있다.","타부서와의 협업 과정에서 디자인 부서의 입장을 대표하고 원활한 소통을 이끌 수 있다."]},{"level":"책임","name":"디자인 기획","def":"아이디에이션을 바탕으로 프로젝트에 맞는 새로운 디자인 기획을 제안하고 적용할 수 있는 역량","ind":["프로젝트의 목적과 타깃 독자를 분석하여 디자인 기획 방향을 설정할 수 있다.","아이디에이션 결과를 바탕으로 프로젝트에 적합한 디자인 기획안을 작성하고 제안할 수 있다.","기획안이 영유아 그림책의 특성과 브랜드 아이덴티티에 부합하는지 검토할 수 있다.","디자인 기획 방향을 편집팀·마케팅팀 등 유관부서에 명확하게 전달하고 협의할 수 있다.","기획안을 실제 디자인 작업에 적용하고 결과물이 기획 의도에 맞게 구현되는지 확인할 수 있다.","다수의 프로젝트 기획을 동시에 진행하며 각각의 완성도를 유지할 수 있다."]},{"level":"책임","name":"디자인 방향 수립","def":"시장 조사 결과를 바탕으로 영유아 그림책의 시각적 차별화 요소를 찾고 디자인 기획 방향을 수립하는 역량","ind":["시장 조사 결과를 분석하여 경쟁 제품 대비 시각적 차별화 포인트를 도출할 수 있다.","유아동 출판 디자인 트렌드를 파악하고 자사 제품에 적용 가능한 방향을 설정할 수 있다.","타깃 독자(연령·성향 등)를 고려하여 제품별 디자인 방향을 구체화할 수 있다.","수립된 디자인 방향을 팀원 및 유관부서에 명확하게 제시하고 실행 기준으로 공유할 수 있다.","디자인 방향이 브랜드 아이덴티티와 일관성을 유지하는지 점검하고 조정할 수 있다.","제품 출시 후 디자인 방향에 대한 시장 반응을 분석하고 차기 방향 수립에 반영할 수 있다."]},{"level":"책임","name":"디자인 제작 관리","def":"완성된 디자인 샘플을 확인(교정지·각종 샘플·컬러 감리)하고 최종 완성된 제작물을 검토·관리하는 역량","ind":["디자인 교정지를 검토하여 오류·누락 여부를 확인하고 수정 사항을 명확하게 전달할 수 있다.","각종 샘플(표지·내지·컬러 등)을 기획 의도와 대조하여 품질 기준에 맞는지 확인할 수 있다.","컬러 감리를 수행하여 인쇄 결과물의 색상이 디자인 의도와 일치하는지 검증할 수 있다.","제작 단계별 완성도를 점검하고 이슈 발생 시 제작팀과 신속하게 협의하여 해결할 수 있다.","최종 완성된 제작물을 기획 의도·품질 기준에 따라 종합적으로 검토하고 승인할 수 있다.","제작 과정에서 발생한 이슈와 해결 방법을 기록하고 차기 제작에 참고할 수 있도록 관리할 수 있다."]},{"level":"책임","name":"디자인 커뮤니케이션","def":"전문성과 유연성을 바탕으로 편집팀 등 타부서와 협력 관계를 유지하고, 디자인 전략과 논리로 유관부서를 설득하며 프로젝트를 원활하게 진행하는 역량, 조직 내 상급자의 실무 노하우 전수를 통해 하급자의 직무 적응력을 높이는 중간역할","ind":["개발실,마케팅팀,영업 등 유관부서와 디자인 방향을 협의하고 공통 목표를 설정할 수 있다.","디자인 전략과 논리를 바탕으로 유관부서의 요구사항과 디자인 방향 간의 이견을 조율할 수 있다.","디자인 결정 사항을 비전문가도 이해할 수 있도록 명확하게 설명하고 설득할 수 있다.","프로젝트 진행 과정에서 발생하는 부서 간 갈등을 파악하고 원만하게 해결할 수 있다.","외주디자이너·그림작가 등 외부 협력자와 디자인 의도를 명확하게 공유하고 결과물을 이끌어낼 수 있다.","프로젝트 주요 의사결정 사항을 관련 부서에 적시에 공유하고 피드백을 반영할 수 있다."]},{"level":"선임","name":"디자인 시장 조사","def":"프로젝트 관련 국내외 디자인 트렌드와 다양한 자료를 수집·분류·분석하여 효과적인 디자인 개발을 위한 기초를 마련하는 역량","ind":["국내외 영유아 그림책 디자인 트렌드를 주기적으로 조사하고 주요 변화를 파악할 수 있다.","프로젝트 관련 경쟁 제품의 디자인 특성과 장단점을 분석하고 차별화 포인트를 도출할 수 있다.","다양한 채널(서점·온라인·해외 출판 박람회 등)을 통해 디자인 참고 자료를 수집·분류할 수 있다.","수집된 자료를 체계적으로 정리하고 프로젝트 기획에 활용할 수 있도록 가공할 수 있다.","시장 조사 결과를 바탕으로 디자인 방향 설정에 필요한 인사이트를 도출할 수 있다.","조사 결과를 팀 내에 공유하고 디자인 기획에 반영될 수 있도록 제안할 수 있다."]},{"level":"선임","name":"디자인 프로세스의 이해","def":"디자인 기획부터 제작·완성까지 출판 관련 디자인 전반의 프로세스를 이해하고 실행하며 완성하는 역량","ind":["디자인 기획·시안·편집·제작·검수까지 전체 프로세스의 흐름을 이해하고 설명할 수 있다.","각 단계별 산출물과 완료 기준을 파악하고 단계에 맞는 작업을 수행할 수 있다.","프로세스 단계별 유관부서(편집·제작 등)의 역할을 이해하고 협업할 수 있다.","프로세스 진행 중 발생하는 이슈를 파악하고 상위자에게 보고하며 해결 방향을 제안할 수 있다.","전체 디자인 일정을 파악하고 자신의 작업이 전체 일정에 미치는 영향을 인식하며 관리할 수 있다.","프로세스별 품질 기준을 이해하고 각 단계에서 완성도를 확인할 수 있다."]},{"level":"선임","name":"북디자인력","def":"책 전체의 흐름을 파악 , 그림스타일 매칭, 글과 그림에 대한 파악을 바탕으로 새로운 디자인기획을 도출해 내는 능력","ind":["책 전체의 스토리 흐름과 콘셉트를 파악하여 표지·내지의 시각 구성 방향을 기획할 수 있다.","그림작가의 그림스타일을 분석하고 이를 극대화할 수 있는 디자인 방향을 설정할 수 있다.","글과 그림의 조화를 고려하여 텍스트 배치·타이포그래피·여백 등을 구성할 수 있다.","그림디렉션을 수행하여 그림작가에게 필요한 수정 방향을 명확하게 전달할 수 있다.","완성된 그림을 디자인 의도에 맞게 정리하고 전체적인 시각 완성도를 높일 수 있다.","표지 디자인이 타깃 독자와 시장 트렌드에 맞게 구성되었는지 검토하고 수정할 수 있다."]},{"level":"선임","name":"북디자인 진행","def":"북디자인 업무에 대한 이해를 바탕으로 편집자, 그림작가와 소통하여 그들의 능력을 끌어내어 새로운 디자인기획에 맞는 글과 그림 운용 및 디자인을 진행하는 역량","ind":["북디자인 전체 프로세스(기획·시안·본문 디자인·제작)의 흐름을 이해하고 각 단계를 실행할 수 있다.","편집자와 디자인 방향 및 편집 의도를 정확하게 공유하고, 의견 차이 발생 시 조율하여 합의점을 도출할 수 있다.","그림작가의 스타일과 강점을 파악하고, 디자인 기획에 맞게 그림 방향과 수정 사항을 명확하게 전달할 수 있다.","글과 그림의 운용 방향을 설정하고, 텍스트·이미지 배치 및 시각적 완성도를 높이는 방향으로 디자인을 진행할 수 있다.","디자인 진행 일정을 관리하고, 편집자·그림작가·외주디자이너 등 관련자들의 납기를 점검하여 전체 일정을 조율할 수 있다.","진행 중 발생하는 디자인 이슈를 파악하고, 상위자에게 보고하며 해결 방향을 제안할 수 있다."]},{"level":"담당","name":"디자인 프로그램 사용","def":"디자인 성과물 산출에 필요한 Illustrator·Photoshop·InDesign 등 각종 소프트웨어 및 AI 디자인 툴을 업무에 효율적으로 활용하는 역량","ind":["Illustrator·Photoshop·InDesign 등 주요 디자인 툴의 기본 기능을 이해하고 활용할 수 있다.","각 프로그램의 특성과 용도를 파악하고 작업 목적에 맞는 툴을 선택하여 사용할 수 있다.","디자인 작업에 필요한 파일 형식(AI·PSD·INDD·PDF 등)의 특성을 이해하고 적절하게 변환·저장할 수 있다."]},{"level":"담당","name":"디자인 아이디에이션 및 시안 개발","def":"프로젝트의 다양한 시각디자인 아이디어를 도출하고, 콘셉트에 맞는 디자인 시안을 제안·제작하고 좋은 그림과 북디자인을 탐구하고 업무에 접목할 수 있는 역량","ind":[]},{"level":"담당","name":"편집 디자인 기초","def":"타이포그래피·색상·텍스트·이미지 배치 등 편집 디자인의 기본 원리를 이해하고, 그림책의 글과 그림이 조화롭게 표현될 수 있도록 기초 편집 디자인을 수행하는 역량","ind":["타이포그래피의 기본 원리(서체·자간·행간·크기 등)를 이해하고 그림책에 적합하게 적용할 수 있다.","색상의 기본 원리(색상환·명도·채도·배색 등)를 이해하고 타깃 연령에 맞는 색상을 선택할 수 있다.","텍스트와 이미지를 조화롭게 배치하여 가독성과 시각적 완성도를 높일 수 있다.","편집 디자인 기준(여백·그리드·정렬 등)을 이해하고 일관성 있게 적용할 수 있다.","그림책의 글과 그림이 서로 보완되고 조화롭게 표현되도록 기초적인 편집 디자인을 수행할 수 있다.","완성된 편집 결과물을 디자인 기준과 대조하여 오류·누락 여부를 확인할 수 있다."]}]},"브랜드디자인":{"slogan":"그림책의 가치를 시각적으로 극대화한다","comps":[{"level":"수석(리더급)","name":"디자인 컨셉 도출","def":"디자인 기획·시안·프로젝트 진행을 거쳐 시각화된 최종 디자인 컨셉을 도출하고, 브랜드 아이덴티티와의 일관성을 유지하며 그림책의 가치를 극대화하는 역량","ind":["프로젝트 기획 의도와 타깃 독자를 분석하여 시각적 방향성과 디자인 컨셉을 도출할 수 있다.","디자인 기획·시안·프로젝트 진행 과정을 종합하여 최종 디자인 컨셉을 확정할 수 있다.","도출된 컨셉이 브랜드 아이덴티티와 일관성을 유지하는지 검토하고 조정할 수 있다.","그림책의 스토리·그림·텍스트가 시각적으로 조화롭게 구현될 수 있도록 컨셉 방향을 제시할 수 있다.","확정된 디자인 컨셉을 팀원 및 유관부서에 명확하게 전달하고 공감대를 형성할 수 있다.","컨셉 실행 과정에서 발생하는 이슈를 파악하고 컨셉의 완성도를 유지하며 조정할 수 있다."]},{"level":"수석(리더급)","name":"디자인 프로젝트 기획","def":"디자인 프로젝트의 목적·내용·일정·요구사항을 파악하여 전체 디자인 프로세스를 구성하고 총괄하는 역량","ind":["프로젝트의 목적과 요구사항을 파악하고 전체 디자인 프로세스를 설계할 수 있다.","프로젝트별 디자인 일정을 수립하고 단계별 마일스톤을 설정하여 관리할 수 있다.","프로젝트 수행에 필요한 인력과 자원을 파악하고 효율적으로 배분할 수 있다.","프로젝트 진행 상황을 주기적으로 점검하고 이슈 발생 시 신속하게 대응할 수 있다.","유관부서(편집·마케팅 등)와 프로젝트 요구사항을 협의하고 디자인 방향을 조율할 수 있다.","다수의 프로젝트를 동시에 관리하며 우선순위를 설정하고 일정을 조정할 수 있다."]},{"level":"수석(리더급)","name":"디자인 조직 관리","def":"크리에이티브 조직의 회사 내 역할과 부서·팀의 방향성을 제시하고, 팀원의 역량 개발과 성과를 관리하는 역량","ind":["회사 전략과 미션에 부합하는 디자인 부서의 역할과 방향성을 수립하고 팀원과 공유할 수 있다.","팀원별 강점과 성장 가능성을 파악하고 역량 개발 방향을 제시할 수 있다.","팀원의 업무를 적절하게 배분하고 성과를 주기적으로 점검하여 피드백할 수 있다.","디자인 부서의 연간 목표를 수립하고 목표 달성을 위한 실행 계획을 구체화할 수 있다.","크리에이티브 조직의 특성을 이해하고 팀원의 창의성과 자율성을 극대화하는 환경을 조성할 수 있다.","타부서와의 협업 과정에서 디자인 부서의 입장을 대표하고 원활한 소통을 이끌 수 있다."]},{"level":"책임","name":"디자인 기획","def":"아이디에이션을 바탕으로 프로젝트에 맞는 새로운 디자인 기획을 제안하고 적용할 수 있는 역량","ind":["프로젝트의 목적과 타깃 독자를 분석하여 디자인 기획 방향을 설정할 수 있다.","아이디에이션 결과를 바탕으로 프로젝트에 적합한 디자인 기획안을 작성하고 제안할 수 있다.","기획안이 영유아 그림책의 특성과 브랜드 아이덴티티에 부합하는지 검토할 수 있다.","디자인 기획 방향을 편집팀·마케팅팀 등 유관부서에 명확하게 전달하고 협의할 수 있다.","기획안을 실제 디자인 작업에 적용하고 결과물이 기획 의도에 맞게 구현되는지 확인할 수 있다.","다수의 프로젝트 기획을 동시에 진행하며 각각의 완성도를 유지할 수 있다."]},{"level":"책임","name":"디자인 방향 수립","def":"시장 조사 결과를 바탕으로 영유아 출판 브랜드디자인 기획 방향을 수립하는 역량","ind":["시장 조사 결과를 분석하여 경쟁 제품 대비 시각적 차별화 포인트를 도출할 수 있다.","유아동 출판 디자인 트렌드를 파악하고 자사 제품에 적용 가능한 방향을 설정할 수 있다.","타깃 독자(연령·성향 등)를 고려하여 제품별 디자인 방향을 구체화할 수 있다.","수립된 디자인 방향을 팀원 및 유관부서에 명확하게 제시하고 실행 기준으로 공유할 수 있다.","디자인 방향이 브랜드 아이덴티티와 일관성을 유지하는지 점검하고 조정할 수 있다.","제품 출시 후 디자인 방향에 대한 시장 반응을 분석하고 차기 방향 수립에 반영할 수 있다."]},{"level":"책임","name":"디자인 제작 관리","def":"완성된 디자인 샘플을 확인(교정지·각종 샘플·컬러 감리)하고 최종 완성된 제작물을 검토·관리하는 역량","ind":["디자인 교정지를 검토하여 오류·누락 여부를 확인하고 수정 사항을 명확하게 전달할 수 있다.","각종 샘플(표지·내지·컬러 등)을 기획 의도와 대조하여 품질 기준에 맞는지 확인할 수 있다.","컬러 감리를 수행하여 인쇄 결과물의 색상이 디자인 의도와 일치하는지 검증할 수 있다.","제작 단계별 완성도를 점검하고 이슈 발생 시 제작팀과 신속하게 협의하여 해결할 수 있다.","최종 완성된 제작물을 기획 의도·품질 기준에 따라 종합적으로 검토하고 승인할 수 있다.","제작 과정에서 발생한 이슈와 해결 방법을 기록하고 차기 제작에 참고할 수 있도록 관리할 수 있다."]},{"level":"책임","name":"디자인 커뮤니케이션","def":"전문성과 유연성을 바탕으로 편집팀 등 타부서와 협력 관계를 유지하고, 디자인 전략과 논리로 유관부서를 설득하며 프로젝트를 원활하게 진행하는 역량, 조직 내 상급자의 실무 노하우 전수를 통해 하급자의 직무 적응력을 높이는 중간역할","ind":["개발실,마케팅팀,영업 등 유관부서와 디자인 방향을 협의하고 공통 목표를 설정할 수 있다.","디자인 전략과 논리를 바탕으로 유관부서의 요구사항과 디자인 방향 간의 이견을 조율할 수 있다.","디자인 결정 사항을 비전문가도 이해할 수 있도록 명확하게 설명하고 설득할 수 있다.","프로젝트 진행 과정에서 발생하는 부서 간 갈등을 파악하고 원만하게 해결할 수 있다.","외주디자이너·그림작가 등 외부 협력자와 디자인 의도를 명확하게 공유하고 결과물을 이끌어낼 수 있다.","프로젝트 주요 의사결정 사항을 관련 부서에 적시에 공유하고 피드백을 반영할 수 있다."]},{"level":"선임","name":"디자인 시장 조사","def":"프로젝트 관련 국내외 디자인 트렌드와 다양한 자료를 수집·분류·분석하여 효과적인 브랜드디자인 개발을 위한 기초를 마련하는 역량","ind":["국내외 영유아 그림책 디자인 트렌드를 주기적으로 조사하고 주요 변화를 파악할 수 있다.","프로젝트 관련 경쟁 제품의 디자인 특성과 장단점을 분석하고 차별화 포인트를 도출할 수 있다.","다양한 채널(서점·온라인·해외 출판 박람회 등)을 통해 디자인 참고 자료를 수집·분류할 수 있다.","수집된 자료를 체계적으로 정리하고 프로젝트 기획에 활용할 수 있도록 가공할 수 있다.","시장 조사 결과를 바탕으로 디자인 방향 설정에 필요한 인사이트를 도출할 수 있다.","조사 결과를 팀 내에 공유하고 디자인 기획에 반영될 수 있도록 제안할 수 있다."]},{"level":"선임","name":"디자인 프로세스의 이해","def":"디자인 기획부터 제작·완성까지 출판 관련 디자인 전반의 프로세스를 이해하고 실행하며 완성하는 역량","ind":["디자인 기획·시안·편집·제작·검수까지 전체 프로세스의 흐름을 이해하고 설명할 수 있다.","각 단계별 산출물과 완료 기준을 파악하고 단계에 맞는 작업을 수행할 수 있다.","프로세스 단계별 유관부서(편집·제작 등)의 역할을 이해하고 협업할 수 있다.","프로세스 진행 중 발생하는 이슈를 파악하고 상위자에게 보고하며 해결 방향을 제안할 수 있다.","전체 디자인 일정을 파악하고 자신의 작업이 전체 일정에 미치는 영향을 인식하며 관리할 수 있다.","프로세스별 품질 기준을 이해하고 각 단계에서 완성도를 확인할 수 있다."]},{"level":"선임","name":"브랜드 디자인력","def":"브랜드 아이덴티티를 이해하고 활자·그리드·색상 등 디자인 원리를 바탕으로 BI·CI 및 온오프라인 다양한 매체에 일관된 브랜드 디자인을 구현하고 확장할 수 있는 역량","ind":["회사의 BI·CI 구성 요소(로고·색상·서체·그리드 등)를 이해하고 디자인 작업에 올바르게 적용할 수 있다.","활자·그리드·색상 등 디자인 원리를 바탕으로 브랜드 아이덴티티에 부합하는 디자인을 구현할 수 있다.","마케팅·온라인 카페·사은품 등 다양한 매체별 특성을 파악하고 매체에 적합한 브랜드 디자인을 제작할 수 있다.","온라인·오프라인 매체 간 브랜드 시각 일관성을 유지하며 디자인을 구현할 수 있다.","디자인 매뉴얼을 참고하여 브랜드 기준에 맞는 새로운 디자인 요소를 개발할 수 있다.","완성된 브랜드 디자인 결과물을 브랜드 아이덴티티 기준과 대조하여 검토할 수 있다."]},{"level":"선임","name":"브랜드 디자인 관리","def":"디자인 매뉴얼을 이해하고 실행하여 브랜드 아이덴티티의 일관성을 유지하며, 마케팅·온라인 카페·사은품 등 온오프라인 디자인 결과물의 브랜드 기준 적합 여부를 검수·관리하는 역량","ind":["디자인 매뉴얼의 내용을 숙지하고 브랜드 아이덴티티 기준을 업무에 적용할 수 있다.","마케팅·온라인 카페·사은품 등 온오프라인 디자인 결과물이 브랜드 기준에 맞는지 검수할 수 있다.","브랜드 기준에 맞지 않는 디자인 결과물을 파악하고 수정 방향을 명확하게 전달할 수 있다.","디자인 매뉴얼을 최신 상태로 유지하고 변경 사항을 관련 부서에 공유할 수 있다.","다양한 매체에서 브랜드 시각 일관성이 유지되는지 주기적으로 모니터링할 수 있다.","외주 디자이너의 결과물이 브랜드 기준에 부합하는지 검토하고 피드백을 제공할 수 있다."]},{"level":"담당","name":"디자인 프로그램 사용","def":"디자인 성과물 산출에 필요한 Illustrator·Photoshop·InDesign 등 각종 소프트웨어 및 AI 디자인 툴을 업무에 효율적으로 활용하는 역량","ind":["Illustrator·Photoshop·InDesign 등 주요 디자인 툴의 기본 기능을 이해하고 활용할 수 있다.","각 프로그램의 특성과 용도를 파악하고 작업 목적에 맞는 툴을 선택하여 사용할 수 있다.","디자인 작업에 필요한 파일 형식(AI·PSD·INDD·PDF 등)의 특성을 이해하고 적절하게 변환·저장할 수 있다."]},{"level":"담당","name":"디자인 시안 개발","def":"프로젝트의 콘셉트와 브랜드 아이덴티티를 이해하고, 마케팅·온라인·사은품 등 다양한 매체에 적합한 디자인 시안을 제안·제작하는 역량","ind":["프로젝트의 콘셉트와 브랜드 아이덴티티를 파악하고 이를 반영한 디자인 시안을 제작할 수 있다.","마케팅·온라인 카페·사은품 등 매체별 특성과 규격을 이해하고 적합한 시안을 제작할 수 있다.","복수의 시안을 제작하여 방향성을 비교·제안하고 선택의 근거를 설명할 수 있다.","시안에 대한 피드백을 수용하고 브랜드 기준에 맞게 수정·발전시킬 수 있다.","브랜드 디자인 매뉴얼을 참고하여 브랜드 기준에 맞는 시안을 제작할 수 있다.","시안 제작에 필요한 참고 자료를 수집하고 독창적인 아이디어로 발전시킬 수 있다."]},{"level":"담당","name":"시각 디자인 기초","def":"타이포그래피·색상·텍스트·이미지 배치 등 시각 디자인의 기본 원리를 이해하고, 브랜드 제작물이 조화롭게 표현될 수 있도록 그래픽 디자인을 수행하는 역량","ind":["타이포그래피의 기본 원리(서체·자간·행간·크기 등)를 이해하고 그림책에 적합하게 적용할 수 있다.","색상의 기본 원리(색상환·명도·채도·배색 등)를 이해하고 타깃 연령에 맞는 색상을 선택할 수 있다.","텍스트와 이미지를 조화롭게 배치하여 가독성과 시각적 완성도를 높일 수 있다.","편집 디자인 기준(여백·그리드·정렬 등)을 이해하고 일관성 있게 적용할 수 있다.","그림책의 글과 그림이 서로 보완되고 조화롭게 표현되도록 기초적인 편집 디자인을 수행할 수 있다.","완성된 편집 결과물을 디자인 기준과 대조하여 오류·누락 여부를 확인할 수 있다."]}]},"제작":{"slogan":"","comps":[{"level":"수석(리더급)","name":"생산계획수립","def":"판매계획에 따라 수립된 생산량을 정해진 납기일에 제공하기 위해 총괄 생산계획을 수립하고, 제품 재고 계획·생산능력 분석·일정 계획을 수행하는 역량","ind":["판매계획과 수요 예측 데이터를 분석하여 제품별 생산량과 납기 일정을 확정할 수 있다.","생산능력을 분석하고 외주업체·내부 자원을 고려하여 총괄 생산계획을 수립할 수 있다.","제품별 재고 현황을 파악하고 적정 재고 수준을 유지하기 위한 재고 계획을 수립할 수 있다.","생산 일정 계획을 수립하고 납기 준수를 위한 공정별 일정을 관리할 수 있다.","생산 계획 대비 실적을 주기적으로 모니터링하고 차이 발생 시 원인을 분석하여 조정할 수 있다.","시장 변화·신제품 출시·판매 계획 변경에 따라 생산 계획을 유연하게 수정하고 관련 부서에 공유할 수 있다."]},{"level":"수석(리더급)","name":"공급자 관계관리","def":"이해관계자와 지속적인 협력을 유지하기 위하여 공급자를 분류하고 공급자 파트너십 유형 및 매핑 차별화 관리 전략에 따라 공급자 관계를 전략적으로 관리하는 역량","ind":["공급자를 중요도·거래 규모·전략적 가치 등 기준에 따라 분류하고 관리 우선순위를 설정할 수 있다.","공급자 파트너십 유형을 정의하고 유형별 차별화된 관리 전략을 수립할 수 있다.","주요 공급자와의 정기적인 소통 채널을 운영하고 협력 관계를 강화하는 활동을 기획·실행할 수 있다.","공급자 성과를 주기적으로 평가하고 평가 결과를 바탕으로 관계 유지·강화·조정 방향을 결정할 수 있다.","공급자와의 계약 조건을 검토하고 상호 이익이 되는 방향으로 협상하여 장기적인 파트너십을 구축할 수 있다.","공급자 리스크를 파악하고 대체 공급자 확보 등 리스크 대응 방안을 마련할 수 있다."]},{"level":"수석(리더급)","name":"외주생산관리","def":"중점 관리 외주업체의 품질 향상·납기 준수·원가 절감을 위하여 외주업체의 공정을 효율적으로 관리하고 외주 생산 전반의 운영 기준을 수립하는 역량","ind":["외주 생산 전반의 운영 기준과 관리 체계를 수립하고 외주업체에 명확하게 전달할 수 있다.","외주업체의 생산 공정을 모니터링하고 품질·납기·원가 목표 달성 여부를 주기적으로 점검할 수 있다.","외주업체의 품질 이슈를 파악하고 원인을 분석하여 개선 방향을 제시하고 결과를 확인할 수 있다.","납기 지연 위험을 사전에 파악하고 외주업체와 일정을 조율하여 납기 준수를 확보할 수 있다.","외주업체와 협력하여 원가 절감 방안을 도출하고 실행 계획을 수립·추진할 수 있다.","외주업체 성과를 종합적으로 평가하고 지속 거래 여부와 관리 수준을 조정할 수 있다."]},{"level":"수석(리더급)","name":"신규 공급자 발굴","def":"구매품의 경쟁력 확보와 시장 변화에 대응하기 위해 신규 공급자 선정기준을 수립하고 공급자 정보 수집·평가 및 기본계약 체결을 수행하는 역량","ind":[]},{"level":"책임","name":"구매발주관리","def":"생산 목표를 달성하기 위해 발주 사전정보를 수집·분석하고 구매품 발주 및 진척을 관리하는 역량","ind":["생산 계획과 재고 현황을 파악하고 구매 품목별 발주 시기와 수량을 결정할 수 있다.","발주 사전정보(공급자 납기·재고·가격 등)를 수집·분석하고 발주 계획을 수립할 수 있다.","구매품 발주서를 작성하고 공급자에게 정확하게 전달하여 발주를 완료할 수 있다.","발주 후 공급자의 납기 진척 상황을 주기적으로 모니터링하고 지연 위험 발생 시 신속하게 대응할 수 있다.","발주 품목의 입고 현황을 확인하고 수량·품질·납기 기준에 맞게 입고 처리할 수 있다.","발주 관련 데이터를 체계적으로 기록·관리하고 구매 실적을 분석하여 개선 방향을 도출할 수 있다."]},{"level":"책임","name":"구매 원가 관리 및 절감","def":"원가요소별 원가계산 기준을 수립하여 원가표를 작성하고 원가를 분석하여 적정 가격을 결정하며, 구매품의 가격경쟁력 확보를 위해 원가 절감 대상과 유형을 결정하여 원가 절감 계획을 수립·추진하는 역량","ind":["원가요소(재료비·가공비·외주비 등)별 원가계산 기준을 수립하고 제품별 원가표를 작성할 수 있다.","원가 데이터를 분석하여 적정 구매 가격을 결정하고 공급자와 가격 협상을 수행할 수 있다.","원가 절감 대상 품목과 절감 유형(사양 변경·대체 소재·공정 개선 등)을 결정할 수 있다.","원가 절감 계획을 수립하고 실행 일정·목표 금액·담당자를 구체화하여 추진할 수 있다.","원가 절감 활동 진행 현황을 모니터링하고 목표 대비 달성률을 분석하여 보고할 수 있다.","시장 가격 변화를 모니터링하고 구매 원가에 미치는 영향을 분석하여 대응 방안을 마련할 수 있다."]},{"level":"책임","name":"협력사품질관리","def":"외주 품질을 확보하기 위해 협력사를 선정·평가하고 품질 기준을 설정하여 지속적으로 지원·관리하는 역량","ind":["협력사 선정 기준을 수립하고 후보 협력사의 품질 능력을 평가하여 적합한 협력사를 선정할 수 있다.","제품별·공정별 품질 기준을 설정하고 협력사에 명확하게 전달하여 준수 여부를 관리할 수 있다.","협력사의 품질 현황을 주기적으로 점검하고 품질 이슈 발생 시 원인을 분석하여 개선 방향을 제시할 수 있다."]},{"level":"담당/선임","name":"출판물 제작 관리","def":"출판물의 제작 계획을 수립하여 제작 의뢰서를 작성하고 제작 일정을 조정하며 진행 상황을 관리하는 역량","ind":["출판물별 제작 사양(판형·용지·인쇄·제책 방식 등)을 파악하고 제작 계획을 수립할 수 있다.","제작 의뢰서를 작성하고 협력사에 정확하게 전달하여 제작을 의뢰할 수 있다.","제작 공정별 일정을 수립하고 단계별 진행 상황을 모니터링하여 납기를 관리할 수 있다.","제작 진행 중 발생하는 일정 지연·사양 변경 등 이슈를 파악하고 신속하게 대응할 수 있다.","개발팀·디자인팀 등 유관부서와 제작 일정을 협의하고 조율할 수 있다.","제작 완료 후 결과물을 기획 의도·사양과 대조하여 확인하고 이슈 사항을 보고할 수 있다."]},{"level":"담당/선임","name":"출판물 구매 외주 관리","def":"적정 출판 제작 원가를 산출하고 원부자재를 구매하여 제작 업체에 제작을 의뢰하고 외주 진행을 관리하는 역량","ind":["출판물 제작에 필요한 원부자재(용지·잉크·후가공 자재 등) 종류와 규격을 파악하고 소요량을 산출할 수 있다.","제작 원가 요소를 파악하고 적정 출판 제작 원가를 산출할 수 있다.","원부자재 구매를 위해 공급업체에 견적을 요청하고 가격·품질·납기를 비교하여 구매를 진행할 수 있다.","제작 업체에 외주 제작을 의뢰하고 작업 지시서·사양서를 정확하게 전달할 수 있다.","외주 제작 진행 상황을 모니터링하고 납기 지연 위험 발생 시 업체와 협의하여 대응할 수 있다.","원부자재 입고 현황을 확인하고 수량·품질 기준에 맞게 검수하여 처리할 수 있다."]},{"level":"담당/선임","name":"출판물 품질 검사","def":"인쇄 품질·후가공 품질·제책 품질을 기준에 따라 검사하고 불량 여부를 판정하여 품질을 확보하는 역량","ind":["출판물 품질 검사 기준(인쇄·후가공·제책 등)을 이해하고 기준에 따라 검사를 수행할 수 있다.","인쇄 품질(색상·농도·오염·인쇄 위치 등)을 검사하고 기준 미달 여부를 판정할 수 있다.","후가공 품질(코팅·박·형압·합지 등)을 검사하고 불량 유형을 파악하여 판정할 수 있다.","제책 품질(접지·제본·재단 등)을 검사하고 불량 여부를 확인하여 처리 방향을 결정할 수 있다.","품질 불량 발생 시 불량 내용을 정확하게 기록하고 협력사에 수정·보완을 요청할 수 있다.","품질 검사 결과를 체계적으로 기록하고 불량 유형별 현황을 분석하여 상위자에게 보고할 수 있다."]}]},"물류":{"slogan":"","comps":[{"level":"수석(리더급)","name":"물류기획","def":"물류에 대한 전반적 이해를 바탕으로 회사에 맞는 물류시스템의 전략적 목표를 설정하고 이를 달성하기 위한 실행 방안을 계획·이행하는 역량","ind":["회사의 사업 방향과 물류 현황을 분석하여 물류시스템의 전략적 목표를 수립할 수 있다.","물류 목표 달성을 위한 연간 물류 실행 계획을 수립하고 단계별 추진 과제를 구체화할 수 있다.","물류 비용·서비스 수준·납기 등 주요 물류 KPI를 설정하고 달성 현황을 모니터링할 수 있다.","물류 운영 전반의 효율성을 분석하고 개선이 필요한 영역을 파악하여 혁신 방향을 제시할 수 있다.","물류 관련 유관부서(영업·제작·재무 등)와 협업 방향을 조율하고 물류 운영의 일관성을 유지할 수 있다.","물류 환경 변화(운송비 상승·공급망 이슈 등)를 파악하고 선제적인 대응 전략을 수립할 수 있다."]},{"level":"수석(리더급)","name":"재고관리 기획","def":"물류 서비스 수준을 높이고 재고비용을 최소화하기 위해 물동량 분석과 수요예측을 기반으로 최적의 재고수준을 결정하고 효율적인 재고관리 목표를 설정하는 역량","ind":["물동량 데이터와 판매 실적을 분석하여 제품별 수요를 예측하고 적정 재고 수준을 결정할 수 있다."]},{"level":"수석(리더급)","name":"운송관리 기획","def":"고객서비스 향상과 비용 적정화를 위해 운송량을 예측하고 최적화된 운송 수단·경로 등의 운송 전략을 설정하는 역량","ind":["판매 계획과 물동량 데이터를 분석하여 기간별·지역별 운송량을 예측할 수 있다.","운송 비용·서비스 수준·납기를 고려하여 최적화된 운송 수단과 경로를 선정할 수 있다.","운송 전략을 수립하고 운송업체 선정 기준과 계약 조건을 결정할 수 있다.","운송 비용을 분석하고 비용 절감 방안을 도출하여 운송 효율성을 높일 수 있다.","운송 현황을 모니터링하고 배송 지연·파손 등 이슈 발생 시 대응 방향을 제시할 수 있다.","운송업체 성과를 평가하고 평가 결과를 바탕으로 계약 유지·변경 여부를 결정할 수 있다."]},{"level":"책임","name":"입고관리","def":"입고 물량정보 및 작업인력·물류시설 처리능력을 토대로 화물 입고계획을 수립하여 하역을 관리하고, 하역된 물품의 수량과 품질을 점검하여 입고를 확정·관리하는 역량","ind":["입고 예정 물량 정보를 사전에 파악하고 작업인력·시설·장비를 고려하여 입고 계획을 수립할 수 있다.","입고 당일 하역 작업을 지시하고 작업 진행 상황을 모니터링하여 안전하고 효율적인 하역이 이루어지도록 관리할 수 있다.","하역된 물품의 수량을 발주 내역과 대조하여 확인하고 수량 차이 발생 시 원인을 파악하여 처리할 수 있다.","입고 물품의 품질을 검사 기준에 따라 점검하고 불량·파손 발생 시 협력사에 클레임을 제기할 수 있다.","입고 확정 후 ERP·물류시스템에 입고 데이터를 정확하게 등록하고 재고에 반영할 수 있다.","입고 현황을 주기적으로 분석하고 입고 지연·수량 불일치 등 반복 이슈를 파악하여 개선 방향을 제안할 수 있다."]},{"level":"책임","name":"납기관리","def":"자재 조달 시 협력사 역량에 대한 검토와 작업 시간에 영향을 주는 부품 특성의 명확한 이해를 통해 납기를 단축하고 효율화를 이끌어내는 역량","ind":["협력사별 생산 능력(Capa)과 작업 일정을 파악하고 납기 달성 가능성을 사전에 검토할 수 있다.","부품·자재별 특성과 작업 시간에 미치는 영향을 이해하고 납기 계획 수립에 반영할 수 있다.","납기 일정을 수립하고 협력사별 진행 상황을 주기적으로 모니터링하여 납기 준수 여부를 관리할 수 있다.","납기 지연 위험이 발생한 협력사를 파악하고 원인을 분석하여 단축 방안을 협의·실행할 수 있다.","납기 단축을 위한 공정 개선 방안을 도출하고 협력사와 협력하여 실행할 수 있다.","납기 실적을 분석하고 협력사별 납기 준수율을 평가하여 관리 수준을 조정할 수 있다."]},{"level":"책임","name":"물류정보시스템 활용","def":"효율적인 물류관리를 위해 주문·운송·창고·포워더·특송 등 각각의 목적에 따른 물류정보시스템을 운영하고 활용 현황을 분석하여 시스템 개선 방향을 도출하는 역량","ind":["주문·운송·창고·포워더·특송 등 물류 영역별 정보시스템의 기능과 운영 방법을 이해하고 활용할 수 있다.","물류정보시스템 운영 현황을 모니터링하고 오류·비효율 요소를 파악하여 IT부서에 개선을 요청할 수 있다.","물류 데이터를 시스템에서 추출하고 분석하여 물류 운영 현황 파악에 활용할 수 있다.","물류정보시스템 활용도를 높이기 위해 팀원에게 시스템 사용 방법을 교육하고 지원할 수 있다.","시스템 개선 요구사항을 파악하고 IT부서와 협의하여 개선 방향을 구체화할 수 있다.","물류정보시스템 개선 후 효과를 검증하고 추가 개선 사항을 도출하여 지속적으로 시스템 활용도를 높일 수 있다."]},{"level":"책임","name":"보관하역관리 기획","def":"화물의 취급과 저장을 효율적으로 수행하기 위해 화물의 입고와 출고·보관·하역 업무에 요구되는 물류센터·작업자·시설·장비 등의 운영안을 수립하는 역량","ind":["물류센터 내 보관·하역 업무 현황을 분석하고 효율화가 필요한 영역을 파악할 수 있다.","화물의 특성과 물동량을 고려하여 최적화된 보관 구역 배치와 하역 동선을 설계할 수 있다.","보관·하역 업무에 필요한 작업자·시설·장비 운영안을 수립하고 자원을 효율적으로 배분할 수 있다.","보관·하역 작업 기준과 절차를 수립하고 작업자가 일관성 있게 수행할 수 있도록 관리할 수 있다.","물류센터 시설·장비의 유지보수 계획을 수립하고 안전한 운영 환경을 유지할 수 있다.","보관·하역 운영 현황을 분석하고 작업 효율성과 안전성 개선 방향을 도출하여 제안할 수 있다."]},{"level":"담당~선임","name":"물류포장관리","def":"분류된 제품의 안전성과 운송의 편리성을 추구하기 위하여 포장 계획을 수립하고 포장 업무에 필요한 설비·인력 등을 관리하는 역량","ind":["제품별 특성과 운송 방식을 고려하여 적합한 포장 방법과 포장재를 선정할 수 있다.","출고 물량에 따른 포장 계획을 수립하고 포장 작업 일정을 관리할 수 있다.","포장 작업에 필요한 설비·인력을 파악하고 효율적으로 배치하여 작업을 진행할 수 있다.","포장 작업 기준을 이해하고 기준에 따라 제품을 정확하게 포장할 수 있다.","포장 완료된 제품의 포장 상태를 확인하고 파손·불량 여부를 점검할 수 있다.","포장재 재고 현황을 파악하고 부족 시 상위자에게 보고하여 적시에 보충될 수 있도록 지원할 수 있다."]},{"level":"담당~선임","name":"보관관리","def":"제품의 취급과 저장을 효율적으로 수행하기 위하여 제품의 입고정보를 기반으로 작업자 및 시설·장비를 관리하고 재고량 최적화를 수행하는 역량","ind":["입고 정보를 기반으로 제품별 보관 위치를 지정하고 효율적인 보관 구역을 관리할 수 있다.","보관 작업에 필요한 작업자·시설·장비를 파악하고 효율적으로 배치하여 작업을 진행할 수 있다.","보관 중인 제품의 재고 현황을 주기적으로 확인하고 ERP·물류시스템에 정확하게 반영할 수 있다.","재고 실사를 수행하고 시스템 재고와 실물 재고의 차이를 파악하여 원인을 분석하고 조정할 수 있다.","보관 중 제품의 파손·오염 여부를 점검하고 이슈 발생 시 신속하게 보고하여 처리할 수 있다.","보관 공간 효율화를 위해 불필요한 재고를 파악하고 재고 최적화 방안을 상위자에게 제안할 수 있다."]},{"level":"담당~선임","name":"출고관리","def":"주문 정보에 따라 제품의 출고를 정확하게 처리하고 배송 지시·출고 현황 관리를 수행하여 고객에게 제품이 안정적으로 공급될 수 있도록 지원하는 역량","ind":["주문 정보를 확인하고 출고 대상 제품·수량·배송지를 정확하게 파악하여 출고 작업을 준비할 수 있다.","출고 작업 지시서를 작성하고 작업자에게 명확하게 전달하여 출고 작업을 진행할 수 있다.","출고 제품의 수량·품질·포장 상태를 확인하고 오출고·파손 여부를 점검할 수 있다.","출고 완료 후 ERP·물류시스템에 출고 데이터를 정확하게 등록하고 재고에 반영할 수 있다.","배송업체에 배송 지시를 전달하고 운송장을 발행하여 배송이 원활하게 진행될 수 있도록 지원할 수 있다.","출고 현황을 모니터링하고 배송 지연·오출고 등 이슈 발생 시 신속하게 파악하여 처리할 수 있다."]}]},"영업기획":{"slogan":"목표달성을 위한 영업정책의 전개, 성과를 추동한다.","comps":[{"level":"수석(리더급)","name":"영업전략","def":"내·외부 환경분석 결과를 기반으로 자사 영업의 기회·위협·강점·단점을 파악하여 영업 경쟁력 강화를 위한 전략적 정책을 결정하는 역량","ind":["내·외부 환경분석(SWOT·PEST 등)을 수행하여 자사 영업의 기회·위협·강점·약점을 도출할 수 있다.","환경분석 결과를 바탕으로 채널별 영업 경쟁력 강화를 위한 전략적 방향을 설정할 수 있다.","경쟁사 영업 전략을 분석하고 자사와의 차별화 포인트를 도출하여 전략에 반영할 수 있다.","영업 전략을 실행 가능한 정책으로 구체화하고 영업 조직에 명확하게 전달할 수 있다.","시장 환경 변화에 따라 영업 전략을 유연하게 수정하고 적용할 수 있다.","영업 전략 실행 결과를 분석하고 전략의 효과성을 평가하여 개선 방향을 도출할 수 있다."]},{"level":"수석(리더급)","name":"영업기획","def":"영업본부의 영업목표에 따른 사업전략을 수립하고 적합한 유·무형 자원배분 및 운영계획을 수립하는 역량","ind":["영업본부의 연간·중기 영업목표를 분석하고 목표 달성을 위한 사업전략 방향을 수립할 수 있다.","영업목표 달성에 필요한 유·무형 자원(인력·예산·시스템 등)을 파악하고 효율적으로 배분할 수 있다.","채널별·지역별 영업 운영계획을 수립하고 실행 기준을 구체화하여 영업 조직에 공유할 수 있다.","영업기획 내용을 경영진에게 명확하게 보고하고 의사결정을 지원할 수 있다.","영업 운영계획 실행 현황을 점검하고 목표 대비 차이를 분석하여 조정 방향을 제시할 수 있다.","영업 효율성 향상을 위한 새로운 운영 방식과 제도를 기획하고 도입할 수 있다."]},{"level":"수석(리더급)","name":"데이터 기반 의사결정","def":"데이터 분석을 통한 통계적 유의값과 비정형 데이터의 맥락상 인과관계를 해석하고 이를 통한 시사점을 도출하여 영업 전략 수립과 의사결정에 활용하는 역량","ind":["영업 관련 정형·비정형 데이터를 수집하고 분석 목적에 맞게 가공할 수 있다.","통계적 분석 방법을 활용하여 데이터의 유의미한 패턴과 상관관계를 도출할 수 있다.","비정형 데이터(고객 반응·현장 의견 등)의 맥락을 파악하고 정형 데이터와 연계하여 해석할 수 있다.","분석 결과를 바탕으로 영업 전략 수립에 필요한 핵심 시사점을 도출할 수 있다.","데이터 분석 결과를 경영진과 영업 조직이 이해하기 쉽게 시각화하여 보고할 수 있다.","데이터 기반의 의사결정 문화를 영업 조직 내에 확산시키고 데이터 활용을 촉진할 수 있다."]},{"level":"책임","name":"영업정책 운영","def":"영업본부의 목표 지향점에 따라 정책의 실행력 확보를 위한 운영계획을 기획·운영하는 역량","ind":["영업본부의 목표 지향점을 파악하고 정책 실행력 확보를 위한 운영계획을 수립할 수 있다.","영업정책의 내용을 영업 조직에 명확하게 전달하고 실행 기준을 공유할 수 있다.","영업정책 실행 현황을 주기적으로 점검하고 실행 과정에서 발생하는 이슈를 파악할 수 있다.","정책 실행 중 발생하는 문제를 분석하고 개선 방안을 도출하여 상위자에게 보고할 수 있다.","채널별·지역별 영업 특성을 고려하여 정책을 현장에 맞게 적용할 수 있도록 지원할 수 있다.","영업정책 운영 결과를 분석하고 차기 정책 수립에 반영할 개선 사항을 도출할 수 있다."]},{"level":"책임","name":"데이터 기반 영업 운영","def":"자사가 보유한 매장 및 고객 데이터를 분석하고 분석 결과를 영업 운영에 적용하여 판매 효율성을 높이는 역량","ind":["자사가 보유한 매장·고객 데이터를 운영 목적에 맞게 분석하고 의미 있는 패턴을 도출할 수 있다.","데이터 분석 결과를 영업 운영에 적용할 수 있는 실행 방안으로 구체화할 수 있다.","판매처별·채널별 데이터를 비교 분석하여 영업 운영 개선 기회를 파악할 수 있다.","데이터 분석 결과를 영업 조직이 이해하기 쉽게 정리하고 공유할 수 있다.","영업 운영에 적용한 데이터 기반 방안의 효과를 측정하고 결과를 분석할 수 있다.","데이터 분석 결과를 바탕으로 영업 운영 개선 방향을 상위자에게 보고할 수 있다."]},{"level":"책임","name":"영업예산 관리","def":"영업본부 내 영업목표 달성을 위한 예산을 수립·관리하고 집행 현황을 모니터링하며 필요 시 조정하는 역량","ind":["영업목표 달성에 필요한 예산 항목을 파악하고 연간 영업예산을 수립할 수 있다.","채널별·항목별 예산을 배분하고 실행 계획과 연계하여 관리할 수 있다.","예산 집행 현황을 주기적으로 모니터링하고 계획 대비 차이를 분석할 수 있다.","예산 초과·미달 항목의 원인을 분석하고 예산 조정 방향을 상위자에게 보고할 수 있다.","영업 활동별 비용 효율성을 분석하고 예산 낭비 요인을 파악하여 개선 방안을 제안할 수 있다.","예산 집행 관련 내부 규정과 절차를 준수하고 투명하게 관리할 수 있다."]},{"level":"선임","name":"영업 데이터 분석","def":"매장 및 고객 데이터를 분석하여 영업 현황을 파악하고 운영 개선에 활용할 수 있는 인사이트를 도출하는 역량","ind":["매장 및 고객 데이터를 수집하고 분석 목적에 맞게 정리·가공할 수 있다.","데이터를 분석하여 판매처별·채널별 영업 현황과 트렌드를 파악할 수 있다.","분석 결과를 바탕으로 영업 운영 개선에 활용할 수 있는 인사이트를 도출할 수 있다.","분석 결과를 표·그래프 등으로 시각화하여 이해하기 쉽게 정리할 수 있다.","데이터 분석 결과를 상위자에게 명확하게 보고하고 활용 방안을 제안할 수 있다.","데이터 오류·누락 여부를 점검하고 정확한 분석이 이루어질 수 있도록 관리할 수 있다."]},{"level":"선임","name":"문서작성 및 보고","def":"내·외부 업무 요청 사항을 파악하고 목적에 맞는 문서를 기획·작성하며 분석 결과를 명확하게 보고하는 역량","ind":["내·외부 업무 요청 사항의 목적과 핵심 내용을 파악하고 적합한 문서 구성 방향을 설정할 수 있다.","보고 대상(경영진·유관부서 등)에 맞는 문서 형식과 수준으로 작성할 수 있다.","데이터 분석 결과를 논리적으로 구성하여 핵심 내용이 명확하게 전달되는 보고서를 작성할 수 있다.","표·그래프·인포그래픽 등 시각화 요소를 활용하여 문서의 가독성을 높일 수 있다.","작성된 문서를 검토하고 오류·누락 여부를 확인하여 완성도를 높일 수 있다.","보고 내용을 구두로도 명확하게 전달하고 질문에 논리적으로 답변할 수 있다."]},{"level":"선임","name":"영업정책 운영 지원","def":"영업본부의 정책 실행을 위한 운영계획 수립을 지원하고 정책 실행 과정에서 발생하는 실무를 처리하는 역량","ind":["영업정책의 내용과 목적을 파악하고 실행을 위한 운영계획 수립을 지원할 수 있다.","영업정책 실행에 필요한 자료·데이터를 수집하고 정리하여 담당자에게 제공할 수 있다.","영업정책 실행 현황을 모니터링하고 진행 상황을 담당자에게 보고할 수 있다.","정책 실행 과정에서 발생하는 실무적 이슈를 파악하고 해결 방안을 상위자에게 보고할 수 있다.","유관부서(영업·마케팅 등)와 정책 실행 관련 사항을 협의하고 조율할 수 있다.","영업정책 관련 문서(운영계획서·결과보고서 등)를 작성하고 체계적으로 관리할 수 있다."]},{"level":"담당","name":"데이터 정리","def":"매장 및 고객 데이터에 대하여 관리 목적에 맞는 데이터를 추출하고 정확하게 정리하는 역량","ind":["매장 및 고객 데이터의 종류와 구조를 이해하고 관리 목적에 맞는 데이터를 추출할 수 있다.","추출된 데이터를 정해진 양식과 기준에 맞게 정확하게 정리할 수 있다.","데이터 입력 오류·누락·중복 여부를 확인하고 수정하여 데이터 정확성을 유지할 수 있다.","정리된 데이터를 목적별·항목별로 분류하고 체계적으로 저장·관리할 수 있다.","데이터 정리 현황을 상위자에게 보고하고 추가 요청 사항을 파악하여 반영할 수 있다.","반복적인 데이터 정리 작업을 효율적으로 수행하고 작업 시간을 단축하는 방법을 찾을 수 있다."]},{"level":"담당","name":"문서작성","def":"부서 내·외부에서 요청된 업무 사항을 파악하고 적합한 형식과 내용으로 문서를 작성하는 역량","ind":["부서 내·외부에서 요청된 업무 사항의 목적과 핵심 내용을 정확하게 파악할 수 있다.","요청 목적에 맞는 문서 형식(보고서·기획서·회의록 등)을 선택하고 기본 구성을 잡을 수 있다.","내용을 논리적으로 구성하고 핵심 사항이 명확하게 전달되도록 문서를 작성할 수 있다.","표·그래프 등 시각화 요소를 기초적으로 활용하여 문서의 가독성을 높일 수 있다.","작성된 문서를 검토하여 오류·누락·오탈자 여부를 확인하고 수정할 수 있다.","작성된 문서를 체계적으로 저장하고 관리하여 필요 시 신속하게 찾을 수 있도록 정리할 수 있다."]},{"level":"담당","name":"자료의 정리및 활용","def":"영업본부의 업무에 필요한 자료의 종류와 생성 정보를 파악하고 체계적으로 정돈하여 업무에 활용하는 역량","ind":["영업본부 업무에 필요한 자료의 종류와 생성 경로를 파악하고 수집할 수 있다.","수집된 자료를 목적·유형·기간별로 분류하고 체계적으로 정돈할 수 있다.","정리된 자료를 업무 요청에 맞게 신속하게 찾아 제공할 수 있다.","자료의 최신성을 유지하기 위해 주기적으로 업데이트하고 불필요한 자료를 정리할 수 있다.","자료 관리 기준을 이해하고 팀 내 공유 자료를 일관성 있게 관리할 수 있다.","업무에 활용 가능한 자료를 선별하고 상위자 및 팀원에게 적시에 제공할 수 있다."]}]},"영업":{"slogan":"목표달성을 위한 영업정책의 전개, 성과를 추동한다.","comps":[{"level":"수석(리더급)","name":"시장분석","def":"유아동 출판 시장의 트렌드와 경쟁사 동향을 지속적으로 분석하고, 총판·매장·백화점 채널별 시장 변화를 파악하여 영업 전략에 반영하는 역량","ind":["유아동 출판 시장의 트렌드와 경쟁사 동향을 주기적으로 조사하고 주요 변화를 파악할 수 있다.","총판·어린이서점·백화점 채널별 판매 현황과 시장 변화를 분석하고 채널별 특성을 파악할 수 있다.","경쟁사의 영업 전략과 신제품 동향을 분석하여 자사 영업에 미치는 영향을 평가할 수 있다.","시장 분석 결과를 바탕으로 채널별 영업 기회와 위협 요인을 도출할 수 있다.","시장 변화에 따른 판매처별 매출 영향도를 분석하고 대응 방향을 수립할 수 있다.","시장 분석 결과를 경영진 및 영업 조직에 명확하게 보고하고 전략 수립에 활용할 수 있다."]},{"level":"수석(리더급)","name":"영업전략 운영","def":"채널별 영업력 확대를 위한 전략을 수립하고 담당자에게 업무를 효율적으로 배분하여 전사 매출 목표 달성을 주도하는 역량","ind":["채널별(총판·어린이서점·백화점) 영업 특성을 분석하고 채널별 영업 확대 전략을 수립할 수 있다.","전사 매출 목표를 채널별·지역별·담당자별로 배분하고 실행 계획을 구체화할 수 있다.","영업 전략 실행 현황을 주기적으로 점검하고 목표 대비 실적 차이를 분석하여 조정할 수 있다.","시장 변화와 판매처 상황에 따라 영업 전략을 유연하게 수정하고 적용할 수 있다.","신규 판매처 개척 전략을 수립하고 채널 확대 방향을 제시할 수 있다.","영업 전략의 방향과 실행 기준을 영업 조직 전체에 명확하게 공유하고 실행을 이끌 수 있다."]},{"level":"수석(리더급)","name":"조직관리","def":"영업국을 이끌며 영업국장들의 목표 달성을 위해 코칭과 지원을 제공하고, 영업 조직의 역량을 강화하여 지속적인 성과를 창출하는 역량","ind":["영업국장별 목표 달성 현황을 파악하고 부진 원인을 분석하여 맞춤형 코칭을 제공할 수 있다.","영업국장들의 강점과 성장 가능성을 파악하고 역량 개발 방향을 제시할 수 있다.","영업 조직의 연간 목표를 수립하고 조직원들이 목표를 명확하게 이해하고 실행할 수 있도록 공유할 수 있다.","영업 조직 내 갈등이나 이슈를 파악하고 원만하게 해결하여 조직 분위기를 유지할 수 있다.","영업국장들의 업무 수행을 지원하고 필요한 자원과 정보를 적시에 제공할 수 있다.","영업 조직의 역량 강화를 위한 교육·학습 기회를 마련하고 실행할 수 있다."]},{"level":"책임","name":"목표추동 관리","def":"담당 판매처의 영업 성과를 모니터링하고 문제점을 분석하여 개선 방안을 마련하며, 판매처와의 관계를 전략적으로 관리하는 역량","ind":["담당 판매처의 매출·판매량·재고 현황 등 영업 성과를 주기적으로 모니터링할 수 있다.","판매처별 영업 성과 데이터를 분석하여 문제점과 개선 기회를 도출할 수 있다.","판매처별 특성(지역·규모·고객층 등)을 파악하고 맞춤형 영업 지원 방안을 마련할 수 있다.","판매처와의 관계를 전략적으로 관리하고 신뢰 기반의 파트너십을 구축할 수 있다.","판매처의 영업 이슈를 파악하고 신속하게 해결 방안을 마련하여 지원할 수 있다.","총판·어린이서점·백화점 채널별 영업 현황을 비교 분석하고 채널별 개선 방향을 제시할 수 있다."]},{"level":"책임","name":"영업관리","def":"담당 판매처의 영업 성과를 모니터링하고 문제점을 분석하여 개선 방안을 마련하며, 판매처와의 관계를 전략적으로 관리하는 역량","ind":["담당 판매처의 매출·판매량·재고 현황 등 영업 성과를 주기적으로 모니터링할 수 있다."]},{"level":"책임","name":"마케팅 관리","def":"담당 판매처별 지역특성·고객층·판매 상황을 분석하여 진열 개선·판촉 행사·홍보물 활용 등 현장 중심의 마케팅 활동을 기획·실행하여 판매처의 매출 극대화를 도모하는 역량","ind":["담당 판매처별 지역 특성·고객층·판매 상황을 분석하여 현장에 맞는 마케팅 방향을 설정할 수 있다.","판매처의 진열 상태를 점검하고 제품 노출도와 구매 전환율을 높이기 위한 진열 개선 방안을 제안할 수 있다.","판매처별 판촉 행사를 기획하고 실행하여 고객 유입과 매출 증대 효과를 창출할 수 있다.","홍보물·판촉물을 판매처 특성에 맞게 활용하고 효과를 분석하여 개선 방향을 도출할 수 있다.","마케팅 본부와 협력하여 판매처에 적합한 마케팅 지원을 요청하고 현장에 적용할 수 있다.","판촉 행사 및 마케팅 활동 결과를 분석하고 효과적인 사례를 팀 내에 공유할 수 있다."]},{"level":"담당~선임","name":"판매처 목표추동","def":"담당 판매처별 부여된 매출 목표를 이해하고, 판매처와 직접 소통하며 목표 달성을 위한 현장 영업활동을 실행·추동하는 역량","ind":["담당 판매처별 부여된 매출 목표를 정확하게 이해하고 목표 달성 계획을 수립할 수 있다.","판매처와 정기적으로 소통하며 목표 달성 현황을 공유하고 판매 의지를 높일 수 있다.","판매처별 매출 데이터를 분석하여 목표 대비 실적 차이를 파악하고 원인을 확인할 수 있다.","목표 달성이 부진한 판매처를 파악하고 판매 활성화를 위한 현장 지원 방안을 실행할 수 있다.","판매처의 판매 상황과 고객 반응을 파악하여 상위자에게 정확하게 보고할 수 있다.","신제품 출시 시 판매처에 제품 특성과 판매 포인트를 전달하고 적극적인 판매를 유도할 수 있다."]},{"level":"담당~선임","name":"판매처 지원관리","def":"담당 판매처의 판매 상황을 파악하고 영업 과정에서 발생하는 각종 에로사항을 신속하게 지원·해결하여 판매처와의 신뢰 관계를 유지하는 역량","ind":["담당 판매처의 판매 상황과 영업 환경을 주기적으로 파악하고 변화를 모니터링할 수 있다.","판매처에서 발생하는 에로사항(재고·배송·제품 불량·상담 등)을 신속하게 접수하고 유형을 파악할 수 있다.","에로사항의 원인을 분석하고 적절한 해결 방안을 마련하여 판매처에 신속하게 지원할 수 있다.","자체적으로 해결이 어려운 이슈는 관련 부서(물류·마케팅·개발 등)와 협력하여 처리할 수 있다.","판매처의 재고 현황을 파악하고 적정 재고 유지를 위한 발주를 지원할 수 있다.","에로사항 처리 결과를 판매처에 명확하게 전달하고 만족 여부를 확인할 수 있다."]},{"level":"담당~선임","name":"영업환경 조성","def":"담당 판매처에 적합한 진열·홍보물·판촉물 등 영업환경을 조성하고, 판매처가 최적의 환경에서 영업활동을 할 수 있도록 지원하는 역량","ind":["담당 판매처의 매장 환경(공간·동선·진열 등)을 파악하고 영업환경 개선 방향을 도출할 수 있다.","판매처 특성에 맞는 제품 진열 방식을 기획하고 실행하여 제품 노출도와 구매 전환율을 높일 수 있다.","판매처에 필요한 홍보물·판촉물을 파악하고 적시에 제공하여 영업환경을 지원할 수 있다.","신제품 출시 및 시즌별 프로모션에 맞춰 판매처의 진열과 홍보물을 업데이트할 수 있다.","판매처의 영업환경 변화(이전·리뉴얼 등)를 파악하고 환경 조성을 신속하게 지원할 수 있다.","영업환경 조성 결과를 사진·보고서 등으로 기록하고 상위자에게 보고할 수 있다."]}]},"영업지원":{"slogan":"목표달성을 위한 영업정책의 전개, 성과를 추동한다.","comps":[{"level":"수석(리더급)","name":"영업지원 전략 기획","def":"영업지원 업무 전반의 운영 현황을 분석하고 효율성 향상을 위한 개선 방향을 수립하며, 영업본부의 목표 달성을 지원하는 운영 전략을 기획하는 역량","ind":["영업지원 업무 전반의 운영 현황을 분석하고 비효율 요소와 개선 기회를 도출할 수 있다.","ERP·정산·거래처·행사 등 영업지원 각 영역의 운영 목표를 수립하고 실행 계획을 구체화할 수 있다.","영업본부의 영업 목표와 영업지원 운영 방향을 연계하여 지원 전략을 기획할 수 있다.","유관부서(재무·물류·IT·마케팅 등)와의 협업 구조를 설계하고 업무 연계 효율성을 높일 수 있다.","영업지원 운영 결과를 주기적으로 분석하고 경영진에게 보고하며 개선 방향을 제안할 수 있다.","영업지원 업무의 자동화·시스템화 방향을 검토하고 도입 계획을 수립할 수 있다."]},{"level":"수석(리더급)","name":"영업지원 조직 관리","def":"영업지원팀을 이끌며 팀원의 역량 개발과 성과를 관리하고, 유관부서와의 협업을 조율하여 영업지원 조직이 안정적으로 운영될 수 있도록 하는 역량","ind":["팀원별 업무 특성과 강점을 파악하고 역량 개발 방향을 제시하며 성장을 지원할 수 있다.","팀원의 업무를 효율적으로 배분하고 성과를 주기적으로 점검하여 피드백할 수 있다.","영업지원팀의 연간 목표를 수립하고 팀원들이 목표를 명확하게 이해하고 실행할 수 있도록 공유할 수 있다.","팀 내 업무 프로세스를 표준화하고 인수인계 체계를 구축하여 업무 연속성을 확보할 수 있다.","재무·물류·IT·마케팅 등 유관부서와의 협업 과정에서 영업지원팀의 입장을 대표하고 원활한 소통을 이끌 수 있다.","팀 내 이슈나 갈등을 파악하고 원만하게 해결하여 안정적인 팀 운영 환경을 유지할 수 있다."]},{"level":"수석(리더급)","name":"백화점 채널 운영 관리","def":"백화점 채널의 운영 현황을 분석하고 백화점별 특성에 맞는 지원 정책과 운영 기준을 수립하여 백화점 채널이 안정적으로 운영될 수 있도록 관리하는 역량","ind":["백화점별(롯데·스타필드 등) 운영 현황과 매출 데이터를 분석하여 채널별 특성과 이슈를 파악할 수 있다.","백화점별 수수료 구조·가격 정책·프로모션 운영 기준을 수립하고 영업지원팀 내에 공유할 수 있다.","백화점 거래처 관리·정산·프로모션 운영의 일관성을 점검하고 기준에 맞게 운영되는지 확인할 수 있다.","백화점 채널 운영 과정에서 발생하는 주요 이슈를 파악하고 근본 원인을 분석하여 개선 방안을 도출할 수 있다.","신규 백화점 입점 또는 채널 정책 변경 시 영향도를 분석하고 실행 계획을 수립할 수 있다.","백화점 판매인 수수료·시상 정산 기준을 관리하고 정산 프로세스가 정확하게 운영되는지 총괄할 수 있다."]},{"level":"책임","name":"행사 기획 및 운영","def":"유아교육전 등 본사·총판 주관 행사의 전반적인 기획·준비·운영·결산을 총괄하고, 행사를 통한 매출 목표 달성과 브랜드 노출 극대화를 지원하는 역량","ind":["본사·총판 주관 행사 일정을 수립하고 행사별 매출 목표와 운영 계획을 기획할 수 있다.","행사 참가 비용 협상·부스 디자인 조율·물품 준비 등 행사 전 준비 사항을 체계적으로 관리할 수 있다.","행사 기안서·지출결의서를 작성하고 결재 프로세스를 진행하며 재무팀에 필요한 자료를 전달할 수 있다.","행사 진행 중 현장 셋팅·주문 등록·결제 처리·돌발 상황 대응 등 현장 운영을 총괄할 수 있다.","행사 종료 후 매출·비용·판매 데이터를 분석하여 결과보고서를 작성하고 영업본부에 공유할 수 있다.","유관부서(마케팅·디자인·물류·재무·인사 등)와 행사 일정·물품·비용 등을 사전에 협의하고 조율할 수 있다."]},{"level":"책임","name":"매출 정산 관리","def":"백화점·총판·유상판촉물 출고 등 채널별 매출을 정확하게 정산하고 수수료·시상금 등을 산출하여 재무팀에 이관하며, 정산 프로세스의 정확성과 신뢰성을 유지하는 역량","ind":["백화점별 월 매출을 확정하고 사내 ERP와 백화점 사이트 데이터를 비교 검수하여 정확성을 확인할 수 있다.","백화점 판매인 수수료를 시스템 기준에 따라 정산하고 지출결의서·기안서를 작성하여 결재를 진행할 수 있다.","유상 견본·판촉·진열 할인 등 월간 유상 출고 건에 대한 매출정산서를 작성하고 재무팀에 이관할 수 있다.","총판별 월별 계산서 발행 자료와 딜러 판매장려금 지급 내역을 정리하여 총판별로 메일 발송할 수 있다.","협력사·직원가 판매 건에 대한 정산서를 작성하고 현금영수증 발행 및 재무팀 이관을 처리할 수 있다.","정산 과정에서 발생하는 오류·불일치 항목을 파악하고 원인을 분석하여 수정 처리할 수 있다."]},{"level":"책임","name":"유통 정책 관리","def":"도서정가제·지역제 등 유통 관련 법규 준수 여부를 모니터링하고, 채널 유입 소스를 관리하며 영업본부의 유통 질서를 유지하는 역량","ind":["도서정가제 위반 여부를 모니터링하고 위반 의심 건을 파악하여 확인 절차를 진행할 수 있다.","지역제 심사 및 납품건 처리 과정에서 ERP 승인 오류건을 확인하고 기준에 맞게 처리할 수 있다.","유통 단속 결과를 분석하고 위반 유형별 대응 기준을 수립하여 팀 내에 공유할 수 있다.","채널 유입 소스(홈페이지 상담 신청 등)를 관리하고 고객 구매 이력을 확인하여 영업국장에게 연결할 수 있다.","유통 정책 변경 시 영향도를 파악하고 관련 판매처 및 총판에 안내 공지를 발송할 수 있다.","유통 관련 법규 변화를 파악하고 내부 운영 기준에 반영하여 법규 준수 체계를 유지할 수 있다."]},{"level":"책임","name":"ERP 운영 고도화 및 재고 예측관리","def":"ERP 시스템 운영 현황을 분석하여 오류·비효율 요소를 파악하고 개선 방향을 도출하며, 재고 데이터를 기반으로 제품별 판매 추이를 예측하여 재고 부족이 발생하지 않도록 선제적으로 발주를 관리하는 역량","ind":["ERP 운영 현황을 분석하여 반복적으로 발생하는 오류와 비효율 프로세스를 파악하고 개선 방향을 도출할 수 있다.","ERP 시스템 개선 사항을 IT개발팀에 명확하게 전달하고 개발 진행 과정을 관리할 수 있다.","전집·전집외 제품별 재고 현황과 주단위 매출 데이터를 분석하여 재고 예측표를 작성할 수 있다.","제품별 판매 달성률과 재고 소진 예상 시점을 분석하여 적정 발주 시기와 수량을 결정할 수 있다.","재고 부족 위험 품목을 선제적으로 파악하고 제작팀·영업기획팀·영업본부에 공유하여 대응 방안을 마련할 수 있다.","전집외(견본·홍보물·판촉물) 재고 현황을 관리하고 품목별 예측 사용일을 도출하여 발주 계획을 수립할 수 있다."]},{"level":"선임","name":"거래처 관리","def":"매장·딜러·백화점 거래처의 신규·복귀·해지 처리를 수행하고 거래처 코드·가격·할인코드를 관리하여 거래처가 원활하게 운영될 수 있도록 지원하는 역량","ind":["매장·딜러·백화점 신규 거래처의 서류를 접수하고 ERP에 거래처 코드를 발급하여 등록 절차를 완료할 수 있다.","신규 거래처에 아이디·주문등록 방법을 안내하고 초도물품 출고 등 영업 시작에 필요한 지원을 제공할 수 있다.","거래처 복귀·해지 요청을 접수하고 관련 절차에 따라 처리하며 ERP와 홈페이지 정보를 업데이트할 수 있다.","홈페이지 매장 정보(소개글·사진·운영시간 등)를 관리하고 변경 사항을 주기적으로 업데이트할 수 있다.","채널별 제품 가격과 할인코드를 설정하고 신제품 출시·개정 시 가격 등록과 코드 관리를 수행할 수 있다.","백화점별 수수료 구조를 이해하고 백화점별 가격 세팅을 정확하게 처리할 수 있다."]},{"level":"선임","name":"정산 관리","def":"월간 유·무상 출고 내역을 구분하여 정산하고 총판별 계산서 발행 자료와 판매장려금 지급 내역을 정리하여 재무팀 및 총판에 이관·발송하는 역량","ind":["월간 출고된 전집·전집외 제품 내역을 유·무상으로 구분하여 정산하고 재무팀에 이관할 수 있다.","총판별 월별 확정 매출 내역을 장표화하여 계산서 발행 금액을 산출하고 총판별로 메일 발송할 수 있다.","총판 딜러 판매장려금·현금시상금·백화점 수수료 지급 내역을 정리하고 총판별로 발송할 수 있다.","한국노벨 총판의 주문·입금배분 등 시스템 관련 총판 업무를 지원할 수 있다.","업무 이관 요청(판매처·고객센터·물류 등)을 접수하고 처리 완료 후 결과를 안내할 수 있다.","정산 과정에서 발생하는 오류·불일치 항목을 파악하고 원인을 분석하여 수정 처리할 수 있다."]},{"level":"선임","name":"프로모션 운영","def":"판매인·고객 대상 프로모션 코드를 등록·관리하고 체험팩·시상코드·고객프로모션 등 월별 프로모션을 시스템에 적용하여 원활하게 운영하는 역량","ind":["판매인 프로모션 대상 매출을 추출하고 시상 프로모션 코드를 발급하여 시스템에 업로드할 수 있다.","고객 프로모션 사은품 코드와 백화점 1+1 프로모션을 매월 시스템에 등록하고 관리할 수 있다.","체험팩 프로모션 진행 전 물류바코드 발급·홈페이지 등록·판촉 홍보물 발주 등 사전 준비 사항을 처리할 수 있다.","체험팩 접수 종료 후 판매처별 접수 수량을 확인하고 구매 한정 수량을 시스템에 업로드하여 출고를 관리할 수 있다.","총판별 행사 등록 시 이벤트 코드를 발급하고 할인 대상 품목 리스트를 업로드하여 총판에 안내할 수 있다.","프로모션 진행 중 발생하는 오류나 이슈를 파악하고 신속하게 수정·처리할 수 있다."]},{"level":"담당","name":"ERP운영 및 주문 관리","def":"ERP 시스템을 활용하여 주문·출고·반품·환불 등 영업 관련 기초 업무를 정확하게 처리하고, 매장·총판·고객의 각종 요청 사항에 신속하게 대응하는 역량","ind":["ERP 주문 등록·수정·취소 및 고객 정보 변경 등 기본적인 주문 관련 업무를 처리할 수 있다.","전집·전집외 출고 요청을 접수하고 ERP에서 출고 처리 및 배송 조회를 수행할 수 있다.","반품 발생 시 택배사로 회수를 요청하고 환불 절차를 정확하게 처리할 수 있다.","ERP 오류 발생 시 오류 내용을 정확하게 접수하고 IT개발팀에 업무를 연결하여 처리할 수 있다.","월별 프로모션 출고(자동출고·수기출고)를 처리하고 출고 결과를 확인할 수 있다.","해외 판매인(GK인터내셔날·초이스메이커 등) 주문을 접수하고 등록·출고·계산서 발행 요청을 처리할 수 있다."]},{"level":"담당","name":"판매인 재원 및 응대","def":"판매인·매장·총판의 ERP 사용 및 영업활동 전반에서 발생하는 문의와 요청 사항을 신속하게 처리하고 공지사항 발송·재판매 정보 처리 등 판매인 지원 업무를 수행하는 역량","ind":[]},{"level":"담당","name":"재고 관리","def":"전집·전집외 제품의 재고 현황을 주기적으로 파악하고 재고예측표를 업데이트하여 발주의뢰 등록 및 외주 발주 업무를 수행하는 역량","ind":["매주 전집 재고예측표에 전주 매출 수량을 업데이트하고 제품별 판매 달성률을 반영하여 재고 현황을 정리할 수 있다.","전집외(견본·홍보물·판촉물·양식) 재고 현황을 파악하고 재고예측표에 출고 수량을 업데이트할 수 있다.","품목별 예측 사용일을 도출하고 적정 시기에 시스템에 제작 발주의뢰를 등록할 수 있다.","외주 가공·구매 품목의 발주 시 업체에 견적서를 요청하고 수량 확정 후 구매 기안서를 작성하여 발주할 수 있다.","발주 물품의 디자인 의뢰(가공박스·물류바코드 등)를 디자이너에게 전달하고 완성된 디자인을 업체에 전달할 수 있다.","입고 예정일에 맞춰 입고 여부를 확인하고 지출결의서를 작성하여 재무팀에 이관할 수 있다."]}]},"교육기획":{"slogan":"판매 현장을 변화시키는 교육으로 영업 성과를 만든다","comps":[{"level":"수석(리더급)","name":"교육 전략 수립","def":"영업 조직의 역량 강화를 위한 연간·중기 교육 방향을 수립하고 교육 목표와 실행 계획을 구체화하여 교육 성과를 관리하는 역량","ind":["영업 조직의 역량 현황과 시장 변화를 분석하여 연간·중기 교육 방향과 목표를 수립할 수 있다.","교육 대상별(영업국장·판매인·신규 매장주) 역량 수준을 파악하고 맞춤형 교육 전략을 설계할 수 있다.","교육 목표 달성을 위한 연간 교육 계획을 수립하고 일정·예산·인력을 배분할 수 있다.","교육 성과를 주기적으로 모니터링하고 목표 대비 달성 현황을 분석하여 개선 방향을 도출할 수 있다.","신제품 출시·시장 변화 등 영업 환경 변화에 따라 교육 계획을 유연하게 조정할 수 있다.","협의하에 교육 전략 및 방향 설정 중"]},{"level":"수석(리더급)","name":"영업 역량 강화 기획","def":"영업국장·판매인·신규 매장주의 판매 역량 강화를 위한 교육 프로그램과 영업 도구를 기획하고, 온라인 수업·화이팅 교육 등 다양한 교육 채널을 통해 영업 성과 극대화를 지원하는 역량","ind":["영업 조직의 역량 강화 니즈를 파악하고 신제품·상담법·화이팅 교육 등 교육 프로그램 방향을 기획할 수 있다.","판매인 교육·신규 판매인 교육·영업자 교육 등 대상별 교육 프로그램의 목표와 커리큘럼 방향을 설정할 수 있다.","상담집·영업 지원 자료 등 판매 현장에서 활용 가능한 영업 도구의 개발 방향을 수립할 수 있다.","온라인 수업의 콘텐츠 방향과 운영 전략을 수립하고 회원수·교재 매출 목표를 설정할 수 있다.","교육 프로그램 실행 결과를 분석하고 교육 효과성을 평가하여 차기 프로그램에 반영할 수 있다.","영업본부와 협력하여 교육 방향이 영업 목표와 연계될 수 있도록 조율할 수 있다."]},{"level":"수석(리더급)","name":"온라인 수업 기획 및 운영","def":"자사 제품을 기반으로 온라인 수업의 전략적 방향을 수립하고 커리큘럼·콘텐츠를 기획하며 강사 육성·회원 관리·교재 매출 목표 달성을 총괄하는 역량","ind":["자사 제품 특성과 고객 니즈를 분석하여 온라인 수업의 중장기 운영 방향과 목표를 수립할 수 있다.","온라인 수업 커리큘럼의 전체 방향을 설계하고 수업 콘텐츠 개발 기준을 수립할 수 있다.","온라인 수업 회원수·교재 매출 목표를 설정하고 달성 현황을 분석하여 전략적 개선 방향을 도출할 수 있다.","강사 육성 방향과 기준을 수립하고 강사 풀이 안정적으로 유지될 수 있도록 인력 관리 전략을 수립할 수 있다.","온라인 수업 운영 성과를 종합적으로 분석하고 경영진에게 보고하며 발전 방향을 제안할 수 있다.","온라인 수업 관련 유관부서(마케팅·디자인·영업 등)와 협업 방향을 조율하고 시너지를 창출할 수 있다."]},{"level":"책임","name":"교육기획 및 운영 총괄","def":"신제품·상담법·화이팅 교육 등 영업 대상별 교육 프로그램을 기획·개발하고 교육 일정을 운영하며 교육 평가와 결과보고를 통해 교육 완성도를 높이는 역량","ind":["교육 대상(영업국장·판매인·신규 매장주)별 역량 니즈를 파악하고 교육 목표와 커리큘럼을 설계할 수 있다.","신제품 출시 시 제품 특성을 분석하고 영업국장·총판·판매인 대상 신제품 교육안을 개발할 수 있다.","판매인 상담법 교육 콘텐츠를 기획하고 현장에서 바로 활용할 수 있는 교육 자료를 제작할 수 있다.","연간 교육 일정을 수립하고 온·오프라인 교육을 계획에 따라 진행하며 일정을 관리할 수 있다.","교육 후 평가 설문을 운영하고 결과를 분석하여 교육 효과성을 측정하고 개선 방향을 도출할 수 있다.","교육 결과보고서를 작성하고 영업본부 및 경영진에게 교육 성과를 명확하게 보고할 수 있다."]},{"level":"책임","name":"강사 육성 관리","def":"온라인 수업 및 판매인 교육에 필요한 강사를 발굴·모집하고 강사 역량 강화 교육을 기획·운영하여 교육 품질을 유지하는 역량","ind":["온라인 수업 및 교육 운영에 필요한 강사 요건을 정의하고 적합한 강사를 발굴·모집할 수 있다.","강사 역량 강화를 위한 교육 프로그램을 기획하고 정기적으로 운영할 수 있다.","강사별 수업 역량과 성과를 평가하고 개선이 필요한 부분에 대해 맞춤형 피드백을 제공할 수 있다.","신규 강사가 빠르게 적응할 수 있도록 온보딩 교육과 멘토링을 운영할 수 있다.","강사 활동 현황을 관리하고 강사별 수업 일정·성과를 체계적으로 기록·관리할 수 있다.","강사 이탈 방지를 위한 동기부여 방안을 마련하고 강사와의 신뢰 관계를 유지할 수 있다."]},{"level":"책임","name":"영업 도구 개발","def":"판매 현장에서 활용 가능한 상담집·영업 지원 자료·홍보물 등 영업 도구를 기획·개발하고 판매인의 영업 활동을 실질적으로 지원하는 역량","ind":["판매 현장의 니즈를 파악하고 상담집·영업 지원 자료 등 필요한 영업 도구의 개발 방향을 설정할 수 있다.","자사 제품의 특성과 판매 포인트를 분석하여 판매인이 현장에서 바로 활용할 수 있는 상담집을 기획·제작할 수 있다.","영업 지원 자료(교재·판매 지원 도구 등)를 개발하고 판매인이 효과적으로 활용할 수 있도록 안내할 수 있다.","홍보물·판촉물 제작 방향을 기획하고 디자인팀과 협업하여 완성도 있는 결과물을 도출할 수 있다.","개발된 영업 도구의 현장 활용 현황을 모니터링하고 판매인 피드백을 수렴하여 개선 방향을 도출할 수 있다.","연간 영업 도구 개발 계획을 수립하고 목표 건수를 달성할 수 있도록 일정을 관리할 수 있다."]},{"level":"선임","name":"교육 콘텐츠 개발","def":"신제품·상담법·화이팅 교육 등 교육 목적과 대상에 맞는 교육 콘텐츠를 기획·개발하고 교육 효과를 높이기 위한 커리큘럼을 구성하는 역량","ind":["교육 대상의 역량 수준과 니즈를 파악하고 교육 목표에 맞는 커리큘럼을 구성할 수 있다.","선임의 업무 아님","판매 현장에서 바로 활용 가능한 상담법 교육 콘텐츠를 기획하고 사례 중심으로 구성할 수 있다.","화이팅 교육 커리큘럼을 개발하고 신규 판매인이 빠르게 영업 역량을 갖출 수 있도록 콘텐츠를 설계할 수 있다.","교육 콘텐츠의 완성도를 높이기 위해 관련 자료를 조사하고 최신 트렌드를 반영할 수 있다.","개발된 교육 콘텐츠를 파일럿 교육에 적용하고 참여자 피드백을 수렴하여 개선할 수 있다."]},{"level":"선임","name":"판매인 교육 운영","def":"판매인·신규 매장주를 대상으로 교육을 계획에 따라 운영하고 교육 평가를 통해 교육 효과성을 측정하며 결과를 보고하는 역량","ind":["판매인 교육 일정과 장소를 확정하고 참여자 모집·안내 등 교육 운영 준비를 완료할 수 있다.","온·오프라인 교육을 계획에 따라 진행하고 현장에서 발생하는 이슈에 신속하게 대응할 수 있다.","선임 업무 아님","교육 후 평가 설문을 운영하고 결과를 분석하여 교육 효과성을 측정할 수 있다.","교육 평가 결과를 바탕으로 개선이 필요한 부분을 파악하고 차기 교육에 반영할 수 있다.","교육 진행 결과보고서를 작성하고 영업본부 및 상위자에게 교육 성과를 보고할 수 있다."]},{"level":"담당","name":"교육 자료 제작","def":"교육 기획 방향에 맞게 신제품·상담법·화이팅 교육 등에 필요한 교육 자료를 수집·정리하고 실무에서 활용 가능한 형태로 제작하는 역량","ind":["교육 목적과 대상에 맞는 교육 자료 구성 방향을 파악하고 필요한 자료를 수집·정리할 수 있다.","신제품 특성·판매 포인트·상담법 등 교육 내용을 이해하고 자료에 정확하게 반영할 수 있다.","담당 업무 아님","디자인팀과 협업하여 홍보물·교육 자료의 시각적 완성도를 높일 수 있도록 요청 사항을 전달할 수 있다.","전체를 알고 있어야 확인 가능한 부분 , 담당 업무 아님","교육 자료를 체계적으로 저장·관리하고 필요 시 신속하게 찾아 제공할 수 있다."]},{"level":"담당","name":"교육 행정 관리","def":"교육 일정·장소·참여자 관리 등 교육 운영에 필요한 행정 업무를 처리하고 교육 관련 문서를 작성·관리하는 역량","ind":["교육 일정을 파악하고 장소·참여자·교육 자료 등 교육 운영에 필요한 사전 준비 사항을 처리할 수 있다.","교육 참여자 명단을 관리하고 참석 여부를 확인하여 교육 진행을 지원할 수 있다.","교육 후 평가 설문을 배포하고 응답 결과를 취합하여 정리할 수 있다.","교육 진행 장표·결과보고서 등 교육 관련 문서를 작성하고 체계적으로 관리할 수 있다.","온·오프라인 교육 진행 시 필요한 장비·자료를 사전에 점검하고 준비할 수 있다.","교육 관련 공지사항을 작성하고 참여자에게 안내 문자·메일을 발송할 수 있다."]},{"level":"담당","name":"온라인 수업 운영 지원","def":"온라인 수업이 원활하게 운영될 수 있도록 수업 일정 관리·회원 현황 정리·교재 발송 등 운영 지원 업무를 수행하는 역량","ind":["온라인 수업 일정을 파악하고 강사·수강생에게 수업 일정과 관련 안내 사항을 전달할 수 있다.","월별 온라인 수업 회원 현황을 정리하고 지사별 매출 정산 자료를 취합하여 보고할 수 있다.","수강생의 교재 신청을 접수하고 교재 발송 및 배송 현황을 확인하여 처리할 수 있다.","온라인 수업 관련 수강생 문의를 접수하고 신속하게 처리하거나 담당자에게 이관할 수 있다.","네이버 카페 등 온라인 채널에 수업 관련 콘텐츠를 업로드하고 게시물을 관리할 수 있다.","온라인 수업 운영 현황을 기록하고 월별 결과 자료를 정리하여 상위자에게 보고할 수 있다."]}]},"마케팅":{"slogan":"","comps":[{"level":"수석(리더급)","name":"통합마케팅 전략","def":"사업 및 마케팅 목표에 맞는 중장기 마케팅 운영 계획을 수립하고, 캠페인·콘텐츠·프로모션 운영 방향 및 우선순위를 통합적으로 관리하여 마케팅 운영 효율을 향상시키는 역량","ind":["시장 환경·경쟁사·고객 트렌드를 분석하여 전사 마케팅 전략 방향성을 수립할 수 있다.","연간·분기별 마케팅 플랜을 수립하고 사업목표와 연계된 마케팅 KPI를 설정할 수 있다.","KPI 달성 현황을 정기적으로 모니터링하고 목표 미달 시 원인을 분석하여 전략을 조정할 수 있다.","전사 마케팅 예산을 채널·캠페인·시기별로 기획하고 효율적으로 배분할 수 있다.","신규 고객 유치를 위한 타겟 고객군을 정의하고 획득 전략(CAC 최적화 등)을 수립할 수 있다.","기존 고객의 재구매와 충성도를 높이기 위한 리텐션 전략(LTV 향상·로열티 프로그램 등)을 기획할 수 있다."]},{"level":"수석(리더급)","name":"마케팅 성과 전략","def":"사업 및 마케팅 목표에 맞는 광고 및 디지털 채널 운영 전략을 수립하고, 고객 유입·채널 성과·ROI 데이터를 기반으로 광고 및 마케팅 운영 효율을 최적화하는 역량","ind":["사업 목표 및 브랜드 방향성에 맞는 광고 및 디지털 채널 운영 전략을 수립할 수 있다.","시장 환경 및 고객 반응을 고려하여 중장기 광고 운영 방향 및 우선순위를 설정할 수 있다.","채널별 성과 및 고객 유입 데이터를 기반으로 운영 효율 개선 방향을 도출할 수 있다.","고객 데이터를 분석하여 생애주기별 맞춤 마케팅 전략(생애 맞춤 정보 제공)을 설계할 수 있다.","광고 성과 지표(ROAS·CPC·CTR·전환율 등)를 모니터링하고 개선 방향을 도출할 수 있다."]},{"level":"수석(리더급)","name":"브랜드 전략","def":"조직의 브랜드 아이덴티티를 정립하고 중장기 브랜드 방향성을 수립하며, 시장 내 차별화된 브랜드 포지셔닝 전략을 기획·추진하는 역량","ind":["브랜드 현황을 진단하고 시장 내 브랜드 포지셔닝을 분석하여 개선 방향을 도출할 수 있다.","브랜드 미션·비전·핵심 가치를 정의하고 브랜드 아이덴티티(BI)를 체계적으로 정립할 수 있다.","목표 고객군의 특성과 니즈를 분석하여 차별화된 브랜드 포지셔닝 전략을 수립할 수 있다.","중장기 브랜드 방향성을 수립하고 연도별 브랜드 실행 계획을 도출할 수 있다.","브랜드 가이드라인을 수립하고 전사적으로 일관된 브랜드 경험이 제공될 수 있도록 관리할 수 있다.","브랜드 인지도·선호도·충성도 등 브랜드 지표를 측정하고 모니터링할 수 있다."]},{"level":"책임","name":"마케팅 운영 기획","def":"마케팅 운영 목표에 맞춰 캠페인·콘텐츠·프로모션 운영 업무를 통합적으로 기획 및 관리하고, 유관부서 협업 및 운영 프로세스를 조율하여 마케팅 운영 효율을 개선하는 역량","ind":["전사 마케팅 전략을 기반으로 연간·분기별 마케팅 목표와 KPI를 설정하고 실행 계획을 수립할 수 있다.","고객 여정(Customer Journey)을 분석하여 단계별 접점에서 효과적인 마케팅 활동을 설계할 수 있다.","마케팅 운영 과정에서 발생하는 이슈 및 리소스를 조율할 수 있다.","유관부서 및 제작 리소스와 협업하여 운영 업무를 리딩할 수 있다.","시즌 이슈 및 주요 운영 일정에 맞춰 운영 방향을 조정할 수 있다.","운영 프로세스 및 업무 흐름의 개선 방향을 도출할 수 있다."]},{"level":"책임","name":"디지털 마케팅 전략","def":"브랜드 및 사업 목표에 맞는 디지털 마케팅 전략을 수립하고, 디지털 채널·광고·콘텐츠 운영 성과를 통합적으로 관리하여 고객 유입 및 ROI 기반의 마케팅 성과를 개선하는 역량","ind":["브랜드 및 캠페인 목적에 맞는 주요 광고 플랫폼의 퍼포먼스 마케팅 운영 방향을 수립할 수 있다.","채널별 특성과 고객 반응을 고려하여 광고·콘텐츠·프로모션 운영 전략을 기획할 수 있다.","고객 유입 및 채널 성과 데이터를 기반으로 운영 효율 및 ROI 개선 방향을 도출할 수 있다.","콘텐츠 노출 및 고객 반응을 고려한 디지털 채널 운영 방향을 관리할 수 있다.","광고·콘텐츠·랜딩 운영 요소를 통합적으로 관리할 수 있다.","고객 여정(퍼널) 단계별 성과를 분석하고 전환율을 높이기 위한 개선 방안을 도출할 수 있다."]},{"level":"책임","name":"콘텐츠 마케팅 전략","def":"브랜드 전략에 부합하는 콘텐츠 마케팅 방향성을 수립하고 채널별 타겟 특성에 맞춘 메시지와 운영 전략을 수립하며, 제작 리소스를 효율적으로 관리하는 역량","ind":["브랜드 아이덴티티와 마케팅 전략에 부합하는 콘텐츠 마케팅 방향성을 수립할 수 있다.","온드미디어/SNS/프로모션 등 다양한 채널의 콘텐츠 운영 전략을 통합적으로 관리할 수 있다.","목표 고객군의 관심사와 소비 패턴을 분석하여 효과적인 콘텐츠 기획 방향을 도출할 수 있다.","시즌 이슈, 캠페인 목적, 상품 특성 등을 반영한 콘텐츠 운영 우선순위를 설정할 수 있다.","콘텐츠 성과 데이터를 기반으로 개선 방향 및 실행 과제를 도출할 수 있다.","콘텐츠 제작 및 운영 과정에서 디자인·영상·유관부서 협업을 조율할 수 있다."]},{"level":"선임","name":"마케팅 데이터분석","def":"Google Analytics·Excel 등 데이터 분석 도구를 활용하여 A/B 테스트를 설계·최적화하고, 설문조사·VOC 분석·트렌드 리서치를 통해 소비자 인사이트를 도출하는 역량","ind":["Google Analytics·Excel 등 데이터 분석 도구를 활용하여 마케팅 성과 데이터를 수집하고 분석할 수 있다.","웹사이트·앱·SNS 채널의 트래픽·전환율·이탈률 등 주요 지표를 분석하고 개선 방향을 도출할 수 있다.","A/B 테스트를 설계하고 실험군과 대조군의 결과를 비교 분석하여 최적의 마케팅 방안을 도출할 수 있다.","고객 설문조사를 설계하고 결과를 분석하여 고객 니즈와 불만 사항을 파악할 수 있다.","VOC(Voice of Customer) 데이터를 수집·분석하여 고객 인사이트를 도출하고 마케팅 전략에 반영할 수 있다.","시장 트렌드와 경쟁사 동향을 리서치하고 자사 마케팅 전략에 시사점을 제공할 수 있다."]},{"level":"선임","name":"디지털 마케팅 기획","def":"캠페인 목적에 맞는 디지털 광고 및 채널 운영 업무를 수행하고, 광고·콘텐츠·프로모션 운영 결과를 기반으로 캠페인 성과를 개선하며 운영 전반을 관리하는 역량","ind":["브랜드 및 캠페인 목적에 맞는 디지털 채널 운영 전략을 수립할 수 있다.","광고 성과 지표(ROAS·CPC·CTR·CPA 등)를 모니터링하고 성과 미달 원인을 파악하여 개선 조치를 취할 수 있다.","광고 및 채널 운영 결과를 분석하고 개선 방향을 도출할 수 있다.","고객 반응 및 콘텐츠 성과를 기반으로 운영 방향을 조정할 수 있다.","광고 채널별 예산을 효율적으로 관리하고 ROAS 목표 달성을 위해 배분을 조정할 수 있다.","타겟 고객군을 세분화하고 광고 소재와 메시지를 최적화하여 광고 효율을 높일 수 있다."]},{"level":"선임","name":"콘텐츠 마케팅 기획","def":"브랜드 및 채널 운영 목적에 맞는 콘텐츠 마케팅 운영 업무를 수행하고, 콘텐츠·프로모션·채널 운영 결과를 기반으로 콘텐츠 성과 및 운영 효율을 개선하는 역량","ind":["브랜드 및 캠페인 목적에 맞는 콘텐츠 운영 방향을 기획할 수 있다.","온드미디어/SNS/프로모션 등 다양한 채널의 콘텐츠 운영을 기획할 수 있다.","콘텐츠 캘린더를 작성하고 채널별 발행 일정과 소재를 체계적으로 관리할 수 있다.","체험단·후기·바이럴 운영 업무를 관리할 수 있다.","콘텐츠 성과 지표(도달·참여율·클릭률·전환율 등)를 분석하고 개선 방향을 도출할 수 있다.","SNS 플랫폼별 알고리즘 변화를 파악하고 노출 최적화 전략을 실행할 수 있다."]},{"level":"담당","name":"마케팅 기초실무","def":"마케팅 기본 개념을 이해하고 데이터 활용·분석의 기초를 갖추며, 디지털 마케팅 트렌드를 학습하고 콘텐츠와 브랜드에 대한 이해를 바탕으로 실무를 수행하는 역량","ind":["채널별 운영 목적에 맞는 콘텐츠 및 프로모션 운영 계획을 수립할 수 있다.","Google Analytics·Excel 등 기초 데이터 분석 도구를 활용하여 마케팅 데이터를 수집하고 정리할 수 있다.","디지털 마케팅 채널(SNS·검색광고·이메일 등)의 특성과 활용 방법을 이해하고 기본 업무를 수행할 수 있다.","최신 디지털 마케팅 트렌드를 모니터링하고 관련 정보를 팀 내에 공유할 수 있다.","브랜드 가이드라인을 이해하고 브랜드 일관성을 유지하는 방향으로 업무를 수행할 수 있다.","마케팅 캠페인 운영을 보조하고 관련 자료를 수집·정리하여 담당자를 지원할 수 있다."]},{"level":"담당","name":"디지털 광고 운영","def":"디지털 광고 및 채널 운영 업무를 수행하고, 광고 소재 운영·콘텐츠 발행·운영 결과 모니터링을 통해 디지털 채널 운영 실무를 안정적으로 수행하는 역량","ind":["디지털 광고 및 채널 운영 업무를 수행할 수 있다.","광고 및 프로모션 운영 일정에 맞춰 콘텐츠 및 운영 업무를 지원할 수 있다.","광고 성과 지표(도달·노출·클릭률·전환율 등)를 확인하고 기본적인 현황을 보고할 수 있다.","채널별 운영 현황 및 고객 반응을 모니터링하고 내용을 정리할 수 있다.","브랜드 가이드라인 및 채널 운영 기준에 맞춰 운영 업무를 수행할 수 있다.","광고 소재 및 콘텐츠 발행 업무를 수행할 수 있다."]},{"level":"담당","name":"콘텐츠 마케팅 운영","def":"브랜드 방향성과 콘텐츠 목적을 이해하고, 채널별 특성에 맞는 콘텐츠 제작 및 운영 지원 업무를 수행하는 역량","ind":["채널별 운영 목적에 맞는 콘텐츠 및 프로모션 운영 계획을 수립할 수 있다.","채널별 특성에 맞는 이미지·카피·영상 소재를 기획하고 제작 및 운영 지원할 수 있다.","홈페이지 게시물·배너·팝업 등 웹 콘텐츠를 기획하고 제작을 지원할 수 있다.","영상 콘텐츠(숏폼·홍보영상 등)의 기획안을 작성하고 제작 과정을 지원할 수 있다.","콘텐츠 제작에 필요한 자료(이미지·영상·텍스트 등)및 레퍼런스를 조사하고 정리할 수 있다.","체험단·후기·바이럴 콘텐츠 운영 업무를 지원할 수 있다."]}]},"영상":{"slogan":"영상으로 브랜드의 가치를 전달한다","comps":[{"level":"선임~책임","name":"영상기획 및 연출","def":"영상 콘텐츠의 제작 의도와 구성 내용을 기획하고 장르별 특성에 맞는 레퍼런스를 제시하며 제작 의도에 맞는 영상 연출을 수행하는 역량","ind":["영상 콘텐츠의 목적과 타깃 시청자를 파악하고 제작 의도와 구성 내용을 담은 기획서를 작성할 수 있다.","장르별 특성(마케팅 영상·유튜브 콘텐츠·애니메이션 등)에 맞는 레퍼런스를 조사하고 제시할 수 있다.","명확한 기획 의도와 구성 내용·제작 예산을 포함한 기획서를 작성하고 유관부서와 협의할 수 있다.","콘티를 작성하고 제작 의도에 맞는 영상 연출 방향을 설정할 수 있다.","촬영·편집 과정에서 연출 의도가 일관되게 구현되는지 확인하고 방향을 조율할 수 있다.","영상 완성 후 기획 의도와 연출 방향에 맞게 구현되었는지 검토하고 수정 방향을 제시할 수 있다."]},{"level":"선임~책임","name":"영상 제작 관리","def":"촬영 현장에 필요한 인원·장소·장비·인물을 섭외하고 제작 일정과 예산을 관리하며 제작 전 과정을 총괄하는 역량","ind":["영상 제작에 필요한 인원·장소·장비·출연자를 파악하고 섭외 계획을 수립하여 실행할 수 있다.","제작 일정을 수립하고 단계별 진행 상황을 모니터링하여 납기를 관리할 수 있다.","제작 예산을 수립하고 집행 현황을 관리하며 예산 범위 내에서 품질을 최적화할 수 있다.","촬영 현장에서 인원·장비·장소 등 제작 환경을 점검하고 원활한 촬영이 진행될 수 있도록 관리할 수 있다.","제작 과정에서 발생하는 이슈(일정 지연·장비 오류·출연자 변경 등)를 파악하고 신속하게 해결할 수 있다.","외부 협력업체·프리랜서와 계약 조건을 협의하고 결과물을 기준에 맞게 검수할 수 있다."]},{"level":"선임~책임","name":"촬영","def":"콘티를 기반으로 카메라 수량·위치·앵글·워킹을 결정하고 조명·오디오를 설치·조정하여 콘텐츠 제작에 최적화된 촬영을 수행하는 역량","ind":["콘티를 분석하고 촬영 목적에 맞는 카메라 수량·위치·앵글·워킹 방향을 결정할 수 있다.","콘텐츠 제작 비용과 효율을 고려하여 촬영 목적에 적합한 카메라 장비를 선택할 수 있다.","카메라 위치와 콘티에 따라 조명을 설치·조정하고 최적의 촬영 환경을 구성할 수 있다.","카메라 위치와 콘티에 따라 오디오를 세팅·조정하여 고품질의 음향을 확보할 수 있다."]},{"level":"선임~책임","name":"영상편집2","def":"촬영·녹화된 영상을 스토리텔링에 맞게 순서를 확정하고 정해진 시간에 맞게 구성하며 데이터 포맷·컨테이너·크기를 고려하여 최적의 데이터 매니지먼트를 수행하는 역량","ind":["촬영·녹화된 영상 소스를 검토하고 스토리텔링에 맞는 편집 방향을 설정할 수 있다.","영상 소스를 스토리텔링 순서에 맞게 배열하고 정해진 시간 내에 완성도 있게 구성할 수 있다.","색보정·음향 편집·자막·그래픽 등 편집 요소를 적용하여 영상의 완성도를 높일 수 있다.","편집 완료된 영상을 납품 기준(포맷·해상도·용량 등)에 맞게 출력하고 관리할 수 있다.","영상 데이터 포맷·컨테이너·크기를 고려하여 최적의 데이터 매니지먼트를 수행할 수 있다.","편집 결과물을 기획 의도와 대조하여 검토하고 수정 사항을 반영하여 최종 완성본을 도출할 수 있다."]},{"level":"선임~책임","name":"멀티 프로젝트 관리","def":"여러 프로젝트와 다양한 작업을 동시에 관리하고 각 작업의 우선순위를 정하여 일정 내에 모든 작업을 완료하는 역량","ind":["동시에 진행되는 여러 프로젝트의 전체 현황을 파악하고 일정·우선순위·리소스를 관리할 수 있다."]},{"level":"담당","name":"영상편집1","def":"촬영·녹화된 영상을 스토리텔링에 맞게 순서를 확정하고 정해진 시간에 맞게 구성하는 역량","ind":["촬영·녹화된 영상 소스를 검토하고 기획 의도에 맞는 편집 방향을 파악할 수 있다.","영상 소스를 스토리텔링 순서에 맞게 배열하고 정해진 시간 내에 구성할 수 있다.","자막·컷 편집 등 기본적인 편집 요소를 적용하여 영상을 완성할 수 있다.","편집 결과물을 납품 기준(포맷·해상도·용량 등)에 맞게 출력하고 전달할 수 있다.","상위자의 피드백을 수용하고 수정 방향에 맞게 편집 결과물을 수정·보완할 수 있다.","편집 소프트웨어(Premiere Pro·DaVinci Resolve 등)를 활용하여 기본적인 편집 작업을 수행할 수 있다."]},{"level":"담당","name":"영상 디자인","def":"선정된 시안에 필요한 일러스트레이션·카피라이팅·타이포그래피·레이아웃·색상 등을 완성하고 그에 따른 영상의 디자인을 개발하는 역량","ind":["선정된 시안의 디자인 방향을 이해하고 영상에 필요한 일러스트레이션·타이포그래피·색상 등을 설계할 수 있다.","영상 콘텐츠의 목적과 타깃 시청자에 맞는 레이아웃과 색상 조합을 구성할 수 있다.","카피라이팅 방향을 파악하고 영상 디자인에 적합한 텍스트 요소를 배치할 수 있다.","브랜드 아이덴티티에 맞게 영상 디자인 요소를 구성하고 일관성을 유지할 수 있다.","완성된 영상 디자인을 편집 소프트웨어에 적용하고 영상과 자연스럽게 연결되도록 작업할 수 있다.","상위자의 피드백을 수용하고 디자인 수정 방향에 맞게 결과물을 보완할 수 있다."]},{"level":"담당","name":"애니메이션 및 인포그래픽 제작","def":"애니메이션·모션 인포그래픽을 제작하여 정보를 시각화하는 역량","ind":["전달하고자 하는 정보를 파악하고 애니메이션·모션 인포그래픽으로 시각화하는 방향을 설정할 수 있다.","After Effects 등 애니메이션 제작 소프트웨어를 활용하여 모션 그래픽을 제작할 수 있다.","정보를 시각적으로 이해하기 쉽게 구조화하고 인포그래픽으로 표현할 수 있다.","영상의 흐름과 스토리텔링에 맞게 애니메이션 타이밍과 속도를 조절할 수 있다.","브랜드 아이덴티티와 영상 디자인 방향에 맞게 애니메이션 스타일을 설정하고 일관성을 유지할 수 있다.","완성된 애니메이션·인포그래픽을 영상 편집 소프트웨어에 적용하고 자연스럽게 연결할 수 있다."]},{"level":"담당","name":"사운드 디자인","def":"영상에 어울리는 사운드 및 음악을 기획하고 삽입하여 영상의 몰입감과 완성도를 높이는 역량","ind":["영상의 분위기와 기획 의도를 파악하고 어울리는 사운드·음악 방향을 설정할 수 있다.","영상 목적과 타깃 시청자에 맞는 배경음악(BGM)과 효과음(SFX)을 선택하고 적용할 수 있다.","음악·사운드 저작권을 확인하고 라이선스 기준에 맞는 음원을 사용할 수 있다.","영상의 장면 전환·강조 포인트에 맞게 사운드 타이밍을 조절하고 자연스럽게 연결할 수 있다.","음향 편집 소프트웨어를 활용하여 사운드 볼륨·EQ·노이즈 제거 등 음향 편집 작업을 수행할 수 있다.","완성된 사운드 디자인이 영상과 자연스럽게 어우러지는지 확인하고 수정·보완할 수 있다."]},{"level":"담당","name":"영상 디자인 툴 활용","def":"영상·디자인 성과물 산출에 필요한 각종 프로그램 및 소프트웨어를 이해하고 업무에 활용하는 역량","ind":["영상 편집 소프트웨어(Premiere Pro·DaVinci Resolve 등)의 주요 기능을 이해하고 편집 작업에 활용할 수 있다."]}]},"해외사업":{"slogan":" 한국의 콘텐츠를 중국 시장에 안착시킨다 ","comps":[{"level":"관리자(수석/책임)","name":"제품 전략 수립","def":"해외 시장의 트렌드와 고객 니즈를 분석하여 현지 시장에 적합한 신제품 출간 전략과 제품 라인업 방향을 수립하는 역량","ind":["해외 시장의 유아동 콘텐츠 트렌드와 경쟁 제품 현황을 분석하여 신제품 출간 기회를 도출할 수 있다.","현지 고객 니즈와 시장 특성을 반영하여 신제품 출간 전략과 제품 라인업 방향을 수립할 수 있다.","신제품 출간 일정·수량·구성품 등 제품 개발 계획을 수립하고 관련 부서와 협의할 수 있다.","현지 시장에 맞는 제품 가격 전략과 유통 방향을 설정하고 법인에 공유할 수 있다.","제품 출간 후 시장 반응과 판매 데이터를 분석하여 차기 제품 전략에 반영할 수 있다.","신제품 출간 성과를 평가하고 경영진에게 보고하며 제품 전략 개선 방향을 제안할 수 있다."]},{"level":"관리자(수석/책임)","name":"해외법인 운영 관리","def":"해외법인의 업무 프로세스를 체계화하고 본사와 법인 간 운영 기준을 수립하여 법인이 효율적으로 운영될 수 있도록 관리하는 역량","ind":["해외법인의 업무 프로세스를 파악하고 효율화가 필요한 영역을 분석하여 개선 방향을 수립할 수 있다.","본사와 법인 간 업무 운영 기준과 협업 프로세스를 수립하고 법인에 명확하게 전달할 수 있다.","협업 툴(Feishu 등)을 활용하여 본사와 법인 간 업무 정보 공유 체계를 구축하고 운영할 수 있다.","법인 운영 매뉴얼을 수립하고 주기적으로 업데이트하여 법인 운영의 일관성을 유지할 수 있다.","법인 운영 현황을 주기적으로 점검하고 이슈 발생 시 원인을 분석하여 대응 방향을 마련할 수 있다.","법인 직원의 역량 강화를 위한 교육·지원 방향을 수립하고 실행을 지원할 수 있다."]},{"level":"관리자(수석/책임)","name":"마케팅 전략 기획","def":"해외 시장의 디지털 플랫폼 특성과 고객 특성을 분석하여 브랜드 인지도 향상과 매출 증대를 위한 마케팅 전략을 기획하는 역량","ind":["해외 디지털 플랫폼(틱톡·샤오홍슈 등)의 특성과 현지 고객 행동 패턴을 분석하여 마케팅 방향을 설정할 수 있다.","브랜드 인지도 향상과 매출 증대를 위한 연간 마케팅 전략과 실행 계획을 수립할 수 있다.","마케팅 예산을 채널별·캠페인별로 배분하고 효율적으로 운영할 수 있다.","마케팅 캠페인 성과를 분석하고 목표 대비 달성률을 평가하여 개선 방향을 도출할 수 있다.","현지 트렌드와 경쟁사 마케팅 활동을 모니터링하고 자사 마케팅 전략에 반영할 수 있다.","법인 마케팅팀과 협력하여 마케팅 전략의 실행력을 높이고 방향의 일관성을 유지할 수 있다."]},{"level":"관리자(수석/책임)","name":"재무분석 및 기획","def":"해외법인의 이익 및 현금흐름을 파악하고 제품가격 전략 및 프로모션 운영전략, 현금흐름에 따른 전략을 수립할 수 있는 역량","ind":["해외법인의 손익계산서·현금흐름표 등 재무 데이터를 파악하고 법인의 수익성과 자금 상황을 분석할 수 있다.","제품별 원가 구조와 마진을 분석하여 현지 시장에 적합한 제품 가격 전략을 수립할 수 있다.","프로모션 비용 대비 효과(ROI)를 분석하고 예산 범위 내에서 최적의 프로모션 운영 전략을 기획할 수 있다.","월별·분기별 현금흐름을 모니터링하고 자금 부족 리스크를 사전에 파악하여 대응 전략을 수립할 수 있다.","재무 분석 결과를 경영진에게 명확하게 보고하고 법인 운영 전략과 연계한 재무적 개선 방향을 제안할 수 있다.","법인의 연간 재무 목표(매출·이익·현금흐름 등)를 설정하고 달성 현황을 주기적으로 점검할 수 있다."]},{"level":"관리자(수석/책임)","name":"매출 목표 관리 및 분석","def":"해외법인의 매출 목표를 설정하고 제품별·기간별 매출 실적을 분석하여 목표 달성을 위한 전략적 개선 방향을 도출하는 역량","ind":["전년도 매출 실적과 시장 현황을 분석하여 연간 매출 목표를 설정하고 제품별로 배분할 수 있다.","월별·분기별 매출 실적을 모니터링하고 목표 대비 달성률을 분석하여 현황을 파악할 수 있다.","매출 부진 제품·채널의 원인을 분석하고 개선 방향을 도출하여 법인에 공유할 수 있다.","매출 데이터를 시각화하고 경영진 및 유관부서에 명확하게 보고할 수 있다.","시장 환경 변화에 따라 매출 목표를 유연하게 조정하고 대응 전략을 수립할 수 있다.","매출 달성을 위한 판매 촉진 방안을 기획하고 법인과 협력하여 실행할 수 있다."]},{"level":"실무자(사원/담당)","name":"제품 개발 지원","def":"현지 시장에 적합한 신제품 출간을 위해 제품 기획·번역·구성품 개발·마케팅 자료 제작 등 제품 개발 전 과정을 지원하는 역량","ind":["신제품 출간 계획을 파악하고 제품 기획·번역·구성품 개발 등 단계별 진행 사항을 정리하여 관리할 수 있다.","현지 시장 특성을 반영하여 제품 번역·현지화 작업을 지원하고 번역 품질을 확인할 수 있다.","신제품 구성품(보드게임·활동지 등) 개발 과정을 지원하고 제작 일정을 관리할 수 있다.","신제품 출간에 필요한 마케팅 자료(제품 소개서·SNS 콘텐츠 자료 등)를 제작하고 관리할 수 있다.","제품 개발 과정에서 발생하는 이슈를 파악하고 신속하게 상위자에게 보고하여 해결 방향을 확인할 수 있다.","본사 개발팀·디자인팀 등 유관부서와 제품 개발 관련 사항을 협의하고 조율할 수 있다."]},{"level":"실무자(사원/담당)","name":"업무 운영 지원 및 DB관리","def":"해외법인 운영에 필요한 업무 매뉴얼을 작성하고 협업 툴을 활용하여 업무자료를 체계적으로 DB화하여 관리하는 역량","ind":["해외법인 운영에 필요한 업무 매뉴얼을 작성하고 현장에서 활용 가능한 형태로 정리할 수 있다.","협업 툴(Feishu 등)의 기능을 이해하고 업무 목적에 맞게 구조를 설계하여 운영할 수 있다.","영업·마케팅·생산·물류·재무·법무·제품 등 부문별 업무자료를 분류하고 체계적으로 DB화할 수 있다.","DB에 등록된 자료를 주기적으로 업데이트하고 최신 정보가 유지될 수 있도록 관리할 수 있다.","협업 툴 운영률을 모니터링하고 활용도를 높이기 위한 방안을 상위자에게 제안할 수 있다.","업무 매뉴얼 변경 사항을 파악하고 법인 직원에게 신속하게 공유할 수 있다."]},{"level":"실무자(사원/담당)","name":"디지털 마케팅 콘텐츠 운영","def":"해외 디지털 플랫폼(틱톡·샤오홍슈 등)의 브랜드 계정을 운영하고 마케팅 콘텐츠를 기획·제작·업데이트하여 브랜드 인지도를 높이는 역량","ind":["틱톡·샤오홍슈 등 해외 디지털 플랫폼의 특성과 알고리즘을 이해하고 플랫폼별 운영 방향을 파악할 수 있다.","브랜드 아이덴티티에 맞는 마케팅 콘텐츠 방향을 설정하고 월별 콘텐츠 계획을 수립할 수 있다.","제품 특성과 현지 고객 관심사를 반영한 콘텐츠를 기획하고 제작하여 플랫폼에 업로드할 수 있다.","브랜드 계정의 콘텐츠 업데이트 횟수와 참여율 등 운영 현황을 모니터링할 수 있다.","콘텐츠 성과(조회수·좋아요·댓글·공유 등)를 분석하고 성과가 높은 콘텐츠 유형을 파악하여 차기 콘텐츠에 반영할 수 있다.","현지 디지털 마케팅 트렌드를 조사하고 자사 콘텐츠 운영에 적용 가능한 방향을 제안할 수 있다."]},{"level":"실무자(사원/담당)","name":"재무업무 지원","def":"해외법인의 이익 및 현금흐름을 파악하고 제품가격 전략 및 프로모션 운영전략, 현금흐름에 따른 전략을 수립할 수 있는 역량","ind":["해외법인의 손익계산서·현금흐름표 등 재무 데이터를 파악하고 법인의 수익성과 자금 상황을 분석할 수 있다.","제품별 원가 구조와 마진을 분석하여 현지 시장에 적합한 제품 가격 전략을 수립할 수 있다.","프로모션 비용 대비 효과(ROI)를 분석하고 예산 범위 내에서 최적의 프로모션 운영 전략을 기획할 수 있다.","월별·분기별 현금흐름을 모니터링하고 자금 부족 리스크를 사전에 파악하여 대응 전략을 수립할 수 있다.","재무 분석 결과를 경영진에게 명확하게 보고하고 법인 운영 전략과 연계한 재무적 개선 방향을 제안할 수 있다.","법인의 연간 재무 목표(매출·이익·현금흐름 등)를 설정하고 달성 현황을 주기적으로 점검할 수 있다."]},{"level":"실무자(사원/담당)","name":"본사-법인 커뮤니케이션 지원","def":"본사와 해외법인 간 원활한 의사소통을 지원하고 협업 툴을 활용하여 업무 정보를 체계적으로 공유하는 역량","ind":["본사와 법인 간 업무 요청·의사결정·정보 공유 등 커뮤니케이션 흐름을 파악하고 원활하게 중계할 수 있다.","협업 툴(Feishu 등)을 활용하여 본사와 법인 간 업무 정보를 체계적으로 공유하고 관리할 수 있다.","본사 유관부서(영업·마케팅·개발·물류 등)와 법인 간 업무 협의 사항을 정리하고 양측에 명확하게 전달할 수 있다.","언어·문화적 차이로 인한 커뮤니케이션 오류를 파악하고 오해가 발생하지 않도록 지원할 수 있다.","본사와 법인 간 정기 회의 일정을 관리하고 회의 자료를 준비하여 원활한 회의 진행을 지원할 수 있다.","커뮤니케이션 과정에서 발생하는 이슈를 파악하고 신속하게 상위자에게 보고하여 해결 방향을 확인할 수 있다."]}]},"콘텐츠디자인":{"slogan":"브랜드의 가치를 디자인으로 완성한다","comps":[{"level":"책임","name":"시각 디자인 전략 수립","def":"리서치 조사 결과를 바탕으로 디자인 요구사항에 적합한 디자인 콘셉트를 도출하고 제품 개발에 필요한 차별화 요소를 결정하여 브랜드 아이덴티티에 맞는 디자인 전략을 수립하는 역량","ind":["시장 트렌드·경쟁사·고객 니즈 등 리서치 결과를 분석하여 디자인 방향의 기초를 마련할 수 있다.","프로젝트 요구사항과 브랜드 아이덴티티를 반영한 디자인 콘셉트를 도출하고 구체화할 수 있다.","경쟁 제품 대비 차별화 포인트를 파악하고 디자인 전략에 반영할 수 있다.","브랜드 스타일 가이드를 수립하고 전체 디자인 산출물에 일관성 있게 적용될 수 있도록 기준을 설정할 수 있다.","수립된 디자인 전략을 팀원 및 유관부서에 명확하게 공유하고 실행 방향을 제시할 수 있다.","디자인 전략 실행 결과를 모니터링하고 브랜드 방향과의 일치 여부를 점검하여 조정할 수 있다."]},{"level":"책임","name":"디자인 프로젝트 기획","def":"디자인 프로젝트의 목적·내용·일정·요구사항을 파악하여 전체 디자인 프로세스를 구성하고 결과물이 목표에 맞게 완성될 수 있도록 총괄하는 역량","ind":["디자인 프로젝트의 목적과 요구사항을 파악하고 전체 디자인 프로세스를 설계할 수 있다.","프로젝트별 디자인 일정을 수립하고 단계별 마일스톤을 설정하여 납기를 관리할 수 있다.","프로젝트 수행에 필요한 인력과 자원을 파악하고 효율적으로 배분할 수 있다.","유관부서(마케팅·개발·해외사업 등)와 디자인 요구사항을 협의하고 방향을 조율할 수 있다.","다수의 프로젝트를 동시에 관리하며 우선순위를 설정하고 일정을 조정할 수 있다.","프로젝트 진행 중 이슈 발생 시 원인을 파악하고 신속하게 해결하여 일정을 유지할 수 있다."]},{"level":"책임","name":"UI/UX 기획","def":"UI/UX 분야에 대한 전문적인 지식을 바탕으로 사용자 경험을 분석하고 최적의 사용자 경험을 제공할 수 있는 디지털 플랫폼 상품 및 서비스를 기획하는 역량","ind":["사용자 조사·분석을 통해 사용자 니즈와 행동 패턴을 파악하고 UI/UX 기획 방향을 설정할 수 있다.","정보 구조(IA)를 설계하고 사용자 흐름(User Flow)을 구체화하여 직관적인 화면 구성을 기획할 수 있다.","와이어프레임·프로토타입을 제작하고 사용자 테스트를 통해 UI/UX 완성도를 검증할 수 있다.","디지털 플랫폼의 UI 디자인 가이드라인을 수립하고 일관성 있게 적용될 수 있도록 관리할 수 있다.","개발팀과 UI/UX 기획 내용을 협의하고 구현 가능성을 검토하여 실행 방향을 조율할 수 있다.","UI/UX 트렌드와 사용성 개선 방향을 파악하고 플랫폼에 적용 가능한 방안을 제안할 수 있다."]},{"level":"책임","name":"프로젝트 완료 최종보고","def":"프로젝트 전체 산출물을 분류·정리하고 기획·진행 상황·결과까지의 보고서를 작성하여 최적의 결과물을 창출하는 역량","ind":["프로젝트 완료 후 전체 산출물을 유형별로 분류하고 체계적으로 정리할 수 있다.","프로젝트 기획 의도·진행 상황·결과를 포함한 최종 보고서를 작성할 수 있다.","프로젝트 목표 대비 달성 결과를 분석하고 성과와 개선 사항을 명확하게 정리할 수 있다.","최종 보고서를 경영진 및 유관부서에 명확하게 발표하고 질의에 논리적으로 답변할 수 있다."]},{"level":"담당~선임","name":"비주얼 아이디에이션 전개","def":"프로젝트의 디자인 콘셉트에 대한 다양한 아이디어를 도출하고 시각적으로 표현·전개하여 적용하는 역량","ind":["프로젝트의 목적과 디자인 콘셉트를 이해하고 다양한 시각적 아이디어를 도출할 수 있다.","도출된 아이디어를 스케치·무드보드 등으로 시각화하여 방향성을 구체화할 수 있다.","타깃 고객과 브랜드 아이덴티티를 고려하여 아이디에이션 방향을 설정하고 발전시킬 수 있다.","다양한 레퍼런스를 조사하고 프로젝트에 적합한 비주얼 방향을 선별하여 제안할 수 있다.","아이디에이션 결과물을 팀 내에 발표하고 디자인 의도를 명확하게 설명할 수 있다.","상위자 및 유관부서의 피드백을 수용하고 아이디에이션 방향을 발전시킬 수 있다."]},{"level":"담당~선임","name":"시안 디자인 개발 기초","def":"각종 디자인 작업 도구 및 컴퓨터 프로그램을 사용하여 프로젝트의 콘셉트에 맞는 여러 가지 디자인 시안을 제안하고 제작하는 역량","ind":["프로젝트 콘셉트와 디자인 방향을 이해하고 이를 반영한 디자인 시안 방향을 설정할 수 있다.","Photoshop·Illustrator 등 디자인 툴을 활용하여 콘셉트에 맞는 복수의 디자인 시안을 제작할 수 있다.","제작된 시안을 비교하고 각 시안의 장단점을 분석하여 제안할 수 있다.","브랜드 아이덴티티와 스타일 가이드를 준수하며 시안을 제작할 수 있다.","시안에 대한 피드백을 수용하고 수정 방향에 맞게 시안을 발전시킬 수 있다.","중국사업 디자인 납기 기준을 준수하여 정해진 일정 내에 시안을 완성하고 전달할 수 있다."]},{"level":"담당~선임","name":"디자인 리서치 조사","def":"프로젝트를 성공적으로 수행하기 위해 관련 분야의 다양한 자료를 수집·분류·분석하여 효과적인 디자인 개발을 위한 기초를 마련하는 역량","ind":["프로젝트 목적과 디자인 방향에 맞는 리서치 범위와 방법을 설정할 수 있다.","국내외 디자인 트렌드·경쟁사·유사 사례 등 다양한 채널을 통해 관련 자료를 수집할 수 있다.","수집된 자료를 유형별로 분류하고 프로젝트에 활용 가능한 인사이트를 도출할 수 있다.","리서치 결과를 체계적으로 정리하고 팀 내에 공유하여 디자인 기획에 활용할 수 있도록 할 수 있다.","타깃 고객의 시각적 선호도와 소비 트렌드를 조사하고 디자인 방향에 반영할 수 있다.","리서치 결과를 바탕으로 디자인 방향 설정에 필요한 근거 자료를 제시할 수 있다."]},{"level":"담당~선임","name":"최종 디자인 실행","def":"선정된 시안에 필요한 일러스트레이션·사진촬영·카피라이팅·타이포그래피·레이아웃·색상 등을 완성하고 그에 따른 어플리케이션 디자인까지 개발하는 역량","ind":["선정된 시안의 디자인 방향을 정확하게 이해하고 최종 디자인 실행 계획을 수립할 수 있다.","일러스트레이션·타이포그래피·색상·레이아웃 등 디자인 요소를 시안에 맞게 완성할 수 있다.","필요한 사진 촬영 방향을 파악하고 촬영 결과물을 디자인에 적합하게 활용할 수 있다.","카피라이팅 방향을 파악하고 디자인에 적합한 텍스트 요소를 배치하여 완성도를 높일 수 있다.","완성된 디자인을 각종 어플리케이션(SNS·인쇄물·굿즈·디지털 플랫폼 등)에 맞게 적용할 수 있다.","최종 디자인 결과물을 납품 기준에 맞게 출력·저장하고 유관부서에 전달할 수 있다."]},{"level":"담당~선임","name":"디자인 자료화","def":"완성된 디자인 결과물을 정리하여 관리하고 결과물에 대한 권리를 보호하기 위하여 지식재산권을 확보하는 역량","ind":["완성된 디자인 결과물을 프로젝트별·유형별로 분류하고 체계적으로 정리하여 저장할 수 있다.","디자인 결과물의 버전을 관리하고 최종 확정본과 수정 이력을 명확하게 구분하여 관리할 수 있다."]}]},"IT개발운영":{"slogan":"","comps":[{"level":"수석(리더급)","name":"IT시스템 운영기획","def":"전사 업무 효율화를 위하여 IT시스템 개선과제를 기획하고, 실행에 필요한 예산을 수립하며 시스템 운영 전반을 총괄하는 역량","ind":["조직의 전략 및 목적과 IT시스템 업무가 연계될 수 있도록 IT서비스 수준 개선에 관한 운영목표와 추진 전략을 수립할 수 있다.","조직의 운영목표 달성을 위한 IT시스템의 장단기 추진과제를 도출하고, IT자원의 투자 우선순위 기준에 따라 일정·조직·예산을 포함하는 실행계획을 수립할 수 있다.","운영목표 기준 성과평가·서비스수준 모니터링·품질점검·고객 불만사항 관리를 통해 개선사항을 식별하고 과제 추진계획을 수립할 수 있다.","IT시스템 운영에 필요한 연간 예산을 편성하고 집행 현황을 관리하며 비용 효율화 방안을 도출할 수 있다.","IT운영 현황과 성과를 정기적으로 경영진에게 보고하고 의사결정에 필요한 정보를 제공할 수 있다.","IT시스템 운영 관련 내·외부 이해관계자(유관부서·벤더·협력사)와의 협력 체계를 구축하고 조율할 수 있다."]},{"level":"수석(리더급)","name":"IT시스템 보안운영","def":"IT서비스 자원(운영체제·데이터베이스·응용소프트웨어·네트워크 등)의 기밀성·무결성·가용성을 확보하고, 보안 정책을 수립·운영하여 안정적이고 안전한 서비스를 제공하는 역량","ind":["조직의 보안 규정에 포함된 애플리케이션 보안 요구사항을 파악하고 보안 정책을 수립할 수 있다.","보안 요구사항에 의거하여 네트워크 보안솔루션을 안정적으로 운영할 수 있다.","IT 환경변화에 따른 변화를 반영할 수 있도록 시스템 보안솔루션 운영 환경을 정기적으로 검토하고 보완할 수 있다.","서버·운영체제·애플리케이션의 취약점을 주기적으로 분석하고 보안 패치 및 조치 계획을 수립·실행할 수 있다.","보안 사고·침해 시도 발생 시 원인을 분석하고 신속하게 대응하여 피해를 최소화하며 재발 방지 대책을 수립할 수 있다.","접근 통제 정책을 설계하고 사용자별 권한을 관리하여 내·외부 비인가 접근을 차단할 수 있다."]},{"level":"수석(리더급)","name":"IT프로젝트 인적자원관리","def":"IT프로젝트 완수를 위하여 내·외부 인력을 적절히 배치·운영하고, 내부 인력의 전문 역량 강화를 위한 역할을 부여하여 효율적인 IT 인적자원을 관리하는 역량","ind":["프로젝트 초기 IT프로젝트의 미션과 임무의 난이도, 팀원들의 운영방식 등을 식별하여 조직의 체계를 구성할 수 있다.","프로젝트 수행조직의 문화와 운영특성을 고려하여 기능적 IT프로젝트 중심적 구조를 혼합하여 운영방식을 결정할 수 있다.","주기적으로 IT프로젝트 조직과 업무부서의 운영효율성과 성과달성 정도를 모니터링하고 피드백하여 조직체계를 조정할 수 있다."]},{"level":"책임","name":"IT시스템 운영관리","def":"IT시스템 전반의 상태를 모니터링하고 문제점을 분석하여 적절한 조치를 취하며, 장애 원인별 대응 방안을 수립하고 재발 방지 대책을 강구하여 시스템을 안정적으로 운영·관리하는 역량","ind":["수립된 IT시스템 운영 기획으로부터 요구된 적합한 관리목록 및 운영 기준을 도출할 수 있다.","시스템 개선 요청에 대한 이해를 위하여 개선 요구된 시스템의 환경과 필요 사항을 파악할 수 있다.","파악된 개선 요건에 대해서 하드웨어·소프트웨어·비즈니스 프로세스·시스템운영과 관련한 해결책을 강구할 수 있다.","개선 방안에 대한 상세 내용과 대응 계획을 수립하여 안정적 운영관리를 할 수 있다.","IT시스템 장애 발생 시 원인을 신속하게 분석하고 복구 절차에 따라 대응하며 영향 범위를 최소화할 수 있다.","장애 처리 후 재발 방지를 위한 근본 원인 분석(RCA)을 수행하고 개선 조치를 실행할 수 있다."]},{"level":"책임","name":"IT프로젝트 통합구현","def":"단위 모듈 간 분산된 데이터 관계를 분석하고, 전체 프로젝트의 통합 모듈 간 효율적 연계를 구현하며 통합 완료 여부를 검증하는 역량","ind":["개발하고자 하는 시스템과 업무 모듈 간 특성을 고려하여 효율적 데이터 송수신을 정의할 수 있다.","외부 및 내부 모듈 간의 연계를 위한 데이터 표준을 기반으로 통합구현을 할 수 있다.","구성된 연계 메커니즘에 대한 명세서를 참조하여 연계모듈 구현을 위한 논리적·물리적 환경을 준비할 수 있다.","연계모듈의 안정적 작동 여부와 모듈 간 인터페이스를 통해 연동된 데이터의 무결성을 검증할 수 있다.","통합 테스트 계획을 수립하고 단위 모듈 간 연계 오류를 탐지하여 수정할 수 있다.","통합 구현 과정에서 발생하는 성능 저하 요인을 분석하고 최적화 방안을 도출할 수 있다."]},{"level":"책임","name":"개인정보 기술적 보호조치 운영","def":"개인정보보호 법령에서 요구하는 기술적·관리적 보호조치를 IT시스템에 구현·운영하고, 접근통제·암호화·접속기록 관리 등을 통해 시스템 내 개인정보가 안전하게 처리될 수 있도록 지원하는 역량","ind":["개인정보 처리시스템에 접근통제(권한관리, 인증) 기능을 구현·운영할 수 있다.","개인정보의 암호화 저장·전송이 적용되도록 시스템을 설계·운영할 수 있다.","개인정보 접속기록을 생성·보관하고 정기적으로 점검할 수 있다.","개인정보 처리시스템의 보안 취약점을 점검하고 개선 조치를 수행할 수 있다.","불필요한 개인정보 보유 현황을 점검하고 파기 절차를 시스템에 반영할 수 있다."]},{"level":"책임","name":"웹 서버관리","def":"웹 서버의 설치·설정·배포를 수행하고 서비스 자원을 안정적으로 할당하며, 서버 상태를 모니터링하고 장애 발생 시 신속하게 대응하여 서비스를 안정적으로 운영하는 역량","ind":["시스템 운용계획에 따라 리눅스·윈도우 등 서버용 운영체제를 설치하고 사용자 요구에 따라 접근통제 등 보안기능을 구성·적용하여 관리할 수 있다.","관련 서비스 데몬 등 패키지 파일 및 기능을 설치하고 사용자 요구에 따라 최적의 환경을 구성하여 서비스를 제공할 수 있다.","서버 보안패치 및 업그레이드를 실시하고 필요 시 백업 복구절차 및 향후 확장을 고려한 자원관리 업무를 수행할 수 있다.","웹 서버 성능 지표(CPU·메모리·디스크·네트워크 트래픽 등)를 주기적으로 모니터링하고 성능 저하 원인을 분석하여 최적화할 수 있다.","웹 서버 장애 발생 시 SOP에 따라 원인을 신속하게 파악하고 서비스 복구를 수행하며 재발 방지 대책을 수립할 수 있다.","서버 용량 계획을 수립하고 서비스 트래픽 증가에 대비하여 자원을 사전에 확보하고 확장 방안을 준비할 수 있다."]},{"level":"선임","name":"요구사항 분석","def":"사용자의 업무 목적별 요구사항을 도출·분석·명세화하고, 분석기법을 활용하여 요구사항을 재검증하며 명확하게 정의·문서화하는 역량","ind":["인터뷰·시나리오 작성·프로토타입 제작·그룹회의·관찰·사용자 스토리 작성 등 제시된 기법을 통해 애플리케이션의 요구사항을 도출할 수 있다.","도출한 요구사항을 기능적 요구사항과 비기능적 요구사항으로 분류할 수 있다.","도출한 요구사항이 개발하고자 하는 애플리케이션 전체 또는 단위 컴포넌트에 영향이 있는지를 분석하여 요구사항의 적용 범위를 확인할 수 있다.","요구사항 분석 결과를 토대로 사용자와 요구사항·우선순위·영향 범위 등을 확정할 수 있다.","구현하고자 하는 애플리케이션이 구동되는 시스템이나 하드웨어 관련 내용을 구체화하여 시스템 요구사항 문서를 작성할 수 있다."]},{"level":"선임","name":"IT프로젝트 단위구현","def":"프로젝트 설계서 및 요구사항에 따라 담당 단위 모듈을 정확하게 개발·구현하고, 단위 테스트를 수행하여 모듈의 품질을 확보하는 역량","ind":["설계서와 요구사항을 분석하여 담당 모듈의 구현 방안을 주도적으로 도출할 수 있다.","업무 로직의 복잡도와 성능을 고려하여 효율적인 코드 구조를 설계할 수 있다.","사내 코딩 표준을 준수하면서 재사용성과 유지보수성을 고려한 모듈을 개발할 수 있다.","단위 테스트 시나리오를 직접 설계하고 예외 케이스까지 검증할 수 있다.","개발 과정에서 발생한 설계 이슈를 식별하고 개선안을 제시할 수 있다.","인접 모듈 담당자와 인터페이스 사양을 조율하고 변경사항을 협의·반영할 수 있다."]},{"level":"선임","name":"데이터(DB)활용","def":"사용자 목적에 따라 데이터베이스에서 필요한 데이터를 추출·분석하고, 쿼리를 작성하여 원하는 정보를 정확하게 제공하며 데이터를 체계적으로 관리하는 역량","ind":["조직의 업무에 사용되는 구체적 데이터 요구사항을 추출하고 제공할 수 있다.","기존에 운영되어오고 있는 시스템을 분석하여 새로운 요구사항을 추출하여 기능 모델링할 수 있다.","비기능적 요구사항인 데이터베이스 반응속도·성능 요구사항을 적용하여 추출할 수 있다.","정의된 데이터 요구사항이 정확하고 완전한지, 최초 발생에서 시스템 구현까지 추적 가능한지를 DB로 검증하고 확인할 수 있다.","SQL을 활용하여 데이터베이스에서 필요한 데이터를 조회·추출하고 사용자가 원하는 정보를 정확하게 제공할 수 있다.","데이터베이스 테이블 구조와 관계를 이해하고 효율적인 쿼리를 작성하여 성능을 최적화할 수 있다."]},{"level":"담당","name":"웹 프로그래밍","def":"웹 프로그램 개발에 사용되는 프로그래밍 언어를 이해하고 활용하여 업무 요건에 맞는 웹 프로그램을 개발하며, 테스트와 유지보수를 통해 안정적인 서비스를 구현하는 역량","ind":["웹 프로그램 개발을 위하여 프로그램 설계서를 확인하고 개발 범위와 요건을 파악할 수 있다."]},{"level":"담당","name":"운영인계 및 안정화","def":"개발 완료된 결과물을 운영 환경에 배포하고 사용자 요구사항과의 일치 여부를 검증하며, 운영 인계·교육·안정화 지원을 통해 프로젝트를 성공적으로 완료하는 역량","ind":["애플리케이션 빌드와 배포를 위한 환경 구성 방안을 계획할 수 있다.","설치한 시스템과 도구 운영을 위해 상세 구성 및 설정을 할 수 있다.","정상적으로 작동하는 소프트웨어 빌드를 위해 형상관리 서버로부터 소스코드를 체크아웃할 수 있다.","소스코드의 환경 설정·운영 환경 정보·대상 시스템 정보 등에 오류가 있는지 확인할 수 있다.","운영 환경에 애플리케이션을 배포하고 배포 후 정상 작동 여부를 확인하여 이상 발생 시 원복 절차를 수행할 수 있다.","사용자 인수 테스트(UAT)를 지원하고 사용자 요구사항과 개발 결과물의 일치 여부를 검증할 수 있다."]}]},"책육아연구":{"slogan":"육아맘의 니즈를 이해하고 신뢰할 수 있는 콘텐츠를 생산하여 고객 설득의 토대를 만든다.","comps":[{"level":"수석(리더급)","name":"콘텐츠 개발전략 수립","def":"전사 콘텐츠 방향성과 중장기 전략을 수립하고, 콘텐츠 개발 유형과 구현 방법을 구체화하여 \n책육아 콘텐츠 개발 전반을 총괄하는 역량","ind":["육아맘 니즈와 시장 트렌드를 분석하여 책육아 콘텐츠의 중장기 개발 방향성을 수립할 수 있다.","조직의 사업 목표와 연계하여 연간 콘텐츠 개발 전략과 실행 계획을 수립할 수 있다.","개발이 필요한 콘텐츠 유형(독서가이드·활용법·부모교육·상담콘텐츠 등)을 도출하고 우선순위를 결정할 수 있다.","콘텐츠 개발 유형별 구현 방법과 제작 기준을 구체화하여 개발 가이드라인을 수립할 수 있다.","기 개발된 콘텐츠와의 차별점을 분석하고 새로운 콘텐츠의 포지셔닝 전략을 도출할 수 있다.","콘텐츠 개발 일정·인력·예산을 계획하고 개발 프로세스 전반을 총괄 관리할 수 있다."]},{"level":"수석(리더급)","name":"콘텐츠 연구 및 트렌드 분석","def":"육아·아동발달·독서교육 분야의 최신 트렌드와 연구 동향을 분석하고\n콘텐츠 개발 방향에 반영하는 역량","ind":["육아·아동발달·독서교육 분야의 국내외 최신 연구 논문과 보고서를 수집하고 분석할 수 있다.","육아 트렌드와 고객(육아맘)의 관심사 변화를 지속적으로 모니터링하고 시사점을 도출할 수 있다.","경쟁사 및 유관 기관의 콘텐츠 동향을 분석하여 자사 콘텐츠의 차별화 방향을 제안할 수 있다.","수집·분석한 연구 동향과 트렌드를 콘텐츠 개발 방향에 구체적으로 반영할 수 있다.","아동발달 이론과 독서교육 연구 결과를 바탕으로 콘텐츠의 이론적 근거를 마련할 수 있다.","트렌드 분석 결과를 보고서로 작성하여 유관 부서와 공유하고 활용할 수 있도록 제공할 수 있다."]},{"level":"수석(리더급)","name":"외부협력 및 네트워크관리","def":"콘텐츠 개발을 위한 외부 전문가·기관과의 협력 체계를 구축하고 관리하는 역량","ind":["콘텐츠 개발에 필요한 외부 전문가(아동발달 전문가·독서교육 전문가·강사 등)를 발굴하고 섭외할 수 있다.","외부 전문가·기관과의 협력 목적과 범위를 명확히 정의하고 협업 계획을 수립할 수 있다.","대학·연구기관·도서관·문화센터 등 유관 기관과의 협력 관계를 구축하고 유지할 수 있다.","외부 협력 과정에서 발생하는 이슈를 조율하고 원활한 협업이 이루어질 수 있도록 관리할 수 있다."]},{"level":"수석(리더급)","name":"교육체계 설계","def":"고객 대상 강연회·부모교육·신제품 교육 등 외부 교육 프로그램의 요구 사항을 분석하고,\n교육목표·순서·방법을 설계하여 고객 교육 체계를 수립하는 역량","ind":["고객(육아맘) 대상 교육 요구 사항을 분석하고 교육의 필요성과 방향성을 도출할 수 있다.","강연회·부모교육·신제품 교육 등 교육 유형별 목표를 명확하게 설정할 수 있다.","교육목표 달성을 위한 교육 내용·순서·방법·시간 배분을 체계적으로 설계할 수 있다.","대상 고객의 연령·관심사·수준에 맞는 교육 프로그램 구성안을 작성할 수 있다.","교육 효과를 측정하기 위한 평가 방법과 도구를 설계할 수 있다.","설계된 교육 프로그램의 타당성을 검토하고 개선 방향을 도출할 수 있다."]},{"level":"책임","name":"콘텐츠 기획 및 제작","def":"마케팅·영업·상담에 필요한 독서가이드·활용법·부모교육 콘텐츠 등\n다양한 원천 소스를 기획하고 제작하는 역량","ind":["마케팅·영업·상담 현장의 니즈를 파악하여 필요한 콘텐츠 유형과 주제를 도출할 수 있다.","도출된 주제를 바탕으로 콘텐츠 기획안(목적·대상·구성·활용 방안 등)을 작성할 수 있다.","아동발달 이론과 독서교육 이론을 근거로 콘텐츠의 이론적 신뢰성을 확보할 수 있다.","독서가이드·활용법 등 유형별 콘텐츠를 기획 의도에 맞게 제작할 수 있다.","부모교육 콘텐츠와 활용 콘텐츠를 고객(육아맘) 관점에서 공감을 이끌어낼 수 있도록 제작할 수 있다.","제작된 콘텐츠를 검토하고 품질 기준에 맞게 수정·보완할 수 있다."]},{"level":"책임","name":"데이터 분석 및 활용","def":"콘텐츠 개발 및 교육과정 운영과 관련된 데이터를 수집·분석하여 객관적인 인사이트를 도출하고, \n이를 콘텐츠 개선과 의사결정에 활용하는 역량","ind":["콘텐츠 활용 현황·교육 참여율·고객 반응 등 관련 데이터를 체계적으로 수집할 수 있다.","수집된 데이터를 분석하여 콘텐츠별 효과와 고객 만족도를 파악할 수 있다.","데이터 분석 결과를 바탕으로 콘텐츠 개선이 필요한 영역을 도출할 수 있다.","고객(육아맘) 피드백 데이터를 분석하여 니즈 변화와 개선 방향을 파악할 수 있다.","분석 결과를 시각화하여 이해하기 쉬운 형태로 보고서를 작성할 수 있다.","데이터 기반의 인사이트를 콘텐츠 개발 방향과 교육 및 강의 개선에 반영할 수 있다."]},{"level":"책임","name":"부모교육(강의) 및 고객설득","def":"오프라인 접점에서 아동발달과 독서교육에 기반한 부모교육(강의)을 직접 실행하고, \n고객이 제품과 서비스의 가치를 이해할 수 있도록 설득하는 역량","ind":["강의 목표와 대상 고객의 특성을 파악하고 강의 계획을 수립할 수 있다.","아동발달과 독서교육 이론을 근거로 고객이 공감할 수 있는 강의 내용을 구성할 수 있다.","강의 교안과 교수매체(PPT·교재·활동지 등)를 준비하고 효과적으로 활용할 수 있다.","문화센터·강연회·신제품 교육 등 다양한 오프라인 접점에서 부모교육을 직접 실행할 수 있다.","강의 중 고객의 반응을 파악하고 참여를 이끌어내는 상호작용을 진행할 수 있다.","고객이 제품과 서비스의 교육적 가치를 이해할 수 있도록 근거를 제시하며 설득할 수 있다."]},{"level":"책임","name":"교수활동수행","def":"개발된 교육과정을 기반으로 교안을 작성하고 교수매체를 준비하여 교수활동을 전개하며,\n강의 품질을 점검하고 개선하는 역량","ind":["개발된 교육과정의 목표와 내용을 정확히 이해하고 교수활동 계획을 수립할 수 있다.","교육 목표에 맞는 교안을 작성하고 학습 흐름이 자연스럽게 연결되도록 구성할 수 있다.","강의 효과를 높이기 위한 교수매체(PPT·교재·활동지·영상 등)를 준비하고 활용할 수 있다.","교육 대상자의 수준과 특성을 고려하여 교수 방법을 선택하고 적용할 수 있다.","교수활동을 전개하면서 학습자의 이해도와 참여도를 확인하며 조정할 수 있다.","교수활동 완료 후 강의 품질을 자체 점검하고 개선이 필요한 부분을 파악할 수 있다."]},{"level":"선임","name":"교육 콘텐츠 전문성","def":"아동 발달 단계와 독서교육 이론을 이해하고, 교육콘텐츠 및 학습법과 관련된 최신 지식·정보·도구를 \n습득하여 콘텐츠 기획과 교육과정 개발 업무에 적극적으로 활용하는 역량","ind":["아동의 연령별 발달 특성(인지·언어·정서·사회성 등)을 이해하고 콘텐츠 기획에 적용할 수 있다.","독서교육 이론과 책육아 방법론을 학습하고 교육과정 개발 업무에 활용할 수 있다."]},{"level":"선임","name":"교육운영 지원","def":"고객 대상 강연회·부모교육·신제품 교육 등의 운영을 보조하고 교수매체·교육 자료를 준비하며,\n오프라인 접점에서 고객을 응대하고 육아맘의 니즈를 파악하여 담당자에게 전달하는 역량","ind":["강연회·부모교육·신제품 교육 등의 운영 계획을 파악하고 사전 준비사항을 점검할 수 있다.","교육 진행에 필요한 교수매체(PPT·교재·활동지 등)와 교육 자료를 준비하고 정리할 수 있다.","교육 장소 세팅·참석자 관리·교육 진행 지원 등 교육 운영을 보조할 수 있다.","오프라인 접점(문화센터·강연회·책육아 카페 등)에서 고객을 친절하게 응대할 수 있다.","고객(육아맘)과의 대화를 통해 니즈와 관심사를 파악하고 담당자에게 정확하게 전달할 수 있다.","교육 운영 중 발생하는 돌발 상황을 파악하고 담당자에게 신속하게 보고할 수 있다."]},{"level":"선임","name":"콘텐츠제작실무","def":"책육아연구소의 콘텐츠 기획 방향에 따라 독서가이드·활용법·상담콘텐츠 등\n원천 소스를 실제로 제작하고 편집하는 역량","ind":["콘텐츠 기획안을 정확히 이해하고 기획 의도에 맞게 콘텐츠를 제작할 수 있다.","아동발달 단계와 독서교육 이론을 이해하고 연령별로 적합한 독서가이드를 작성할 수 있다.","책의 내용과 특성을 분석하여 활용법·놀이법·독후활동 등 활용 콘텐츠를 제작할 수 있다.","영업·상담 현장에서 활용 가능한 상담콘텐츠를 작성할 수 있다.","제작된 콘텐츠를 검토하고 오류·표현 등을 수정하여 완성도를 높일 수 있다.","담당자의 피드백을 반영하여 콘텐츠를 수정·보완할 수 있다."]},{"level":"담당","name":"책 활용 프로그램 개발지원","def":"영유아의 발달 단계와 독서·놀이의 연계성을 이해하고, 책을 활용한 놀이 프로그램을 개발하여\n문화센터·책육아 카페 등 다양한 접점에서 활용할 수 있도록 지원하는 역량","ind":["영유아의 연령별 발달 특성과 독서·놀이의 연계성을 이해하고 프로그램 개발에 적용할 수 있다.","책을 활용한 놀이 프로그램의 기획안(목적·대상·구성·활용 방법 등)을 작성할 수 있다.","연령별로 적합한 도서를 선정하고 책의 내용을 놀이 활동과 연계하는 방법을 제안할 수 있다.","문화센터·책육아 카페 등 오프라인 접점에서 활용 가능한 놀이 프로그램 자료를 제작할 수 있다.","개발된 프로그램을 검토하고 대상 연령과 활용 목적에 맞게 수정·보완할 수 있다.","담당자의 피드백을 반영하여 프로그램 내용을 개선할 수 있다."]},{"level":"담당","name":"문서작성","def":"부서 내외부에서 요청된 문서를 작성하기 위하여 내용을 계획하고 자료를 조사·정리·편집하여\n목적에 맞는 문서를 완성하는 역량","ind":["문서 작성 목적과 대상을 파악하고 작성 계획을 수립할 수 있다.","문서 작성에 필요한 자료를 수집하고 신뢰성을 검토하여 정리할 수 있다.","수집한 자료를 논리적으로 구성하고 목적에 맞게 편집할 수 있다.","맞춤법·표현·형식 등을 점검하여 완성도 높은 문서를 작성할 수 있다.","부서 내외부의 요청 사항을 정확하게 반영하여 기한 내에 문서를 완성할 수 있다.","작성된 문서를 체계적으로 분류하고 관리할 수 있다."]},{"level":"담당","name":"자료관리","def":"업무 관련 자료를 수집·분석하고 체계적으로 관리하여 관련 부서에 제공함으로써\n업무 효율성을 높이는 역량","ind":["업무에 필요한 자료를 다양한 경로(인터넷·도서·내부 문서 등)를 통해 수집할 수 있다.","수집한 자료의 신뢰성과 최신성을 확인하고 업무 목적에 맞게 분류할 수 있다.","자료를 체계적인 기준에 따라 분류하고 파일링하여 필요 시 신속하게 검색할 수 있도록 관리할 수 있다.","관련 부서의 자료 요청에 신속하게 대응하고 필요한 자료를 정확하게 제공할 수 있다.","자료의 최신성을 유지하기 위해 정기적으로 업데이트하고 불필요한 자료를 정리할 수 있다.","자료 보안 기준을 준수하고 중요 자료가 외부로 유출되지 않도록 관리할 수 있다."]}]},"재무회계":{"slogan":"","comps":[{"level":"수석","name":"세무조정","def":"법인세 신고를 위하여 기업회계와 세무회계의 차이를 분석·조정하고, 과세표준 및 세법상 수입금액을 산출하여 세무조정계산서를 작성하는 역량","ind":["기업회계기준에 따른 당기 손순익을 기초로 세법 규정에 따라 익금과 손금을 조정하여 정확한 과세소득을 계산할 수 있다.","세무조정에 필요한 표준재무제표(재무상태표, 포괄손익계산서, 현금흐름표 등)를 이해하고 \n세무조정에 필요한 정보를 활용할 수 있다.","세법상 익금산입·익금불산입·손금산입·손금불산입 항목을 구분하여 세무조정을 수행할 수 있다.","인건비, 접대비, 기부금 등 세법상 한도가 있는 비용에 대한 한도  초과 여부를 검토할 수 있다.","감가상각비, 대손충당금 등 자산·부채 평가에 대한 적정성을 판단할 수 있다.","재고자산, 유가증권, 외화자산·부채의 평가손익을 세법 기준으로 조정할 수 있다."]},{"level":"수석","name":"법인세 신고","def":"세무조정 결과를 바탕으로 과세표준 및 세액을 산정하고 법인세 신고서를 작성·신고하며, 납부 및 사후 관리를 수행하는 역량","ind":["기업회계기준에 따른 당기순이익을 기초로 세법 규정에 따라 익금과 손금을 조정하여 각사업연도 과세소득을 계산할 수 있다.","수입금액, 감가상각비, 퇴직급여충당부채, 대손충당금 등 주요 항목별 세무조정을 수행하고 관련 부속서류를 작성할 수 있다.","기부금, 접대비, 업무용 승용차 관련 비용 등 한도가 있는 손금 항목의 한도 초과액을 계산할 수 있다.","외화자산·부채, 재고자산, 유가증권 등의 평가손익을 세법 기준으로 조정할 수 있다.","소득금액조정합계표, 자본금과적립금조정명세서 등 세무조정계산서를 완성할 수 있다.","법인세 신고에 필요한 재무상태표, 포괄손익계산서, 이익잉여금처분계산서, 세무조정계산서 등 관련 서류를 준비할 수 있다."]},{"level":"수석","name":"예산수립 및 실적 관리","def":"회사의 경영목표 달성을 위하여 예산을 수립하고, 예산 대비 실적을 분석하여 경영 의사결정을 지원하는 역량","ind":["회사의 비전과 미션을 바탕으로 구체적이고 측정 가능한 예산을 설정할 수 있다.","매출·이익·비용 등 재무적 지표와 시장 동향·경쟁사 분석·인력 수요 등 비재무적 지표를 고려하여 예산을 수립할 수 있다.","부서별 예산 요구사항을 수집하고 사업의 중요도와 긴급성을 고려하여 우선순위를 결정할 수 있다.","경영진과 협의·협상을 통해 사업부별 예산을 조정하여 최적의 종합예산을 확정할 수 있다.","예산 집행 현황을 주기적으로 모니터링하여 계획 대비 실적 차이를 파악할 수 있다.","예산을 초과하거나 미만으로 집행된 항목의 원인을 분석하고 계절적 요인·이벤트 등 집행 변동성을 파악할 수 있다."]},{"level":"책임","name":"회계감사","def":"회계투명성 제고를 위하여 내·외부 감사를 준비하고 대응하며, 감사 결과를 반영하여 재무정보를 정확하게 공시하는 역량","ind":["외부감사인과의 원활한 소통을 위해 감사 일정·범위 등을 포함한 커뮤니케이션 계획을 수립할 수 있다.","감사인이 요구하는 재무제표, 주석, 부속명세서 등 감사 자료를 사전에 준비하고 신속하게 대응할 수 있다.","외부감사 시 재무정보의 신뢰성을 검증하기 위해 재무정보를 정확하게 작성하고 최신 상태로 유지할 수 있다.","감사인의 지적사항을 적극적으로 수용하고 내부 프로세스 개선에 반영하여 재발을 예방할 수 있다.","감사 결과에 따른 시정 조치를 신속하게 이행하고 개선 사항을 지속적으로 모니터링할 수 있다.","재무정보의 정확성과 신뢰성 보장을 위해 내부통제 시스템을 구축하고 운영할 수 있다."]},{"level":"책임","name":"재무제표작성","def":"회계기간의 거래를 정리,마감하고 재무상태와 경영성과를 반영한 재무제표를 작성하는 역량","ind":["회사가 소유한 모든 자산(현금·매출채권·재고자산·유형자산 등)과 부채(차입금·미지급금·매입채무 등), 자본(자본금·이익잉여금·자본조정 등)을 식별하고 평가할 수 있다.","계정과목별 명세서를 작성하고 계정과목을 분류하여 재무상태표를 작성할 수 있다.","재화·서비스 제공 시점에 수익을 인식하고 직접 발생한 비용(매출원가·판관비·인건비·감가상각비 등)을 대응시켜 손익계산서를 작성할 수 있다.","자본금·이익잉여금·자본조정·기타포괄손익누계액의 변동을 구분하여 자본변동표를 작성할 수 있다.","영업·투자·재무활동으로 인한 현금 유입과 유출을 구분하여 현금흐름표를 작성할 수 있다.","기초현금과 기말현금을 계산하고 현금흐름의 순증가액을 검증할 수 있다."]},{"level":"책임","name":"원가계산","def":"기업운영에 필요한 원가정보를 제공하기 위하여 제작원가를 집계·분석하고, 원가 분석 결과를 경영 의사결정과 원가 및 수익성 개선에 활용하는 역량","ind":["제작원가 구성항목 (지류, 인쇄, 제본, 후가공, 교구 등)을 구분할 수 있다.","제품 생산에 간접적으로 소요되는 비용(감가상각비 등 제작간접원가)을 분류할 수 있다.","원가요소별로 비용을 집계하여 총비용을 계산하고 원가흐름에 따라 배부할 수 있다.","설정한 배부 기준에 따라 총비용을 제품 또는 서비스 단위별로 배부하여 제품별 원가를 계산할 수 있다.","제품별 원가 구조를 분석하고 원가 변동 원인을 파악할 수 있다.","원가 계산 결과를 정기적으로 검토하고 필요한 경우 수정하여 정확성을 유지할 수 있다."]},{"level":"책임","name":"결산처리","def":"월·분기·연 결산 일정에 따라 계정을 정리하고 필요한 결산분개를 수행하여 정확한 마감을 완료하는 역량","ind":["각 부서에서 수집한 매출·비용 등의 데이터를 집계하고 마감 여부를 확인할 수 있다.","재고 수량과 금액을 파악하여 재고 자산을 평가하고 재무상태표와 포괄손익계산서를 작성할 수 있다.","매출채권·매입채무 등의 현황을 파악하고 대손충당금 설정 및 부채 평가를 실시할 수 있다.","유형자산의 감가상각비를 계산하여 비용으로 반영하고 결산 관련 세무 신고 준비를 할 수 있다.","결산 분개가 정확하게 이루어졌는지 계정과목·금액·날짜 등을 검토하고 누락 항목을 확인할 수 있다.","동일 유형의 거래나 사건에 대해 관련된 방식으로 일관되게 분개가 이루어졌는지 확인할 수 있다."]},{"level":"선임","name":"원천징수","def":"각종 소득(근로·사업·기타·퇴직 등) 지급 시 관련 세법에 따라 원천세를 징수·신고·납부하는 역량","ind":["근로소득 지급 시 근로소득세를 간이세액표에 따라 계산하여 원천징수하고 나머지 금액을 지급할 수 있다.(인사)","사업소득(용역 제공 대가) 지급 시 3.3%, 기타소득(강연료·원고료·인세 등) 지급 시 필요경비를 제외한 금액의 22%를 원천징수할 수 있다.","퇴직소득·금융소득 등 소득 유형별로 적용 세율과 징수 방법을 구분하여 원천징수를 수행할 수 있다.","매월 발생한 원천징수 대상 소득을 집계하고 다음 달 10일까지 원천징수이행상황신고서를 세무서에 제출할 수 있다.","원천징수 세액을 기한 내에 납부하고 납부 결과를 확인하여 기록·관리할 수 있다.","연말정산을 위해 구성원별 공제 항목(부양가족·보험료·교육비·의료비 등)을 수집하고 검토할 수 있다.(인사)"]},{"level":"선임","name":"지방세 신고","def":"지방세관계법과 지방자치단체 조례에 따라 과세표준·세율·납부세액을 산정하고 지방세목별로 신고·납부하는 역량","ind":["전년도 소득 금액과 세액공제·감면 사항을 확인하고 법인지방소득세 신고에 필요한 서류를 준비할 수 있다.","법인세 과세표준을 기반으로 지방세법에서 정한 세율을 적용하여 법인지방소득세 산출세액을 계산할 수 있다.","세액공제 및 감면을 적용하여 최종 법인지방소득세액을 확정하고 신고 기한(매년 3월~4월 말) 내에 신고·납부할 수 있다.","지방세 포털(위택스) 또는 세무서 방문을 통해 온·오프라인으로 지방소득세 신고를 수행할 수 있다.","신고 내용에 오류나 수정사항이 있는 경우 기한 내에 수정 신고를 수행할 수 있다.","법인이 취득한 부동산(토지·건물·차량 등)의 유형과 취득 원인(매매·상속·증여 등)을 파악할 수 있다."]},{"level":"선임","name":"자금관리","def":"회사 자금 운영 기준에 따라 현금·예금·법인카드 등을 관리하고, 자금 수지를 예측하여 효율적인 자금 운용 계획을 수립하는 역량","ind":["매일 현금의 입출금 내역을 기록하고 현금시재일보를 작성하여 당일의 현금 흐름을 파악할 수 있다.","월 1회 현금시재를 점검하여 장부와 실제 현금 일치 여부를 확인하고 증빙서류를 보관할 수 있다.","여러 은행의 예금 상품을 비교하여 적합한 예금 계좌를 개설하고 계좌의 종류·금리·만기일 등을 관리할 수 있다.","정기적으로 예금 잔액을 확인하여 회사의 재무상태를 파악하고 금리 변동에 따른 적절한 대처 방안을 마련할 수 있다.","보이스피싱·해킹 등 금융 사기로부터 예금을 보호하기 위해 비밀번호·보안카드를 철저히 관리할 수 있다.","법인카드 발급 신청 후 카드의 유효기간·결제일·한도 등을 확인하고 사용자 등록을 관리할 수 있다."]},{"level":"선임","name":"부가가치세신고","def":"재화·용역의 공급에서 발생하는 부가가치에 대해 부가가치세법에 따라 과세표준을 산정하고 신고·납부하는 역량","ind":["공급 시기가 속하는 달의 다음 달 10일까지 세금계산서를 발급·수취하고 공급자 등록번호·상호·공급가액 등 필수 기재사항을 정확히 입력할 수 있다.","수정세금계산서 발급 사유와 발급 절차를 이해하고 지연발급·미발급 시 가산세 부과를 예방할 수 있다.","매출처별·매입처별 세금계산서 합계표를 작성하고 신용카드 매출전표·현금영수증·직불카드 등 매출 발생 건을 집계할 수 있다.","건물·구축물·차량 등 감가상각자산 취득 시 취득가액과 내용연수를 기재하여 건물 등 감가상각자산 취득명세서를 작성할 수 있다.","수출 등 영세율 적용 대상 거래의 관련 증빙서류(수출계약서·외화입금증명서·내국신용장 등)를 검토하고 제출할 수 있다.","대손세액·공제받지 못할 매입세액·의제매입세액 등 부속서류를 정확하게 작성할 수 있다."]},{"level":"담당","name":"세무기초자료관리","def":"세무조정 및 법인세 신고를 지원하기 위하여 재무데이터를 수집·정리하고 관련 기초자료를 작성·관리하는 역량","ind":["세무조정에 필요한 재무제표, 계정별 원장, 거래 내역 등 기초 자료를 부서별로 수집하고 정리할 수 있다.","수집된 자료의 누락·오류 여부를 확인하고 담당자에게 보완을 요청할 수 있다.","세무조정 항목별로 필요한 기초자료(감가상각명세서·대손충당금명세서·접대비명세서 등)를 분류하고 정리할 수 있다.","세법 규정에 따라 익금산입·손금산입 항목과 관련된 기초 데이터를 취합하여 정리할 수 있다.","법인세 신고에 필요한 부속명세서 작성을 위한 기초자료를 담당자가 활용할 수 있도록 체계적으로 제공할 수 있다.","전년도 세무 신고 자료와 당해 연도 자료를 비교하여 주요 변동 사항을 파악하고 보고할 수 있다."]},{"level":"담당","name":"감사지원 및 자료관리","def":"내·외부 감사가 원활하게 진행될 수 있도록 감사 관련 자료를 수집·정리하고 감사 일정 관리를 지원하는 역량","ind":["내·외부 감사 일정을 파악하고 감사 준비에 필요한 자료 목록을 작성하여 사전에 준비 계획을 수립할 수 있다.","감사인이 요청하는 재무제표, 계정별 원장, 거래 내역, 계약서 등 증빙자료를 부서별로 수집하고 취합할 수 있다.","수집된 자료의 누락·오류 여부를 확인하고 관련 부서에 보완을 요청하여 완전한 자료를 준비할 수 있다.","감사 자료를 항목별·계정별로 체계적으로 분류하고 감사인이 쉽게 찾을 수 있도록 정리할 수 있다.","감사 진행 중 감사인의 추가 자료 요청에 신속하게 대응하고 필요한 자료를 제공할 수 있다.","감사 결과 지적사항과 시정 요청 내용을 정리하고 담당자에게 전달하여 후속 조치를 지원할 수 있다."]},{"level":"담당","name":"전표관리","def":"회계상 거래를 인식하고 증빙서류에 근거하여 전표를 작성·처리하며 관련 자료를 체계적으로 관리하는 역량","ind":["발생한 거래의 성격을 파악하고 적절한 회계처리 방법을 판단할 수 있다.","식별된 거래의 크기와 가치를 측정하여 수익과 비용을 구분하고 적절한 측정 방법을 선택할 수 있다.","측정된 거래를 회계 장부에 분개하고 입금·출금·대체전표를 정확하게 작성할 수 있다.","작성된 전표를 관련 부서나 상사에게 결재를 받고 회계 시스템에 기록·반영할 수 있다.","중요한 증빙을 발행하는 경우 발행한 증빙의 사본을 보관하고 발행 관련 보조 장부를 만들어 관리할 수 있다.","증빙서류를 체계적으로 정리하고 주기적으로 점검하여 누락되거나 손상된 서류가 없는지 확인할 수 있다."]}]},"인사":{"slogan":"사람을 통해 회사의 성장과 성과를 만든다","comps":[{"level":"수석(리더급)","name":"인사기획","def":"조직의 비전과 중장기 사업전략에 근거하여 인적자원의 효율적 운영을 위한 인사전략을 수립하고, 인사제도를 기획·개선하여 조직의 목표 달성을 지원하는 역량","ind":["조직의 비전과 중·장기 사업전략에 따라 내/외부 인사전략 환경을 분석할 수 있다.","인사전략 환경분석 결과에 따라 중ㆍ장기 인사전략의 방향성을 수립할 수 있다.","중ㆍ장기 방향성에 따라 당해 연도의 인사전략을 수립할 수 있다.","수립된 인사전략과 제도의 실행 결과를 모니터링하고 개선 방향을 도출할 수 있다.","인사전략 추진을 위한 예산 계획을 수립하고 인건비 운영 방향을 제시할 수 있다.","인사전략에 따라 새로운 인사제도를 기획할 수 있다."]},{"level":"수석(리더급)","name":"인재개발전략수립","def":"조직의 비전과 목표 달성을 위하여 인재개발의 필요성과 방향성을 분석하고, 이를 근거로 중장기 인재개발 전략을 수립하는 역량","ind":["기업의 비전, 경영 환경, 인재상을 분석하여 인재개발 전략의 필요성과 방향성을 도출할 수 있다.","중장기 인재개발 전략에 영향을 미치는 내외부 이슈를 파악하고 시사점을 도출할 수 있다.","인재개발 전략의 방향성에 근거하여 인재개발 부문의 미션·비전·역할을 설정할 수 있다.","중장기 인재개발 목표·추진방침·추진과제를 체계적으로 설정할 수 있다.","목표·방침·과제를 종합하여 중장기 인재개발 전략을 수립할 수 있다.","중장기 목표와 방침에 근거하여 연도별 교육목표·방침·핵심과제를 도출할 수 있다."]},{"level":"수석(리더급)","name":"임금관리","def":"조직의 보상 경쟁력 확보를 위하여 시장 임금을 조사·분석하고, 임금체계를 설계하며 임금인상률 확정 및 인건비를 종합적으로 관리하는 역량","ind":["임금조정안 수립을 위하여 거시적·미시적 경제 지표 및 동종업계 임금 현황을 조사할 수 있다.","임금조정안의 객관성 확보를 위하여 외부 전문기관을 통해 조직의 임금수준 경쟁력을 검토할 수 있다.","조직의 경영 성과와 지불능력을 분석하여 당해 연도 임금 조정 방향을 설정할 수 있다.","조직의 지불능력, 생계비, 동종업계 임금수준을 고려하여 직급별 임금인상률을 추정할 수 있다.","인사고과 평가결과를 바탕으로 개인별 임금인상률을 산정하고 가용재원 내에서 조정할 수 있다.","회사·부서·개인 평가를 반영하여 당해 연도 성과급 지급률을 산정할 수 있다."]},{"level":"책임","name":"인사제도 운영","def":"조직의 성과향상과 구성원의 능력 개발을 위하여 평가 및 승진 제도를 운영하고, 목표 설정·평가 실시·승진자 선발 등 인사제도 전반을 관리·개선하는 역량","ind":["수립된 인사제도를 기반으로 당해 연도 목표 설정 및 평가계획을 수립할 수 있다.","조직구성원에게 주요 성과지표를 공유하고 개인별 목표 설정을 지원하여 최종 목표를 확정할 수 있다.","평가방법에 따라 조직과 개인의 목표 수준을 평가하는 가이드라인을 설정할 수 있다.","평가자와 피평가자를 대상으로 평가제도, 평가오류 유형, 프로세스, 면담기법 등 평가교육을 실시할 수 있다.","평가계획에 따라 평가를 시행하고 공정성 확보를 위해 전반적인 평가과정을 검토할 수 있다.","평가결과를 공개하고 이의 제기 절차를 거쳐 최종등급을 확정하며, 피드백 절차를 관리할 수 있다."]},{"level":"책임","name":"HR데이터 분석","def":"인사 관련 데이터를 수집·분석하여 인력 현황, 채용 효율, 교육 효과, 이직률, 인건비 추이 등 주요 HR 지표를 도출하고, 이를 바탕으로 데이터 기반의 인사 의사결정을 지원하는 역량","ind":["채용, 평가, 교육, 근태, 급여 등 인사 관련 데이터를 체계적으로 수집하고 관리할 수 있다.","주요 HR 지표(이직률, 채용 소요기간, 교육 이수율, 인건비 비율 등)를 정기적으로 산출하고 모니터링할 수 있다.","HR 데이터 분석 결과를 시각화하여 경영진과 현업 리더에게 이해하기 쉬운 형태로 보고할 수 있다.","인력 현황 및 인건비 추이를 분석하여 인력운영 계획 수립에 활용할 수 있다.","채용 채널별 효율성을 분석하여 채용 전략 개선에 반영할 수 있다.","교육 참여율과 역량 변화 데이터를 연계 분석하여 교육 효과를 측정할 수 있다."]},{"level":"책임","name":"노사갈등 해결","def":"노사 간 신뢰 관계를 구축하고 노동법규 준수 여부를 관리하며, 갈등 상황을 조기에 감지하여 대화와 협의를 통해 건설적으로 해결하고 구성원의 고충을 처리하는 역량","ind":["노사관계 관련 조직의 정책에 따라 이와 관련한 조직 구성원들의 요구를 파악할 수 있다.","파악된 요구사항을 바탕으로 노사관계 개선계획을 수립하고 실행하여 구성원의 신뢰를 증진할 수 있다.","노사 간 신뢰 증진을 위한 제도 개선과 바람직한 노사문화 환경을 조성할 수 있다.","노동법에 준하여 근로계약, 취업규칙, 단체협약 등의 준수 여부를 검토할 수 있다.","부당노동행위 등 법률 위반이 발생하지 않도록 교육·홍보를 통해 예방하고, 위반 발생 시 규정에 따라 신속히 조치할 수 있다.","위반행위의 예방과 처리를 위하여 유관기관과 협력관계를 유지할 수 있다."]},{"level":"책임","name":"조직문화관리","def":"조직의 성과 창출과 구성원 성장을 위하여 조직문화를 진단하고, 비전·핵심가치 공유 및 문화 개선 활동을 기획·실행하여 건강한 조직문화를 형성하는 역량","ind":["조직의 중·장기 비전에 따라 조직문화 방향성을 수립할 수 있다.","수립된 방향성을 기준으로 현재 조직문화 수준을 진단하고 개선점을 도출하여 우선순위를 선정할 수 있다.","선정된 우선순위에 따라 핵심가치 전파·업무혁신·구성원 커뮤니케이션 촉진 방안을 수립할 수 있다.","조직문화 촉진방안 실행을 위한 예산계획을 수립할 수 있다.","촉진방안 실행계획을 내부 구성원에게 공유하고 참여와 수용성을 높일 수 있다.","조직문화 촉진방안에 따라 다양한 활동을 계획대로 실행할 수 있다."]},{"level":"선임","name":"급여지급","def":"근태 및 인사 변동 사항을 반영하여 구성원의 급여를 정확하게 산정·지급하고, 관련 법규에 따라 4대보험 및 연말정산을 처리하는 역량","ind":["채용, 이동, 승진, 퇴직 등 인사발령에 따라 급여대장을 갱신할 수 있다.","급여계산을 위한 기초사항과 소득·공제 항목을 정확하게 등록할 수 있다.","각 부서의 근태자료를 집계하고 급여규정 및 관련 법규에 부합하는 지급 금액을 산출할 수 있다.","급여작업 수행 절차에 따라 단계별로 급여작업을 수행할 수 있다.","급여작업 결과와 이전 급여집행 내역을 비교하여 오류 여부를 검증할 수 있다.","전결 규정에 따라 급여 결재 자료를 작성하고, 결재 완료 후 구성원에게 급여를 지급할 수 있다."]},{"level":"선임","name":"교육과정 운영","def":"구성원의 역량 향상을 위하여 연간 교육 계획을 수립하고, 교육 준비·진행·결과보고의 전 과정을 체계적으로 운영하는 역량","ind":["교육과정을 검토하여 과정운영에 필요한 과제·절차·방법·일정·예산을 판단할 수 있다.","교육과정 검토결과를 근거로 운영계획서를 작성하고 준비사항 체크리스트를 수립할 수 있다.","학습 대상자에게 교육과정 이수에 필요한 내용을 안내하고 선행학습을 관리할 수 있다.","교육과정에 적합한 교수자를 선정·섭외하고 필요한 안내·의뢰·협조 문서를 작성할 수 있다.","교육과정 운영에 필요한 고용보험 인·지정 신청 및 수료보고 업무를 수행할 수 있다.","운영계획과 체크리스트에 따라 교육 준비사항을 빠짐없이 점검하고 준비할 수 있다."]},{"level":"선임","name":"인력채용","def":"조직의 인력 수요를 파악하고 채용계획을 수립하여 적합한 인재를 모집·선발하며, 입사 후 조직 적응을 지원하는 일련의 채용 활동을 수행하는 역량","ind":["조직의 중장기 사업전략, 내부 인력 변동, 노동시장 환경을 분석하여 인력 수요를 파악할 수 있다."]},{"level":"담당","name":"근태관리","def":"구성원들의 출퇴근 및 근무시간을 정확하게 관리하고, 연차·휴가·시간외근무·주52시간 등 근태 관련 제도를 법규에 따라 운영하는 역량","ind":["회사의 근태 관리 기준과 근무제도를 정확히 이해하고 시스템에 적용할 수 있다.","각 조직 또는 직무별 적용 가능한 근무형태를 파악하고 구성원에게 안내할 수 있다.","근무 제도에 따라 일상적인 근태관리를 정확하게 수행할 수 있다.","근태 결과를 기간·근무형태에 따라 집계하고 분석할 수 있다.","근로기준법에 따라 근무시간, OT 및 주52시간을 관리하고 OT 발생 시 보상휴가를 부여할 수 있다.","주52시간 발생을 예방하기 위한 방안을 마련하고 적용할 수 있다."]},{"level":"담당","name":"복리후생관리","def":"관련 법령과 경영전략·예산계획에 따라 구성원의 근로조건 개선 및 복지 증진을 위한 복리후생제도를 설계하고 운영하는 역량","ind":["조직의 경영전략과 복리후생 예산에 의거하여 구성원의 니즈를 조사할 수 있다.","니즈 조사 결과를 기초하여 복리후생 항목의 우선순위를 결정할 수 있다.","결정된 우선순위에 따라 항목별 세부 예산을 계획하고 실행할 수 있다.","수립된 복리후생 제도를 전체 구성원에게 공지하고 신청을 접수할 수 있다.","심사요건에 따라 신청자의 자격을 심사하고 결과를 통보할 수 있다.","심사 결과에 따라 해당 복리후생 항목을 실행할 수 있다."]}]},"고객상담및관리":{"slogan":"고객의 첫 번째 목소리를 듣고, 최선의 답을 드린다","comps":[{"level":"리더직(센터장)","name":"인력 관리 능력 Ⅱ","def":"채용·교육·평가·보상 등을 통해 고객센터 구성원의 역량을 강화하고 인력을 전략적으로 운영하는 역량","ind":["고객센터 운영 목표에 맞는 인력 계획을 수립하고 적합한 인재를 채용하는 기준을 설정할 수 있다.","구성원별 역량 수준을 파악하고 맞춤형 교육·육성 계획을 수립하여 실행할 수 있다.","구성원의 성과를 평가하는 기준을 수립하고 공정한 평가 프로세스를 운영할 수 있다.","평가 결과를 바탕으로 보상·승진·이동 등 인사 결정을 합리적으로 수행할 수 있다.","고객센터 운영 상황에 따라 인력을 유연하게 배치하고 업무 효율성을 높일 수 있다.","구성원의 이직·이탈을 방지하기 위한 동기부여 방안을 마련하고 실행할 수 있다."]},{"level":"리더직(센터장)","name":"전략 수립 능력","def":"고객센터의 비전과 목표를 설정하고 고객 서비스 향상을 위한 중장기 전략을 수립하는 역량","ind":["고객센터 운영 현황과 고객 서비스 트렌드를 분석하여 중장기 비전과 목표를 설정할 수 있다.","목표 달성을 위한 연간 전략 실행 계획을 수립하고 단계별 추진 과제를 구체화할 수 있다.","고객 서비스 KPI를 설정하고 달성 현황을 모니터링하며 개선 방향을 도출할 수 있다."]},{"level":"리더직(센터장)","name":"조직 관리 능력","def":"고객·판매인 등 내외부의 VOC를 종합적으로 분석하고 서비스 프로세스 개선 방향을 기획하여 고객경험을 향상시키는 역량","ind":["고객·판매인 등 다양한 채널에서 수집된 VOC를 유형별로 분류하고 패턴을 분석할 수 있다.","VOC 분석 결과를 바탕으로 반복적으로 발생하는 문제의 근본 원인을 도출할 수 있다.","VOC 분석 결과를 토대로 서비스 프로세스 개선 방향을 기획하고 실행 계획을 수립할 수 있다.","개선 방안의 우선순위를 설정하고 유관부서와 협력하여 실행을 이끌 수 있다.","프로세스 개선 후 효과를 측정하고 고객 만족도 변화를 분석하여 보고할 수 있다.","VOC 분석 결과와 개선 방향을 경영진 및 유관부서에 명확하게 제시하고 공감대를 형성할 수 있다."]},{"level":"리더직(센터장)","name":"VOC 분석 및 개선 기획","def":"고객·판매인 등 내외부의 VOC를 종합적으로 분석하고 서비스 프로세스 개선 방향을 기획하여 고객경험을 향상시키는 역량","ind":["고객·판매인 등 다양한 채널에서 수집된 VOC를 유형별로 분류하고 패턴을 분석할 수 있다."]},{"level":"리더직(센터장)","name":"기획 능력","def":"고객 만족도를 높이고 매출을 향상시킬 수 있는 고객 서비스 정책 및 운영 방안을 기획하는 역량","ind":["고객 만족도 현황과 시장 트렌드를 분석하여 서비스 정책 개선 방향을 도출할 수 있다.","고객 만족도 향상을 위한 새로운 서비스 정책과 운영 방안을 기획하고 실행 계획을 수립할 수 있다.","서비스 정책이 매출 향상에 미치는 영향을 분석하고 정책 방향에 반영할 수 있다.","기획된 서비스 정책을 유관부서에 공유하고 협의하여 실행 기반을 마련할 수 있다.","서비스 정책 실행 결과를 모니터링하고 효과성을 평가하여 개선 방향을 도출할 수 있다.","AS 프로세스·응대 매뉴얼 등 고객센터 운영 기준을 수립하고 주기적으로 업데이트할 수 있다."]},{"level":"중간관리직(선임~책임)","name":"인력 관리 능력 Ⅰ","def":"상담사의 성과를 모니터링하고 목표 달성을 위해 지원하며, 코칭과 피드백을 통해 상담 역량을 향상시키는 역량","ind":["상담사별 상담 성과(응대율·처리시간·만족도 등)를 주기적으로 모니터링하고 현황을 파악할 수 있다.","상담사별 강점과 개선이 필요한 부분을 파악하고 맞춤형 코칭 방향을 설정할 수 있다.","정기적인 1:1 코칭을 통해 상담사의 상담 역량 향상을 지원하고 피드백을 제공할 수 있다.","상담사의 목표 달성 현황을 점검하고 미달 시 원인을 분석하여 개선 방안을 마련할 수 있다.","신규 상담사의 온보딩을 지원하고 빠르게 업무에 적응할 수 있도록 멘토링을 수행할 수 있다.","상담사 간 업무 배분의 균형을 유지하고 과부하 발생 시 신속하게 조정할 수 있다."]},{"level":"중간관리직(선임~책임)","name":"데이터 분석 능력","def":"상담 데이터를 정량적으로 분석하여 문제를 예측하고 대비하며 서비스 프로세스를 개선하는 역량","ind":["상담 데이터(인입량·처리시간·만족도·VOC 유형 등)를 수집하고 분석 목적에 맞게 정리할 수 있다.","상담 데이터를 분석하여 반복적으로 발생하는 문제 패턴과 개선 기회를 파악할 수 있다.","데이터 분석 결과를 바탕으로 향후 발생 가능한 문제를 예측하고 사전 대응 방안을 마련할 수 있다.","분석 결과를 표·그래프 등으로 시각화하여 팀원 및 상위자가 이해하기 쉽게 정리할 수 있다.","데이터 분석 결과를 활용하여 서비스 프로세스 개선 방향을 도출하고 제안할 수 있다.","상담사별·시간대별·유형별 데이터를 비교 분석하여 운영 효율화 방안을 도출할 수 있다."]},{"level":"중간관리직(선임~책임)","name":"강의능력","def":"교육 과정의 목표에 맞게 강사로서 효과적으로 내용을 전달하고 교육 대상자들이 적극적으로 참여할 수 있도록 지원하는 역량","ind":["교육 목표와 대상자 수준을 파악하고 이에 맞는 강의 방식과 내용 전달 방법을 설계할 수 있다.","상담 실무 경험을 바탕으로 현장에서 바로 활용 가능한 사례 중심의 강의를 진행할 수 있다.","교육 대상자들의 참여를 유도하는 질문·토론·실습 등 다양한 교수법을 활용할 수 있다.","강의 중 교육 대상자들의 이해도를 확인하고 이해가 부족한 부분을 보완하여 전달할 수 있다.","강의 후 교육 대상자의 피드백을 수렴하고 강의 내용과 방식을 개선할 수 있다.","강의 자료를 교육 목표에 맞게 구성하고 가독성 높게 제작할 수 있다."]},{"level":"중간관리직(선임~책임)","name":"교육과정 설계 및 운영","def":"교육과정 개발 요구사항 분석에 의거하여 교육 목표·순서·방법 등을 설계하고 단위 교육과정의 운영계획 수립·준비·진행·결과보고 활동을 수행하는 역량","ind":["교육 요구사항을 분석하고 교육 목표·대상·내용·방법·일정을 포함한 교육과정을 설계할 수 있다.","상담사의 역량 수준과 업무 특성을 반영하여 실무 중심의 교육 커리큘럼을 구성할 수 있다.","단위 교육과정의 운영계획을 수립하고 강사·장소·자료 등 필요한 자원을 준비할 수 있다.","교육과정을 계획에 따라 진행하고 운영 중 발생하는 이슈에 신속하게 대응할 수 있다.","교육 후 참여자 평가 설문을 운영하고 결과를 분석하여 교육 효과성을 측정할 수 있다.","교육과정 운영 결과보고서를 작성하고 상위자에게 교육 성과를 명확하게 보고할 수 있다."]},{"level":"중간관리직(선임~책임)","name":"교육 사후관리","def":"교육과정에서 습득한 지식·기술·태도를 현업에 적용하여 성과로 연결될 수 있도록 계획을 수립하고 지원 활동을 수행하는 역량","ind":["교육 종료 후 상담사가 교육 내용을 현업에 적용할 수 있도록 현업 적용 계획을 수립할 수 있다.","교육 내용의 현업 적용 여부를 모니터링하고 적용 수준을 점검하여 피드백을 제공할 수 있다.","현업 적용 과정에서 어려움을 겪는 상담사를 파악하고 추가 코칭·지원을 제공할 수 있다.","교육 후 일정 기간이 지난 시점에 상담 성과 변화를 분석하여 교육 효과성을 측정할 수 있다.","교육 내용이 현업에서 일관성 있게 적용될 수 있도록 팔로업 교육·보완 자료를 제공할 수 있다.","교육 사후관리 결과를 정리하고 상위자에게 보고하며 교육 개선에 반영할 사항을 제안할 수 있다."]},{"level":"상담직","name":"VOC 접수 및 대응","def":"고객·판매인 등 내외부의 VOC를 정확하게 접수하고 유형별로 분류하여 신속하게 대응하는 역량","ind":["고객·판매인 등 다양한 채널로 인입되는 VOC를 정확하게 접수하고 내용을 파악할 수 있다.","접수된 VOC를 유형별(제품 문의·AS 접수·불만·칭찬 등)로 분류하고 ERP·상담 시스템에 정확하게 등록할 수 있다.","VOC 유형에 따라 적합한 대응 방법을 파악하고 신속하게 처리할 수 있다.","자체 처리가 어려운 VOC는 관련 부서(영업·제작·물류 등)에 신속하게 이관하고 처리 결과를 확인할 수 있다.","AS 접수 시 고객의 제품 상태와 증상을 정확하게 파악하고 AS 프로세스에 따라 처리할 수 있다.","VOC 처리 결과를 고객에게 명확하게 안내하고 고객의 만족 여부를 확인할 수 있다."]},{"level":"상담직","name":"고객상담능력","def":"고객의 견해에 귀를 기울이고 고객의 고충을 수용하며 이에 대한 적절한 피드백을 제공하는 역량","ind":["고객의 말을 끝까지 경청하고 고객이 전달하려는 핵심 내용을 정확하게 파악할 수 있다.","고객의 감정 상태를 파악하고 공감적인 표현으로 고객의 고충을 수용할 수 있다.","고객의 문의·불만에 대해 정확하고 이해하기 쉬운 언어로 답변을 제공할 수 있다.","불만 고객을 응대할 때 감정적으로 반응하지 않고 침착하게 상황을 관리할 수 있다.","고객의 기대 수준을 파악하고 현실적인 해결 방안을 제시하여 고객 만족을 이끌어낼 수 있다.","상담 중 고객에게 추가적으로 필요한 정보를 파악하고 선제적으로 제공할 수 있다."]},{"level":"상담직","name":"업무지식 능력","def":"자사 제품·서비스·AS 프로세스에 대한 전문 지식을 바탕으로 고객에게 신뢰할 수 있는 답변을 제공하는 역량","ind":["자사 전 제품의 구성·특성·연령별 특징을 이해하고 고객 문의에 정확하게 답변할 수 있다.","AS 접수 기준·처리 절차·소요 기간 등 AS 프로세스를 숙지하고 고객에게 명확하게 안내할 수 있다.","도서정가제·반품 정책·배송 기준 등 주요 서비스 정책을 이해하고 고객 문의에 정확하게 답변할 수 있다.","제품 관련 자주 묻는 질문(FAQ)을 숙지하고 신속하게 답변할 수 있다.","신제품 출시·제품 개정 등 변경 사항을 빠르게 습득하고 최신 정보를 바탕으로 상담할 수 있다.","고객 문의 내용이 자신의 업무 범위를 벗어날 경우 적합한 부서로 안내하거나 이관할 수 있다."]},{"level":"상담직","name":"문제 해결 능력","def":"고객의 문제를 신속하게 분석하고 적절한 해결 방안을 도출하여 고객 만족을 이끌어내는 역량","ind":["고객의 문제를 정확하게 파악하기 위해 적절한 질문을 통해 상황을 구체적으로 확인할 수 있다.","파악된 문제를 유형별로 분류하고 처리 기준에 따라 해결 방법을 신속하게 결정할 수 있다.","표준 처리 절차 내에서 해결 가능한 문제는 즉시 처리하고 고객에게 결과를 안내할 수 있다.","표준 처리 절차로 해결이 어려운 복잡한 문제는 상위자 또는 유관부서와 협의하여 최적의 해결 방안을 도출할 수 있다.","고객의 입장에서 가장 만족스러운 해결 방안을 선택하고 고객에게 명확하게 설명할 수 있다.","문제 해결 후 고객의 만족 여부를 확인하고 추가적인 문제가 없는지 점검할 수 있다."]}]}};
+
+const COMMON = [
+ {name:'창의적 사고', def:'다양한 관점에서 사고하고 새로운 아이디어 혹은 업무 방식을 도출·제안하며, 이를 구체화시켜 업무에 적용하려는 자세와 능력'},
+ {name:'긍정과 열정', def:'긍정적인 마인드로 자기 일에 자부심을 갖고 주도적으로 도전하며 발전을 위해 지속적으로 노력하는 자세와 능력'},
+ {name:'소통과 협업', def:'열린 마음으로 타인의 의견을 경청하고 소통하며, 함께 하는 가치를 알고 타인 및 타 부서를 존중하며 적극적으로 협업하는 자세와 능력'},
+ {name:'고객중심', def:'모든 업무를 고객의 입장에서 생각하고 고객의 요구 및 문제를 능동적으로 파악하여 고객이 중요하게 생각하는 가치를 제공하고 향상시키고자 하는 자세와 능력'}
+];
+
+const ROLE = {
+ "담당": [
+  {
+   "name": "대인관계",
+   "def": "내/외부 고객을 비롯한 업무상 접하게 되는 타인 및 조직에 대한 폭넓은 이해를 가지고 본인의 업무 수행 및 조직성과 향상에 유익한 인간관계를 형성하는 능력",
+   "ind": [
+    "업무수행을 위해 사내외적으로 관계형성이 필요한 대상에 대해 파악하고 있다.",
+    "고객 응대 시 상황에 맞는 행동요령을 숙지하고 실천한다.",
+    "업무와 관계된 동료 및 상사와 원만한 관계를 유지한다.",
+    "개방적인 사고로 타인의 의견을 적극 수용하고 타인의 입장에서 이해하려고 노력한다.",
+    "처음 만나는 사내/외 관계자에게 먼저 다가가 긍정적인 첫인상을 형성하려 노력한다.",
+    "업무 관련 갈등이나 오해가 생겼을 때 회피하지 않고 대화로 해결하려 시도한다."
+   ]
+  },
+  {
+   "name": "분석적 사고",
+   "def": "문제나 상황의 여러 부분을 다양한 관점에서 논리적으로 생각하고 이를 바탕으로 체계적으로 업무를 수행하는 능력",
+   "ind": [
+    "업무 수행에 필요한 자료를 수집하고 분류한다.",
+    "주어진 문제들 간의 기본적인 관계를 파악하여 중요도에 따라 정리할 수 있다.",
+    "업무추진 시 발생하는 문제 상황의 원인을 파악하려고 시도한다.",
+    "하나의 문제를 여러 각도에서 생각해보고 단순하게 결론 내리지 않으려 노력한다.",
+    "업무 지시나 요청의 의도와 배경을 파악하고 그에 맞게 업무를 수행한다.",
+    "자료나 수치를 그대로 받아들이지 않고 내용의 정확성과 타당성을 확인한다."
+   ]
+  },
+  {
+   "name": "주도성",
+   "def": "적극성과 도전의식을 보유하고 적극적으로 업무를 수행하며 높은 성과 기준을 달성하기 위하여 끊임없이 노력하는 태도와 능력",
+   "ind": [
+    "본인이 맡은 업무는 책임감을 가지고 적극적이고 주도적으로 수행한다.",
+    "업무 진행 상황을 스스로 파악하고 경과를 보고하며 필요시 대안을 제시한다.",
+    "상사의 요구나 지시를 받기 전에 문제점을 찾아 스스로 업무를 추진하고 개선한다.",
+    "도전적인 업무 목표를 세우고 목표를 달성하기 위해 노력한다.",
+    "역량(기술, 지식, 능력) 향상을 위해 스스로 꾸준히 자기개발한다.",
+    "주어진 업무 안에서 더 나은 방법을 찾으려 시도하고 작은 개선을 실천한다.",
+    "맡은 업무를 중간에 포기하지 않고 기한 내에 완수하며, 결과에 대해 스스로 책임진다."
+   ]
+  }
+ ],
+ "선임": [
+  {
+   "name": "자기관리",
+   "def": "자신의 업무 우선순위와 시간을 스스로 계획하고 조절하며, 감정과 태도를 안정적으로 유지하여 주어진 성과 목표를 일관성 있게 실행해 나가는 능력",
+   "ind": [
+    "맡은 업무의 우선순위를 스스로 판단하고 기한 내에 완료될 수 있도록 일정을 계획한다.",
+    "여러 업무가 동시에 주어졌을 때 중요도와 긴급도를 고려하여 순서를 정하고 처리한다.",
+    "업무 중 스트레스나 어려운 상황에서도 안정적인 태도를 유지하며 업무에 임한다.",
+    "부정적인 피드백을 받았을 때 감정적으로 반응하지 않고 개선의 기회로 받아들인다.",
+    "주어진 성과 목표를 달성하기 위한 실행 계획을 스스로 수립하고 진행 상황을 점검한다.",
+    "목표 달성에 방해가 되는 요소를 스스로 파악하고 제거하려 노력한다.",
+    "자신의 강점과 보완이 필요한 부분을 객관적으로 파악하고 업무에 반영한다.",
+    "반복적으로 발생하는 실수나 비효율을 인식하고 스스로 개선 방법을 찾는다."
+   ]
+  },
+  {
+   "name": "문제해결",
+   "def": "업무추진 또는 목표 달성 시 발생하는 문제에 대한 정확한 원인을 파악하고 적절한 정보 및 자원을 활용하여 적기에 문제를 해결·처리하는 능력",
+   "ind": [
+    "주어진 문제의 핵심 요인을 정확하게 파악할 수 있다.",
+    "업무에 있어 문제해결을 위한 기본적인 절차(process)를 알고 있다.",
+    "규정된 절차나 매뉴얼에 따라 문제를 처리하며, 필요시 상사의 도움을 적절하게 받고 있다.",
+    "팀 내/외부 또는 고객으로부터 자료나 정보를 입수하여 문제 해결에 활용한다.",
+    "주어진 문제에 대한 근본 원인을 분석하여 구체화·명료화 시킬 수 있다.",
+    "유사한 문제가 반복될 경우 패턴을 인식하고 스스로 해결 방법을 찾으려 시도한다.",
+    "문제 해결 후 결과를 검토하고 더 나은 방법이 있었는지 스스로 되돌아본다.",
+    "혼자 해결하기 어려운 문제는 적절한 시점에 상사나 동료에게 도움을 요청하여 처리한다."
+   ]
+  },
+  {
+   "name": "전문성 추구",
+   "def": "자신에게 필요한 역량 및 skill이 무엇인지 정확하게 파악하고 전문적인 지식과 기술을 습득하기 위해 지속적으로 학습하고 자기개발하는 능력",
+   "ind": [
+    "업무 수행을 위해 자신에게 필요한 역량이나 기술이 무엇인지 파악하고 있다.",
+    "업계에서 일반적으로 쓰이는 전문용어를 알고 있다.",
+    "업무에 필요한 기본적 기술을 이해하며 보유하고 있다.",
+    "업무와 관련한 교육 프로그램에 참석하여 지식을 습득한다.",
+    "업무 지식 및 정보를 실무에 적절하게 적용하고 있다.",
+    "자신의 강점과 개발이 필요한 부분을 스스로 파악하고 개인 학습 계획을 세워 실행한다.",
+    "업무에서 겪은 시행착오와 성공 경험을 정리하여 자신만의 노하우로 축적한다.",
+    "관련 분야의 최신 트렌드를 꾸준히 모니터링하고 업무에 적용 가능한 부분을 찾는다."
+   ]
+  }
+ ],
+ "책임": [
+  {
+   "name": "동기부여",
+   "def": "부하 직원들이 업무에서 성과를 발휘할 수 있도록 유도하고 업무 결과에 대한 피드백을 제공하거나 발전을 위해 독려하는 능력",
+   "ind": [
+    "구성원들에게 일의 목적과 목표를 잘 설명하고 공감할 수 있도록 한다.",
+    "구성원들에게 적절한 피드백을 제공하여 일을 잘할 수 있도록 돕는다.",
+    "구성원들이 자율적으로 일을 하고 성취감을 느낄 수 있도록 적절한 권한위임을 한다.(리더)",
+    "구성원들이 업무를 추진하는 과정에서 다양한 관점에서 사고하도록 도와준다.",
+    "구성원들이 업무상 겪는 어려움을 파악하고 적합한 해결 방향을 함께 모색한다.",
+    "부하직원의 고민과 어려움을 이해하고 적극적으로 돕는다.",
+    "구성원 개인의 성장 목표와 조직의 방향을 연계하여 균형 있는 방향을 제시한다.(리더)",
+    "목표달성과정에서 자신감 및 성취감을 느낄 수 있도록 칭찬과 긍정적인 피드백을 제공한다."
+   ]
+  },
+  {
+   "name": "전략적 사고",
+   "def": "성과목표 달성을 위해 자사, 경쟁사, 시장 등의 전략적 요소를 분석하고 결과를 바탕으로 최적의 대안을 모색하고 해결방안을 찾는 능력",
+   "ind": [
+    "조직의 목표와 경영전략을 정확하게 이해하고 있다.",
+    "경영전략 속에서 자신의 업무가 차지하는 위치와 목적 그리고 목표를 정확히 이해하고 있다.",
+    "자신의 업무와 관련된 비즈니스 동향(Trend) 및 타사 사례를 주기적으로 파악한다.",
+    "팀의 업무계획 달성을 위해 자신의 업무 목표 및 업무 추진 계획을 효율적으로 수립한다.",
+    "조직 내 개별 업무가 전략과 어떻게 상호 연계되는지를 이해하고 있다.",
+    "팀 업무에 영향을 미치는 내외부 환경 변화를 파악하고 대응 방향을 팀원들과 공유한다.",
+    "단기 성과와 중장기 목표의 균형을 고려하여 팀의 업무 우선순위를 조정한다.",
+    "자사와 경쟁사의 강약점을 분석하여 팀 업무의 차별화 방향을 도출한다."
+   ]
+  },
+  {
+   "name": "업무추진력",
+   "def": "회사의 목표와 부서의 목표를 명확하게 인식하고 구체적 사실과 정보, 자료에 근거하여 신속하고 정확하게 업무 방향을 결정하고 추진하는 능력",
+   "ind": [
+    "회사의 목표와 전략을 명확하게 인식하고 있다.",
+    "장애요인이 있더라도 문제 해결 노력을 통해 최종 결과를 도출한다.",
+    "회사와 상위 조직의 목표를 명확하게 인식하고 이해 부합되도록 우선순위를 정하여 업무를 진행한 다.",
+    "의사결정이 내려지면 주저하지 않고 실행에 옮긴다.",
+    "중요한 결정을 내리기 전에 관련된 모든 자료와 정보를 수집하고 검토한다.",
+    "팀의 업무 목표를 구성원별 역할로 구체화하고 실행 계획을 수립하여 추진한다.(리더)",
+    "업무 진행 상황을 주기적으로 점검하고 지연 요소를 사전에 파악하여 대응한다.",
+    "팀 내 업무 배분을 효율적으로 조정하여 목표 달성을 위한 자원을 최적화한다.(리더)"
+   ]
+  },
+  {
+   "name": "갈등관리",
+   "def": "팀 내외부에서 발생하는 이견과 갈등 상황을 조기에 감지하고, 각 당사자의 입장을 균형 있게 파악하여 대화와 타협을 통해 건설적인 합의점을 도출하는 능력",
+   "ind": [
+    "갈등상황을 인지하고 다각적/객관적 정보를 바탕으로 갈등 당사자들의 입장과 상황을 정확히 파악 한다.",
+    "개인적 편견을 가지지 않고 갈등을 바라본다.",
+    "갈등의 핵심요인을 파악하고 갈등 해결을 위한 Process를 알고 있다.",
+    "갈등 관계자들의 입장 차이를 정확히 파악하여 해결점을 찾으려고 노력한다.",
+    "도출된 해결점에 맞추어 자신의 관점, 입장을 조절한다.",
+    "항상 개방적인 의견 교류와 솔직한 대화를 통해 갈등의 소지를 최소화한다.",
+    "실질적인 의견대립이나 의견충돌을 개방적이고 협력적인 방식으로 해결한다.",
+    "팀 내 잠재적 갈등 요소를 미리 파악하고 사전에 소통하여 갈등 발생을 예방한다."
+   ]
+  }
+ ],
+ "수석": [
+  {
+   "name": "변화주도",
+   "def": "변화의 목적과 방향을 정해 추진하고 공유·모니터링함으로써 조직이 긍정적인 변화를 추구하는 태도 및 의지",
+   "ind": [
+    "변화의 방향 및 변화관리 전략에 대한 의견을 제시한다.",
+    "변화를 기회로 보고 수용하게 하며, 변화에 능동적으로 대처한다.",
+    "이해 관계자들을 통해 새로운 변화와 관련된 그들의 의견을 정기적으로 수집한다.",
+    "변화에 대한 핵심적인 저항 원인을 분석하고 해결방안을 도출한다.",
+    "이해 관계자들에게 맞는 메시지 및 전달 수단을 개발한다.",
+    "지속적 변화를 추진할 수 있는 체계를 구축한다.",
+    "장기적 변화와 관련된 주요 단계별 변화관리 전략을 수립한다.",
+    "변화 추진 과정에서 구성원의 불안과 저항을 공감하고 심리적 안전감을 형성한다."
+   ]
+  },
+  {
+   "name": "성과관리",
+   "def": "단위 조직의 목표를 구성원별 역할과 연계하여 구체적인 성과 지표로 설정하고, 진행 과정을 지속적으로 모니터링하며 피드백과 지원을 통해 조직 전체의 성과를 달성하는 능력",
+   "ind": [
+    "조직의 전략 방향에 근거하여 단위 조직의 성과 목표를 구체적이고 측정 가능하게 설정한다.",
+    "팀 목표를 구성원별 역할과 강점에 맞게 배분하고 개인 목표와 연계한다.",
+    "성과 목표 대비 진행 상황을 주기적으로 점검하고 이슈를 조기에 파악하여 대응한다.",
+    "목표 달성을 저해하는 내외부 장애요인을 사전에 파악하고 제거 방안을 마련한다.",
+    "구성원의 성과 결과에 대해 구체적이고 공정한 피드백을 정기적으로 제공한다.",
+    "성과가 미흡한 구성원에게는 원인을 함께 분석하고 개선 방향을 코칭한다.",
+    "우수한 성과를 낸 구성원을 적절히 인정하고 보상과 연계될 수 있도록 지원한다.",
+    "팀 내 성과에 대한 명확한 기준과 공정한 평가 문화를 정착시킨다."
+   ]
+  },
+  {
+   "name": "비전제시",
+   "def": "조직의 장기 사업목표와 전략을 바탕으로 단위 조직의 비전을 스스로 수립하고, 구성원들이 방향성에 공감하고 몰입할 수 있도록 명확하게 제시하며 지속적으로 동기를 부여하는 능력",
+   "ind": [
+    "조직이 추구하는 전략적, 장기적 목표와 비전을 구성원들이 정확히 인식할 수 있도록 명확하게 제시 하고 공감대를 형성한다.",
+    "조직의 비전을 구체화하고 실현할 수 있도록 자원을 관리하고 조정한다.",
+    "구성원들이 회사 내에서 자신의 비전을 설정하고 이를 추구할 수 있도록 코칭한다.",
+    "회사의 장기적 비전 수행을 위한 구체적인 액션 플랜 및 제도적 지원 방안을 모색하고 수립한다.",
+    "잦은 소통을 통해 구성원들의 공헌이 조직의 목표에 어떻게 영향을 미치는지 구체적으로 제시한다.",
+    "사업 환경과 조직 역량을 분석하여 단위 조직의 중장기 비전을 스스로 수립하고 경영진과 공유한다.",
+    "비전 달성 과정에서 구성원들이 의미와 성취감을 느낄 수 있도록 중간 성과를 지속적으로 공유하고 격려한다.",
+    "조직 비전이 구성원 개개인의 성장 방향과 연결될 수 있도록 개인별 목표 설정을 지원한다."
+   ]
+  },
+  {
+   "name": "부하육성",
+   "def": "조언과 지도를 통하여 조직원의 전문성을 배양하고 성과를 향상시킬 수 있는 역량을 습득할 수 있도록 지원하는 능력",
+   "ind": [
+    "팀 구성원들의 업무에 도움이 되는 정보와 경험을 적극적으로 공유하고 성장을 위한 방향을 제시한 다.",
+    "구성원들과 인간적으로 가까운 관계를 맺으며 공정하게 대한다.",
+    "학습분위기를 조성하고 직원들을 교육시키며 역량을 강화한다.",
+    "업무상의 애로사항을 구체적으로 청취하고 스스로 해결방안을 찾을 수 있도록 코칭한다.",
+    "업무 내용과 관련한 자신의 경험이나 지식을 적극적으로 전달한다.",
+    "구성원 성과 향상과 역량 개발을 위해 장애요인을 제거하고 지속적인 지도와 육성 방안을 모색한다.",
+    "구성원의 강점과 약점을 파악하고 있으며 성과 향상에 필요한 역량을 명확하게 알고 있다.",
+    "구성원의 역량 개발을 위한 체계적인 계획이 수립되어 있다."
+   ]
+  }
+ ]
+};
+
+const ROLE_Q = {"대인관계": [{"q": "업무를 진행하면서 처음 만나는 상대(고객, 유관부서 등)와 협력 관계를 만들어야 했던 경험을 말씀해 주세요. 어떻게 접근하셨나요?", "f": "상대가 비협조적이었다면 어떻게 하셨나요?"}, {"q": "나와 입장이나 요구가 다른 상대를 응대했던 경험이 있다면, 상대의 관점을 이해하기 위해 어떤 노력을 했는지 말씀해 주세요.", "f": "그 관계는 이후 어떻게 유지되었나요?"}, {"q": "협업 과정에서 상대와의 관계가 틀어질 뻔했던 경험이 있다면, 어떻게 회복하셨는지 말씀해 주세요.", "f": "그 일 이후 관계를 관리하는 방식에서 달라진 점이 있나요?"}], "분석적 사고": [{"q": "자료나 데이터를 수집·정리해서 결론을 이끌어냈던 경험을 말씀해 주세요. 어떤 기준으로 자료를 분류하고 판단하셨나요?", "f": "자료가 부족하거나 서로 상충할 때는 어떻게 하셨나요?"}, {"q": "복잡한 과제를 여러 단계로 쪼개 체계적으로 처리했던 경험이 있다면 그 과정을 설명해 주세요.", "f": "그 방식이 효과적이었다고 판단한 근거는 무엇인가요?"}, {"q": "충분한 자료나 근거 없이 판단해야 했던 순간이 있었다면, 어떻게 하셨나요?", "f": "나중에 그 판단을 검증해 본 결과는 어땠나요?"}], "주도성": [{"q": "누가 시키지 않았지만 필요하다고 판단해 스스로 시작했던 일을 말씀해 주세요.", "f": "주변의 반응은 어땠고, 결과는 어떻게 되었나요?"}, {"q": "주어진 목표보다 더 높은 기준을 스스로 세우고 달성하려 노력했던 경험이 있다면 말씀해 주세요.", "f": "그 과정에서 포기하고 싶었던 순간은 없었나요? 어떻게 넘겼나요?"}, {"q": "스스로 시작한 일이 기대만큼 성과가 나지 않았던 경험을 말씀해 주세요.", "f": "그 경험이 이후 일하는 방식에 어떤 영향을 줬나요?"}], "자기관리": [{"q": "여러 업무가 동시에 몰렸을 때 우선순위를 정해 기한 내에 처리했던 경험을 말씀해 주세요. 순서를 정한 기준은 무엇이었나요?", "f": "계획대로 되지 않았을 때는 어떻게 조정하셨나요?"}, {"q": "압박이 크거나 감정적으로 힘든 상황에서도 업무 품질을 유지해야 했던 경험을 말씀해 주세요.", "f": "본인만의 감정·컨디션 관리 방법이 있다면 무엇인가요?"}, {"q": "업무량이 감당하기 어려운 수준이었을 때 어떻게 대응하셨는지 말씀해 주세요.", "f": "도움을 요청한 시점과 방식은 적절했다고 보시나요?"}], "문제해결": [{"q": "업무 중 발생한 문제의 원인을 파고들어 해결했던 경험을 상황–행동–결과 순으로 말씀해 주세요.", "f": "처음 짚었던 원인이 틀렸던 적은 없나요? 어떻게 알아차렸나요?"}, {"q": "혼자 해결하기 어려운 문제를 사람·정보·도구 등 다른 자원을 활용해 풀었던 경험을 말씀해 주세요.", "f": "도움을 요청하기 전에 무엇을 준비하셨나요?"}, {"q": "해결에 실패했던 문제가 있다면, 지금 돌아볼 때 무엇이 부족했다고 생각하시나요?", "f": "같은 문제를 다시 만난다면 무엇부터 다르게 하시겠어요?"}], "전문성 추구": [{"q": "최근 1~2년 사이 업무 역량을 높이기 위해 스스로 학습하거나 시도한 것을 구체적으로 말씀해 주세요.", "f": "학습한 내용을 실제 업무에 적용해서 달라진 점은 무엇인가요?"}, {"q": "본인 분야의 최신 흐름을 어떤 방식으로 따라가고 있으며, 최근 가장 주목한 변화는 무엇인가요?", "f": "그 변화가 우리 회사 업무에는 어떤 영향을 줄 것 같나요?"}, {"q": "배우고 싶었지만 미뤄둔 역량이나 기술이 있다면 무엇이고, 왜 미뤄졌나요?", "f": "입사 후 그 부분을 어떻게 보완할 계획인가요?"}], "동기부여": [{"q": "의욕이 떨어진 팀원이나 후배의 성과를 끌어올렸던 경험을 말씀해 주세요. 어떤 방식으로 접근하셨나요?", "f": "효과가 없었던 시도도 있었나요? 그때는 어떻게 바꾸셨나요?"}, {"q": "성과가 낮은 구성원에게 어려운 피드백을 전달해야 했던 경험이 있다면, 어떻게 말씀하셨는지 들려주세요.", "f": "피드백 이후 그 구성원은 어떻게 달라졌나요?"}, {"q": "팀 전체의 사기가 떨어졌던 시기를 어떻게 관리하셨는지 말씀해 주세요.", "f": "그때 효과가 있었던 것과 없었던 것은 각각 무엇이었나요?"}], "전략적 사고": [{"q": "시장·경쟁사·내부 상황을 분석해 업무의 방향이나 대안을 제시했던 경험을 말씀해 주세요.", "f": "분석 결과가 기존 방침과 달랐다면 어떻게 설득하셨나요?"}, {"q": "단기 성과와 장기 방향이 충돌했던 상황에서 어떤 기준으로 판단하셨는지 사례로 말씀해 주세요.", "f": "그 결정을 지금 돌아보면 어떻게 평가하시나요?"}, {"q": "본인의 분석이나 예측이 빗나갔던 경험을 말씀해 주세요.", "f": "무엇을 놓쳤고, 이후 분석 방식은 어떻게 바뀌었나요?"}], "업무추진력": [{"q": "장애물이나 반대가 있었지만 끝까지 추진해 결과를 만들어낸 경험을 말씀해 주세요.", "f": "추진 과정에서 잃은 것이나 감수한 리스크는 없었나요?"}, {"q": "정보가 불완전한 상태에서 빠르게 의사결정을 해야 했던 경험이 있다면, 무엇을 근거로 결정하셨나요?", "f": "만약 그 결정이 틀렸다면 어떻게 수습할 계획이었나요?"}, {"q": "추진하던 일을 중단하거나 방향을 바꿔야 했던 경험이 있다면, 그 판단은 어떻게 내리셨나요?", "f": "중단 결정을 구성원이나 유관 부서에 어떻게 설명하셨나요?"}], "갈등관리": [{"q": "팀 내부 또는 부서 간 갈등을 중재해 합의를 이끌어냈던 경험을 구체적으로 말씀해 주세요.", "f": "양쪽 모두 만족하지 못하는 상황이었다면 어떻게 마무리하셨나요?"}, {"q": "본인이 갈등의 당사자였던 상황에서는 어떻게 풀어가셨는지 말씀해 주세요.", "f": "지금 다시 그 상황이 온다면 다르게 할 부분이 있나요?"}, {"q": "중재를 시도했지만 갈등이 오히려 커졌던 경험이 있다면 말씀해 주세요.", "f": "그 경험에서 배운 것은 무엇인가요?"}], "변화주도": [{"q": "조직의 일하는 방식이나 구조를 바꾸는 변화를 주도했던 경험을 말씀해 주세요. 무엇부터 시작하셨나요?", "f": "구성원들의 불안이나 저항은 어떻게 다루셨나요?"}, {"q": "추진하던 변화가 동력을 잃었을 때 다시 살려낸 경험이 있다면 말씀해 주세요.", "f": "변화의 성과를 구성원들에게 어떻게 보여주셨나요?"}, {"q": "추진했던 변화가 결국 조직에 정착하지 못했던 경험이 있다면, 원인은 무엇이었나요?", "f": "다시 추진한다면 무엇을 다르게 하시겠어요?"}], "성과관리": [{"q": "조직의 목표를 구성원별 역할과 지표로 나눠 관리했던 방식을 사례로 말씀해 주세요.", "f": "목표 달성이 어려워 보일 때는 어느 시점에 어떻게 개입하셨나요?"}, {"q": "구성원 간 성과 차이가 클 때 이를 어떻게 관리하셨는지 말씀해 주세요.", "f": "지속적인 저성과자에 대해서는 어떤 조치를 하셨나요?"}, {"q": "설정했던 목표나 지표가 잘못되었다는 것을 뒤늦게 알게 된 경험이 있나요?", "f": "어떤 시점에 어떻게 바로잡으셨나요?"}], "비전제시": [{"q": "조직(팀)의 방향성을 직접 수립하고 구성원들에게 공유했던 경험을 말씀해 주세요. 공감은 어떻게 이끌어내셨나요?", "f": "방향에 동의하지 않는 구성원은 어떻게 하셨나요?"}, {"q": "회사의 전략과 팀의 일상 업무를 연결해 설명해야 했던 경험이 있다면 말씀해 주세요.", "f": "구성원들이 실제로 몰입하고 있다는 것은 무엇으로 확인하시나요?"}, {"q": "제시한 방향이 구성원들에게 받아들여지지 않았던 경험이 있다면 말씀해 주세요.", "f": "방향을 수정하셨나요, 아니면 설득을 계속하셨나요? 그 이유는요?"}], "부하육성": [{"q": "구성원을 성장시켜 성과나 역할이 눈에 띄게 달라졌던 사례를 말씀해 주세요. 어떤 지원을 하셨나요?", "f": "성장이 더딘 구성원에게는 어떻게 하셨나요?"}, {"q": "구성원 개개인의 강점과 약점을 어떻게 파악하고, 업무 배분에 어떻게 반영하시나요?", "f": "본인의 육성 방식이 통하지 않았던 경험도 말씀해 주세요."}, {"q": "육성에 공을 들였지만 결국 팀을 떠난(퇴사·전배) 구성원이 있었다면, 그 경험을 어떻게 해석하시나요?", "f": "그 이후 육성 방식에서 바꾼 것이 있나요?"}]};
+
+/* 전사공통 질문 (면접 가이드 발췌) */
+const COMMON_Q = {
+ '긍정과 열정':[
+  {q:'불가능하거나 힘든 상황이었음에도 불구하고 무엇인가를 시도했던 경험을 말씀해 주세요.'},
+  {q:'학업(업무) 이외에 시간이나 노력을 열정적으로 투자해 본 경험은 무엇입니까?'},
+  {q:'그레이트북스 지원 동기를 말씀해 주세요.'},
+  {q:'자신의 성실성을 몇 점이라 판단하십니까? 주변에서는 어떻게 판단하는지 말씀해 주세요.'}],
+ '소통과 협업':[
+  {q:'대인관계에서 가장 중요하게 생각하는 것은 무엇입니까?'},
+  {q:'어울리기 힘들었던 사람과 공동의 이익을 만들었던 경험이 있다면 말씀해 주세요.'},
+  {q:'주위 사람들은 본인을 어떤 사람으로 평가하는지 말씀해 주세요.'}],
+ '창의적 사고':[
+  {q:'본인이 참여했던 과제/프로젝트의 효과를 높이기 위해 노력한 것을 말씀해 주세요.'},
+  {q:'기존 방식과 다르게 시도해서 더 나은 결과를 만든 경험이 있다면 말씀해 주세요.'},
+  {q:'모두가 당연하게 여기던 프로세스나 방식에 의문을 갖고 바꿔보자고 제안했던 경험이 있다면 말씀해 주세요.',f:'제안이 받아들여지지 않았다면 이유는 무엇이었나요?'}],
+ '고객중심':[
+  {q:'그레이트북스를 검색했을 때, 본인이 긍정적/부정적으로 해석한 부분을 말씀해 주세요.'},
+  {q:'고객(또는 상대방)의 입장에서 문제를 다시 정의해 해결했던 경험을 말씀해 주세요.'},
+  {q:'고객이나 내부 고객의 불만을 직접 처리했던 경험을 말씀해 주세요. 어떻게 대응하셨나요?',f:'같은 불만이 반복되지 않도록 무엇을 바꾸셨나요?'}],
+ '기타':[
+  {q:'본인이 회사를 선택할 때 중요하게 생각하는 3가지는 무엇입니까?'},
+  {q:'본인은 리더형인가요, 팔로워형인가요?'},
+  {q:'보통 어떤 상황에서 스트레스를 받나요? 본인만의 해소법이 있다면 이야기해 주세요.'},
+  {q:'서류 합격 통보 후 면접을 어떻게 준비했는지 말씀해 주세요.'},
+  {q:'업무와 관련하여 상사와 의견이 다를 경우, 어떻게 대응하시겠습니까?'},
+  {q:'최근 성공/실패 경험과 그를 통해 배운 점은 무엇입니까?'}]
+};
+
+/* ══════════ 상태 ══════════ */
+const LV_ORDER=['담당','선임','책임','수석'];
+let S = { job:'', level:'', includeLower:false, checkedQ:{}, aiQ:null, aiQMeta:null, aiCtx:'', qNum:3, customQ:'', activeCand:null, resume:null, resumeQ:null, analysis:null, apiOpen:false, ratings:{}, notes:{}, grade:'' };
+
+/* ══════════ 유틸 ══════════ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function go(p){document.querySelectorAll('main>section').forEach(s=>s.hidden=true);$('page-'+p).hidden=false;document.querySelectorAll('.rail-step').forEach(b=>b.classList.toggle('on',b.dataset.page===p));window.scrollTo({top:0});if(p==='eval'){renderEvalComps();renderCandBanner();}if(p==='box')renderBox();if(p==='cand')renderCand();}
+document.querySelectorAll('.rail-step').forEach(b=>b.onclick=()=>go(b.dataset.page));
+
+/* 직급 버킷 매핑 */
+function bucketLevels(label){
+  const s=label, set=new Set(), has=k=>s.includes(k);
+  LV_ORDER.forEach(k=>{if(has(k))set.add(k)});
+  if(s.includes('~')){const idx=LV_ORDER.filter(k=>has(k)).map(k=>LV_ORDER.indexOf(k));if(idx.length>=2){for(let i=Math.min(...idx);i<=Math.max(...idx);i++)set.add(LV_ORDER[i]);}}
+  if(has('실무자')||has('사원')||has('상담직')){set.add('담당');set.add('선임');}
+  if(has('관리자')&&!has('중간')){set.add('책임');set.add('수석');}
+  if(has('중간관리')){set.add('선임');set.add('책임');}
+  if(has('리더직')||has('센터장')||has('리더급')){set.add('수석');}
+  return set;
+}
+function jobComps(job, level, lower){
+  const j=JOBS[job]; if(!j)return[];
+  const selIdx=LV_ORDER.indexOf(level);
+  return j.comps.filter(c=>{
+    const lv=bucketLevels(c.level);
+    if(lv.has(level))return true;
+    if(lower){for(const l of lv){if(LV_ORDER.indexOf(l)>=0&&LV_ORDER.indexOf(l)<selIdx)return true;}}
+    return false;
+  });
+}
+function roleComps(level, lower){
+  const idx=LV_ORDER.indexOf(level); let arr=[];
+  if(lower){for(let i=0;i<=idx;i++)arr=arr.concat(ROLE[LV_ORDER[i]].map(c=>({...c,lv:LV_ORDER[i]})));}
+  else arr=ROLE[level].map(c=>({...c,lv:level}));
+  return arr;
+}
+
+/* ══════════ ② 역량·질문 렌더 ══════════ */
+const selJob=$('selJob');
+selJob.innerHTML='<option value="">직무 선택…</option>'+Object.keys(JOBS).map(j=>`<option>${esc(j)}</option>`).join('');
+selJob.onchange=()=>{S.job=selJob.value;S.aiQ=null;S.aiQMeta=null;S.resumeQ=null;S.checkedQ={};renderQuest();$('fRole').value=S.job;};
+document.querySelectorAll('#lvBtns button').forEach(b=>b.onclick=()=>{S.level=b.dataset.lv;S.aiQ=null;S.aiQMeta=null;S.resumeQ=null;S.checkedQ={};document.querySelectorAll('#lvBtns button').forEach(x=>x.classList.toggle('on',x===b));renderQuest();$('fLevel').value=S.level;});
+$('chkLower').onchange=e=>{S.includeLower=e.target.checked;renderQuest();};
+$('btnResetQuest').onclick=()=>{
+  S.job='';S.level='';S.aiQ=null;S.aiQMeta=null;S.resume=null;S.resumeQ=null;S.checkedQ={};S.includeLower=false;S.aiCtx='';S.customQ='';
+  selJob.value='';$('chkLower').checked=false;
+  document.querySelectorAll('#lvBtns button').forEach(x=>x.classList.remove('on'));
+  $('fRole').value='';$('fLevel').value='';
+  renderQuest();toast('역량·질문 선택을 초기화했습니다');
+};
+
+function tmplQ(c){ /* 행동지표 기반 기본 질문(3개) — 역량명을 직접 노출하지 않음 */
+  if(ROLE_Q[c.name])return ROLE_Q[c.name];
+  const qs=[];
+  const clean=x=>x.replace(/(할 수 있다|하고 있다|고 있다|한다|이다|있다)\.?\s*$/,'').replace(/\.$/,'').trim();
+  const inds=(c.ind||[]).map(clean).filter(x=>x.length>6);
+  if(inds[0])qs.push({q:`실제 업무에서 ${inds[0]}했던 경험을 상황–행동–결과 순으로 구체적으로 말씀해 주세요.`,f:'그 과정에서 본인이 직접 한 일과 다른 사람이 한 일을 구분해 주시겠어요?'});
+  if(inds[1])qs.push({q:`${inds[1]}해야 했던 상황이 있었다면, 어떻게 접근했는지 말씀해 주세요.`,f:'그때 가장 어려웠던 점과 극복 방법은 무엇이었나요?'});
+  if(inds[2])qs.push({q:`${inds[2]}하는 과정에서 예상대로 되지 않았거나 실패했던 경험이 있다면 말씀해 주세요.`,f:'그 경험에서 배운 것을 이후 어떻게 적용하셨나요?'});
+  while(qs.length<3){
+    const fill=[
+      {q:'이 업무 영역에서 가장 성과가 좋았던 경험을 상황–행동–결과 순으로 말씀해 주세요.',f:'그 성과에서 본인의 기여는 구체적으로 무엇이었나요?'},
+      {q:'이 업무 영역에서 실패했거나 예상과 다르게 흘러갔던 경험과 그로부터 배운 점을 말씀해 주세요.',f:'같은 상황이 다시 온다면 무엇을 다르게 하시겠어요?'},
+      {q:'이 업무를 잘하기 위해 본인이 갖춘 강점과 아직 부족한 부분을 각각 말씀해 주세요.',f:'부족한 부분은 어떻게 보완해 오셨나요?'}
+    ];
+    qs.push(fill[qs.length%3]);
+  }
+  return qs;
+}
+function qKey(sec,i,j){return sec+'|'+i+'|'+j;}
+let QREG={}; /* 렌더 시점의 질문 텍스트 레지스트리 */
+function toggleQ(k){
+  if(S.checkedQ[k])delete S.checkedQ[k];
+  else S.checkedQ[k]=QREG[k]||true;
+  const c=$('qCount');if(c)c.textContent=checkedList().length;
+}
+function checkedList(){
+  return Object.values(S.checkedQ).filter(v=>v&&v.q);
+}
+function customList(){
+  return (S.customQ||'').split('\n').map(x=>x.trim()).filter(x=>x.length>1);
+}
+function qItemHtml(sec,i,j,q,f,comp){
+  const k=qKey(sec,i,j), ck=S.checkedQ[k]?'checked':'';
+  QREG[k]={c:comp||'',q,f:f||''};
+  return `<div class="qitem"><input type="checkbox" ${ck} onchange="toggleQ('${k}')" aria-label="이 질문을 면접에 사용"><div><div class="qt">${esc(q)}</div>${f?`<div class="ft">${esc(f)}</div>`:''}</div></div>`;
+}
+function compCard(c,badge,sec,i){
+  const qs=(S.aiQ&&S.aiQ[c.name])?S.aiQ[c.name]:tmplQ(c);
+  const indHtml=c.ind&&c.ind.length?`<details class="fold"><summary>행동 지표 보기</summary><ul>${c.ind.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'';
+  return `<div class="comp"><div class="hd"><span class="tag ${badge.cls}">${badge.txt}</span><span class="nm">${esc(c.name)}</span></div>
+  <div class="df">${esc(c.def)}</div>${indHtml}
+  <div style="margin-top:10px">${qs.map((x,j)=>qItemHtml(sec,i,j,x.q,x.f,c.name)).join('')}</div></div>`;
+}
+function apiPanelHtml(){
+  const mode=CFG.url?'프록시 서버 연결':'Claude 내장';
+  const dot=CFG.url?'🟢':'⚪';
+  return `<div class="card" style="border:1.5px solid var(--amber);background:#FDFBF5">
+    <details ${S.apiOpen?'open':''} ontoggle="S.apiOpen=this.open">
+      <summary style="cursor:pointer;font-weight:700;font-size:.95rem;list-style:none">⚙ AI 연결 설정 &nbsp;<span class="tag a">${dot} 현재: ${mode}</span> <span class="hint" style="font-weight:400">— AI 질문 생성이 실패하면 여기서 프록시를 설정하세요 (클릭해서 펼치기)</span></summary>
+      <div style="margin-top:14px;display:grid;gap:9px;max-width:620px">
+        <div><label class="fld">프록시 서버 URL <span style="font-weight:400">(인재경영팀에서 안내받은 주소 — 한 번 적용하면 이 브라우저에 저장됩니다)</span></label>
+        <input type="text" id="cfgUrl" placeholder="예: https://gb-interview.your-team.workers.dev" value="${esc(CFG.url)}"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn primary sm" onclick="saveCfg()">적용</button>
+          <button class="btn plain sm" onclick="resetCfg()">기본으로</button>
+          <button class="btn ghost sm" onclick="testCfg()" id="btnTestCfg">연결 테스트</button>
+          <span class="hint" id="cfgStat" style="align-self:center"></span>
+        </div>
+        <p class="hint">이 앱은 API 키를 다루지 않습니다. 키는 프록시 서버에만 보관되며, 사용자는 위 주소만 입력하면 됩니다.</p>
+      </div>
+    </details></div>`;
+}
+async function testCfg(){
+  const b=$('btnTestCfg'),st=$('cfgStat');
+  b.disabled=true;b.innerHTML='<span class="spin" style="border-color:var(--forest);border-top-color:transparent"></span>테스트 중…';st.textContent='';
+  try{
+    const t=await callClaude('연결 테스트입니다. "OK"라고만 답해 주세요.');
+    st.textContent='✅ 연결 성공 — AI 기능을 사용할 수 있습니다'+(t?'':'');
+  }catch(e){st.textContent='❌ 연결 실패: '+(e.message==='ENV'?'서버에 닿지 않습니다. 키/URL을 확인해 주세요.':e.message);}
+  b.disabled=false;b.textContent='연결 테스트';
+}
+function renderQuest(){
+  const box=$('questBody');
+  QREG={};
+  if(!S.job||!S.level){box.innerHTML=apiPanelHtml()+'<p class="hint" style="padding:30px 0;text-align:center">직무와 직급을 선택해 주세요.</p>';return;}
+  const jc=jobComps(S.job,S.level,S.includeLower);
+  const rc=roleComps(S.level,S.includeLower);
+  const jinfo=JOBS[S.job];
+  let h='';
+  if(jinfo.slogan)h+=`<div class="card" style="border-left:4px solid var(--forest)"><b class="serif" style="font-size:1.05rem">"${esc(jinfo.slogan)}"</b><div class="hint" style="margin-top:4px">${esc(S.job)} 직무 슬로건 · ${esc(S.level)} 직급 기준 역량 ${jc.length}개</div></div>`;
+  h+=`<div class="card" style="padding:12px 18px;border-left:4px solid var(--amber)">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <b style="font-size:.9rem">✓ 질문 체크 = 면접에 사용할 질문 선택</b>
+      <span class="hint">선택 <b id="qCount">${checkedList().length}</b>개${customList().length?` + 추가 <b>${customList().length}</b>개`:''}</span>
+      <button class="btn amber sm" onclick="printQSheet()">🖨 선택 질문지 인쇄</button>
+      <span class="hint">체크·추가한 질문은 평가표와 요약표 인쇄물에도 함께 기록됩니다</span>
+    </div>
+    <details class="fold" style="border:none;margin-top:8px;padding:0" ${S.customQ?'open':''}>
+      <summary>➕ 개인 추가 질문 입력 (한 줄에 질문 하나씩 — 질문지에 함께 인쇄됩니다)</summary>
+      <textarea id="customQ" placeholder="예: 우리 회사 전집을 직접 본 적이 있나요? 어떤 인상을 받았나요?
+예: 통근 거리가 먼 편인데 괜찮으신가요? (직무 관련 사항만)" style="margin-top:8px;min-height:64px;font-size:.88rem" oninput="S.customQ=this.value;const c=$('qCount');if(c)c.textContent=checkedList().length;">${esc(S.customQ||'')}</textarea>
+    </details>
+  </div>`;
+  const chips=['신입 지원자','경력직 — 이직 사유 확인','리더 포지션 — 조직관리 검증','직무 전환 지원자','장기 근속 의지 확인','실무 즉시 투입 가능 여부'];
+  h+=`<div class="aibox"><b>🪄 AI 맞춤 질문 생성</b><p class="hint" style="margin:5px 0 14px">아래 ①~③ 순서로 사용합니다. 기본 질문으로 충분하면 이 박스는 건너뛰어도 됩니다.</p>
+
+  <div style="margin-bottom:12px">
+    <label class="fld">① 질문에 반영할 조건 입력 <span style="font-weight:400">(선택 — 아래 태그를 눌러 넣거나 직접 입력)</span></label>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      ${chips.map(c=>`<button class="btn plain sm" style="font-size:.78rem;padding:4px 10px" onclick="addCtx('${c}')">+ ${c}</button>`).join('')}
+    </div>
+    <input type="text" id="aiCtx" placeholder="예: 경력 5년차, 스타트업 출신, 이직 사유 확인 필요" value="${esc(S.aiCtx||'')}" oninput="S.aiCtx=this.value;updateCtxWarn()">
+  </div>
+
+  <div style="margin-bottom:12px">
+    <label class="fld">② 이력서 첨부 <span style="font-weight:400">(선택 — 첨부하면 경력 기반 질문 버튼이 활성화됩니다)</span></label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <label class="btn ghost sm" style="cursor:pointer;display:inline-block">📄 이력서 PDF 첨부
+        <input type="file" id="resumeFile" accept="application/pdf" style="display:none" onchange="onResume(this)"></label>
+      <span class="hint" id="resumeStat">${S.resume?esc(S.resume.name)+' 첨부됨':'미첨부'}</span>
+      ${S.resume?'<button class="btn plain sm" onclick="clearResume()">첨부 해제</button>':''}
+    </div>
+  </div>
+
+  <div>
+    <label class="fld">③ 질문 생성 실행 — ①·②의 내용이 함께 반영됩니다</label>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <span style="font-size:.83rem;font-weight:700">역량당 질문 수</span>
+      ${[3,4,5].map(n=>`<button class="btn ${(S.qNum||3)===n?'primary':'plain'} sm" style="padding:4px 12px" onclick="S.qNum=${n};renderQuest()">${n}개</button>`).join('')}
+      <span class="hint">최소 3개 ~ 최대 5개</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn primary" id="btnAI" onclick="genAI()">역량 기반 질문 생성<br><span style="font-weight:400;font-size:.75rem">아래 역할·직무 역량의 질문을 맞춤 교체</span></button>
+      <button class="btn amber" id="btnAIResume" onclick="genResumeQ()" ${S.resume?'':'disabled'}>이력서 기반 질문 생성<br><span style="font-weight:400;font-size:.75rem">경력·프로젝트 검증 질문 별도 생성</span></button>
+      <span class="hint" id="aiStat" style="align-self:center"></span>
+    </div>
+    ${aiStatusHtml()}
+  </div>
+  </div></div>`;
+  h+=apiPanelHtml();
+  if(S.resumeQ){
+    const rq=S.resumeQ;
+    h+=`<div class="comp" style="border-left:4px solid var(--amber)"><div class="hd"><span class="tag a">이력서</span><span class="nm">이력서 기반 질문</span></div>
+    ${rq.summary?`<div class="df"><b>요약:</b> ${esc(rq.summary)}</div>`:''}
+    ${rq.flags&&rq.flags.length?`<div class="df" style="margin-top:5px"><b>확인 포인트:</b> ${rq.flags.map(esc).join(' · ')}</div>`:''}
+    <div style="margin-top:10px">${(rq.questions||[]).map((x,j)=>qItemHtml('resume',0,j,x.q,x.f,'이력서 기반')).join('')}</div></div>`;
+  }
+  h+=`<h3 style="margin:20px 0 10px;font-size:1.05rem">① 전사공통 역량 <span class="hint" style="font-weight:400">— GB 구성원이라면 갖춰야 할 기본 역량 · 핵심가치</span></h3>`;
+  COMMON.forEach((c,i)=>{const qs=COMMON_Q[c.name]||[];const cc={...c,ind:[]};
+    h+=`<div class="comp"><div class="hd"><span class="tag g">공통</span><span class="nm">${esc(c.name)}</span></div><div class="df">${esc(c.def)}</div>
+    <div style="margin-top:10px">${qs.map((x,j)=>qItemHtml('common',i,j,x.q,x.f,c.name)).join('')}</div></div>`;});
+  h+=`<details class="fold" style="border:none;margin:0 0 8px"><summary>공통 참고 질문 더 보기 (${COMMON_Q['기타'].length})</summary><div class="comp" style="margin-top:8px">${COMMON_Q['기타'].map((x,j)=>qItemHtml('etc',0,j,x.q,x.f,'기타')).join('')}</div></details>`;
+  h+=`<h3 style="margin:22px 0 10px;font-size:1.05rem">② 역할 역량 <span class="hint" style="font-weight:400">— ${esc(S.level)} 직급 역할 수행에 필요한 역량</span></h3>`;
+  rc.forEach((c,i)=>{h+=compCard(c,{cls:'a',txt:c.lv},'role',i);});
+  h+=`<h3 style="margin:22px 0 10px;font-size:1.05rem">③ 직무 역량 <span class="hint" style="font-weight:400">— ${esc(S.job)} 직무 수행에 필요한 전문 역량</span></h3>`;
+  if(jc.length)jc.forEach((c,i)=>{h+=compCard(c,{cls:'n',txt:c.level},'job',i);});
+  else h+='<p class="hint">해당 직급 기준으로 정의된 직무 역량이 없습니다. "하위 직급 역량 포함"을 체크해 보세요.</p>';
+  h+=`<div style="margin-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px"><button class="btn plain" onclick="go('guide')">← 면접 가이드</button><button class="btn primary" onclick="go('eval')">다음 · 면접 평가표 작성 →</button></div>`;
+  box.innerHTML=h;
+}
+
+/* ══════════ AI 질문 생성 ══════════ */
+const ENV_MSG='AI 서버에 연결할 수 없습니다. "⚙ AI 연결 설정"에서 인재경영팀이 안내한 프록시 서버 URL을 입력한 뒤 다시 시도해 주세요.';
+let CFG={url:DEFAULT_PROXY};
+async function saveCfg(){
+  CFG.url=($('cfgUrl')?.value||'').trim();
+  try{const st=await store();if(CFG.url)await st.set('cfgurl',CFG.url);else await st.delete('cfgurl').catch(()=>{});}catch(e){}
+  renderQuest();toast(CFG.url?'프록시 연결을 적용했습니다 — 이 브라우저에 저장되어 다음에도 유지됩니다':'프록시 설정을 해제했습니다');
+}
+async function resetCfg(){
+  CFG.url=DEFAULT_PROXY;
+  try{const st=await store();await st.delete('cfgurl').catch(()=>{});}catch(e){}
+  renderQuest();toast(DEFAULT_PROXY?'배포 기본 프록시로 되돌렸습니다':'기본(Claude 내장) 연결로 되돌렸습니다');
+}
+/* 저장된 프록시 URL 자동 로드 */
+(async()=>{try{const st=await store();const g=await st.get('cfgurl');if(g&&g.value)CFG.url=g.value;}catch(e){}})();
+async function callClaude(content){
+  const body=JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content}]});
+  let endpoint='https://api.anthropic.com/v1/messages';
+  const headers={'Content-Type':'application/json'};
+  if(CFG.url){endpoint=CFG.url;}
+  let res;
+  try{
+    res=await fetch(endpoint,{method:'POST',headers,body});
+    /* 미리보기 등 프록시가 없는 환경: 내장 엔드포인트로 폴백 */
+    if(!res.ok&&res.status===404&&endpoint!=='https://api.anthropic.com/v1/messages'){
+      res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body});
+    }
+  }catch(e){
+    if(endpoint!=='https://api.anthropic.com/v1/messages'){
+      try{res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body});}
+      catch(e2){throw new Error('ENV');}
+    }else throw new Error('ENV');
+  }
+  if(!res)throw new Error('ENV');
+  if(!res.ok){
+    let msg='HTTP '+res.status;
+    try{const d=await res.json();msg=(d.error&&d.error.message)||msg;}catch(e){}
+    throw new Error(msg);
+  }
+  const data=await res.json();
+  if(data.error)throw new Error(data.error.message||'API error');
+  return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+}
+function parseJSON(text){
+  text=text.replace(/```json|```/g,'').trim();
+  const s0=text.indexOf('{');
+  if(s0<0){console.warn('[AI 원문 — JSON 없음]',text);throw new Error('NOJSON');}
+  const body=text.slice(s0);
+  try{return JSON.parse(body.slice(0,body.lastIndexOf('}')+1));}catch(e){}
+  const rep=repairJSON(body);
+  if(rep!==null)return rep;
+  console.warn('[AI 원문 — 복구 실패]',text);
+  throw new Error('JSON');
+}
+/* 잘린 JSON 복구: 뒤에서부터 완결 지점을 찾아 열린 괄호를 닫는다 */
+function repairJSON(body){
+  for(let end=body.length;end>10;){
+    const cut=Math.max(body.lastIndexOf('}',end-1),body.lastIndexOf(']',end-1),body.lastIndexOf('"',end-1));
+    if(cut<=0)break;
+    const frag=body.slice(0,cut+1);
+    let stack=[],inStr=false,escp=false;
+    for(const ch of frag){
+      if(escp){escp=false;continue;}
+      if(ch==='\\'){escp=true;continue;}
+      if(ch==='"'){inStr=!inStr;continue;}
+      if(inStr)continue;
+      if(ch==='{'||ch==='[')stack.push(ch);
+      else if(ch==='}'||ch===']')stack.pop();
+    }
+    if(!inStr){
+      let closed=frag.replace(/,\s*$/,'');
+      for(let i=stack.length-1;i>=0;i--)closed+=(stack[i]==='{'?'}':']');
+      closed=closed.replace(/,\s*([}\]])/g,'$1');
+      try{return JSON.parse(closed);}catch(e){}
+    }
+    end=cut;
+  }
+  return null;
+}
+function errMsg(e){
+  if(!e)return '생성에 실패했습니다';
+  if(e.message==='ENV')return ENV_MSG;
+  if(e.message==='JSON')return 'AI 응답이 길이 제한으로 잘렸습니다. 다시 시도해 주세요.';
+  if(e.message==='NOJSON')return 'AI가 형식 대신 일반 문장으로 답했습니다. 다시 시도해 주세요.';
+  return '생성에 실패했습니다: '+e.message;
+}
+
+/* ── 이력서 첨부 ── */
+function onResume(input){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.type!=='application/pdf'){toast('PDF 파일만 첨부할 수 있습니다');input.value='';return;}
+  if(file.size>8*1024*1024){toast('파일이 너무 큽니다 (8MB 이하)');input.value='';return;}
+  const r=new FileReader();
+  r.onload=()=>{S.resume={name:file.name,b64:r.result.split(',')[1]};renderQuest();toast('이력서가 첨부되었습니다');};
+  r.onerror=()=>toast('파일을 읽을 수 없습니다');
+  r.readAsDataURL(file);
+}
+function clearResume(){S.resume=null;S.resumeQ=null;renderQuest();}
+function addCtx(t){
+  const cur=(S.aiCtx||'').trim();
+  if(cur.includes(t))return;
+  S.aiCtx=cur?cur+', '+t:t;
+  const el=$('aiCtx');if(el)el.value=S.aiCtx;
+  updateCtxWarn();
+}
+function ctxChanged(){
+  if(!S.aiQ||!S.aiQMeta)return false;
+  return (S.aiCtx||'').trim()!==(S.aiQMeta.ctx||'').trim();
+}
+function updateCtxWarn(){
+  const w=$('ctxWarn');if(!w)return;
+  w.style.display=ctxChanged()?'block':'none';
+}
+function revertAIQ(){S.aiQ=null;S.aiQMeta=null;renderQuest();toast('행동지표 기반 기본 질문으로 되돌렸습니다');}
+function aiStatusHtml(){
+  if(!S.aiQ)return '';
+  const t=S.aiQMeta?new Date(S.aiQMeta.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'';
+  const ctx=S.aiQMeta&&S.aiQMeta.ctx?`조건: ${esc(S.aiQMeta.ctx)}`:'조건 없음';
+  return `<div style="margin-top:12px;padding:10px 12px;background:#fff;border:1px solid var(--forest);border-radius:8px;font-size:.84rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <span>🟢 <b>AI 생성 질문 적용 중</b> (${t} 생성 · ${ctx})</span>
+    <button class="btn plain sm" onclick="revertAIQ()" style="margin-left:auto">기본 질문으로 되돌리기</button>
+  </div>
+  <div id="ctxWarn" style="display:${ctxChanged()?'block':'none'};margin-top:8px;padding:9px 12px;background:#FDF6E9;border:1px solid #EAD9AE;border-radius:8px;font-size:.84rem">
+    ⚠ 입력한 조건이 현재 질문에 아직 반영되지 않았습니다 — <b>③ 역량 기반 질문 생성</b>을 다시 눌러 주세요.
+  </div>`;
+}
+
+async function genResumeQ(){
+  if(!S.resume||!S.job||!S.level)return;
+  const btn=$('btnAIResume'),stat=$('aiStat');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>이력서 분석 중…';stat.textContent='';
+  try{
+    const jc=jobComps(S.job,S.level,S.includeLower).map(c=>c.name).slice(0,8);
+    const ctx=(S.aiCtx||$('aiCtx')?.value||'').trim();
+    const prompt=`당신은 그레이트북스(유아동 도서·교육 기업) 채용 면접 설계 전문가입니다. 첨부된 이력서를 검토해 주세요.
+채용 직무: ${S.job} / 직급: ${S.level} / 필요 직무역량: ${jc.join(', ')}${ctx?`\n특이사항: ${ctx}`:''}
+이력서의 실제 경력·프로젝트·경력 공백·이직 이력에 근거한 검증 질문 4개(각 꼬리질문 1개 포함)와, 면접에서 확인해야 할 포인트 3개를 뽑아 주세요. 모든 문장은 짧고 간결하게 — 질문은 50자 이내, 요약·포인트는 각 40자 이내.
+주의: 채용절차법에 따라 가족·혼인·출신지역·신체조건·재산 등 직무와 무관한 개인정보 관련 질문은 절대 금지. 경력과 직무 중심으로만.
+반드시 아래 JSON만 출력 (마크다운 코드블록 없이):
+{"summary":"경력 요약 2~3문장","flags":["확인 포인트1","확인 포인트2","확인 포인트3"],"questions":[{"q":"질문","f":"꼬리질문"}]}`;
+    const content=[
+      {type:'document',source:{type:'base64',media_type:'application/pdf',data:S.resume.b64}},
+      {type:'text',text:prompt}
+    ];
+    const text=await callClaude(content);
+    try{
+      S.resumeQ=parseJSON(text);
+    }catch(e1){
+      if(e1.message!=='JSON'&&e1.message!=='NOJSON')throw e1;
+      /* 응답이 잘렸거나 형식 위반 → 더 짧게 자동 재시도 */
+      const b0=$('btnAIResume');if(b0)b0.innerHTML='<span class="spin"></span>응답이 길어 잘렸습니다 — 짧게 재시도 중…';
+      const content2=[content[0],{type:'text',text:prompt+'\n\n(중요: 직전 응답이 길어서 잘렸습니다. 질문을 3개로 줄이고 모든 문장을 30자 이내로 짧게 하여, 설명 없이 JSON만 다시 출력하세요.)'}];
+      S.resumeQ=parseJSON(await callClaude(content2));
+    }
+    renderQuest();
+    toast('이력서 기반 질문이 생성되었습니다');
+  }catch(e){
+    console.error(e);
+    let reason='';
+    if(e&&e.message==='ENV')reason=ENV_MSG;
+    else if(e&&e.message==='JSON')reason='AI 응답이 길이 제한으로 잘려 해석에 실패했습니다. 자동 재시도까지 실패했으니, 한 번 더 눌러 주세요. (반복되면 이력서가 매우 길거나 표 중심일 수 있습니다)';
+    else if(e&&e.message==='NOJSON')reason='AI가 형식 대신 일반 문장으로 답했습니다. 한 번 더 시도해 주세요.';
+    else reason='이력서 분석 실패: '+((e&&e.message)||'알 수 없는 오류')+' — 스캔 이미지 PDF는 텍스트를 읽지 못해 실패할 수 있습니다.';
+    const s=$('aiStat');if(s)s.textContent=reason;
+    const b=$('btnAIResume');if(b){b.disabled=false;b.textContent='이력서 기반 질문 생성';}
+  }
+}
+async function genAI(){
+  if(!S.job||!S.level)return;
+  const btn=$('btnAI'),stat=$('aiStat');
+  btn.disabled=true;stat.textContent='';
+  try{
+    const jc=jobComps(S.job,S.level,S.includeLower).slice(0,8);
+    const rc=roleComps(S.level,false);
+    const all=[...rc.map(c=>({name:c.name,def:c.def,ind:(c.ind||[]).slice(0,3)})),...jc.map(c=>({name:c.name,def:c.def,ind:(c.ind||[]).slice(0,2)}))];
+    const ctx=(S.aiCtx||$('aiCtx')?.value||'').trim();
+    const n=Math.min(5,Math.max(3,S.qNum||3));
+    /* 응답 길이 제한을 넘지 않도록 나눠 생성 — 질문 수가 많으면 청크를 줄임 */
+    const per=n>=4?2:3;
+    const chunks=[];for(let i=0;i<all.length;i+=per)chunks.push(all.slice(i,i+per));
+    const result={};
+    for(let ci=0;ci<chunks.length;ci++){
+      btn.innerHTML=`<span class="spin"></span>생성 중… (${ci+1}/${chunks.length})`;
+      const chunk=chunks[ci];
+      const prompt=`당신은 그레이트북스(유아동 도서·교육 기업) 채용 면접 설계 전문가입니다. 회사 핵심가치는 창의적 사고, 소통과 협업, 고객중심, 긍정과 열정입니다.
+채용 직무: ${S.job} / 직급: ${S.level}
+아래 역량별로 행동면접(BEI, 과거 경험 기반) 질문 ${n}개와 각 질문의 꼬리질문 1개를 만들어 주세요. ${n}개 중 1개는 실패·역경험을 묻는 질문으로 구성하세요. 질문은 존댓말, 간결하게, 구체적 경험을 끌어내는 형태로. 질문에 역량 명칭을 직접 쓰지 말 것. 차별적·위법 소지 질문 금지.${ctx?`
+[중요] 지원자 특이사항: "${ctx}" — 각 역량의 질문 ${n}개 중 최소 1개는 이 특이사항을 명시적으로 반영해 변형하세요. (예: 경력직이면 실제 직장 경험 기준으로, 이직 사유 확인이면 이직 맥락을 묻는 형태로)`:''}
+역량 목록:
+${chunk.map(c=>`- ${c.name}: ${c.def}${c.ind.length?` (행동지표 예: ${c.ind.join(' / ')})`:''}`).join('\n')}
+반드시 아래 JSON만 출력하세요. 역량명을 key로, 마크다운 코드블록 없이 순수 JSON:
+{"역량명":[{"q":"질문","f":"꼬리질문"}, ...(역량당 ${n}개)]}`;
+      const text=await callClaude(prompt);
+      Object.assign(result,parseJSON(text));
+      S.aiQ={...result};renderQuest(); /* 진행되는 대로 화면 반영 */
+      const nb=$('btnAI');if(nb&&ci<chunks.length-1){nb.disabled=true;nb.innerHTML=`<span class="spin"></span>생성 중… (${ci+2}/${chunks.length})`;}
+    }
+    S.aiQ=result;S.aiQMeta={ctx,at:Date.now()};renderQuest();
+    toast('AI 질문 생성 완료 — 역할·직무 역량 질문이 갱신되었습니다');
+  }catch(e){
+    console.error(e);
+    renderQuest();
+    const s=$('aiStat');if(s)s.textContent=errMsg(e);
+    const b=$('btnAI');if(b){b.disabled=false;b.textContent='역량 기반 질문 생성';}
+  }
+}
+
+/* ══════════ ③ 평가표 ══════════ */
+function evalTargets(){
+  if(!S.job||!S.level)return[];
+  const rc=roleComps(S.level,false).map(c=>({name:c.name,cat:'역할',def:c.def}));
+  const jc=jobComps(S.job,S.level,S.includeLower).map(c=>({name:c.name,cat:'직무',def:c.def}));
+  const cm=COMMON.map(c=>({name:c.name,cat:'공통',def:c.def}));
+  return [...cm,...rc,...jc];
+}
+function renderEvalComps(){
+  const box=$('evalComps');
+  const t=evalTargets();
+  if(!t.length){box.innerHTML='<p class="hint">② 단계에서 직무·직급을 선택하면 평가 대상 역량이 자동으로 구성됩니다.</p>';return;}
+  box.innerHTML=t.map(c=>{
+    const r=S.ratings[c.name];
+    const naBtn=c.cat==='직무'?`<button class="na ${r==='NA'?'on-na':''}" onclick="setRate('${esc(c.name)}','NA')" title="경험 없음 — 0점 처리">0</button>`:'';
+    const memoPh=r==='NA'?'경험 없음 사유·대체 경험 등을 기재해 주세요':'관찰 메모 (선택)';
+    return `<div class="evrow"><div><span class="tag ${c.cat==='공통'?'g':c.cat==='역할'?'a':'n'}">${c.cat}</span> <b style="font-size:.93rem">${esc(c.name)}</b>${r==='NA'?' <span class="tag r">경험없음</span>':''}
+    <div class="hint" style="margin-top:3px;line-height:1.5">${esc(c.def||'')}</div>
+    <input type="text" placeholder="${memoPh}" value="${esc(S.notes[c.name]||'')}" oninput="S.notes['${esc(c.name)}']=this.value" style="margin-top:7px;font-size:.85rem;padding:6px 10px"></div>
+    <div class="rate">${naBtn}${[1,2,3,4,5].map(n=>`<button class="${r===n?'on':''}" onclick="setRate('${esc(c.name)}',${n})">${n}</button>`).join('')}</div></div>`;
+  }).join('');
+  renderScore();renderAnalysis();renderUsedQ();
+}
+function renderUsedQ(){
+  const card=$('usedQCard');if(!card)return;
+  const list=checkedList();
+  const custom=customList();
+  if(!list.length&&!custom.length){card.hidden=true;return;}
+  card.hidden=false;
+  const byComp={};
+  list.forEach(v=>{(byComp[v.c||'기타']=byComp[v.c||'기타']||[]).push(v);});
+  custom.forEach(q=>{(byComp['개인 추가 질문']=byComp['개인 추가 질문']||[]).push({q});});
+  card.innerHTML=`<h3><span class="tag g">질문</span>사용한 면접 질문 <span class="hint" style="font-weight:400">· 체크 ${list.length}개${custom.length?' + 추가 '+custom.length+'개':''}</span></h3>
+  <details class="fold" style="border:none;margin:0;padding:0"><summary>펼쳐 보기</summary>
+  ${Object.entries(byComp).map(([c,qs])=>`<div style="margin-top:10px"><b style="font-size:.88rem">${esc(c)}</b><ul class="dot" style="font-size:.86rem;margin-top:4px">${qs.map(v=>`<li>${esc(v.q)}</li>`).join('')}</ul></div>`).join('')}
+  </details>`;
+}
+function setRate(name,n){
+  if(S.ratings[name]===n)delete S.ratings[name];else S.ratings[name]=n;
+  renderEvalComps();
+}
+/* 순수 함수: 저장 데이터에도 재사용 (역검증 가능) */
+function scoreOf(targets,ratings){
+  const cats={'공통':[],'역할':[],'직무':[]};let na=0,rated=0;
+  (targets||[]).forEach(c=>{
+    const r=(ratings||{})[c.name];
+    if(r==='NA'){na++;}
+    else if(typeof r==='number'&&r>=1&&r<=5){cats[c.cat].push(r);rated++;}
+  });
+  const avg=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10:null;
+  const all=[...cats['공통'],...cats['역할'],...cats['직무']];
+  const total=avg(all);
+  let sug=null;
+  if(total!==null)sug=total>=4.5?'S':total>=3.5?'A':total>=2.5?'B':total>=1.5?'C':'D';
+  return{c:avg(cats['공통']),r:avg(cats['역할']),j:avg(cats['직무']),total,na,rated,count:(targets||[]).length,sug};
+}
+function barHtml(label,val,color){
+  const w=val===null?0:val/5*100;
+  return `<div style="display:grid;grid-template-columns:110px 1fr 46px;gap:10px;align-items:center;margin-bottom:8px">
+    <span style="font-size:.86rem;font-weight:700">${label}</span>
+    <div style="background:#EDEFEC;border-radius:20px;height:14px;overflow:hidden"><div style="width:${w}%;height:100%;background:${color};border-radius:20px;transition:width .3s"></div></div>
+    <span style="font-size:.86rem;font-weight:700;text-align:right">${val===null?'—':val.toFixed(1)}</span></div>`;
+}
+function renderScore(){
+  const card=$('scoreCard');if(!card)return;
+  const t=evalTargets();
+  if(!t.length){card.hidden=true;return;}
+  const sc=scoreOf(t,S.ratings);
+  card.hidden=false;
+  card.innerHTML=`<h3><span class="tag a">집계</span>점수 자동 집계 <span class="hint" style="font-weight:400">· 평가 ${sc.rated}/${sc.count}개${sc.na?` · 경험없음 ${sc.na}개(평균 제외)`:''}</span></h3>
+  ${barHtml('공통 역량',sc.c,'var(--forest)')}
+  ${barHtml('역할 역량',sc.r,'var(--amber)')}
+  ${barHtml('직무 역량',sc.j,'#4A5361')}
+  <div style="border-top:1px dashed var(--line);margin-top:10px;padding-top:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <b>종합 평균 <span class="serif" style="font-size:1.3rem">${sc.total===null?'—':sc.total.toFixed(1)}</span> / 5</b>
+    ${sc.sug?`<span class="tag g" style="font-size:.8rem">등급 가이드: ${sc.sug} 수준</span>`:''}
+    <span class="hint">가이드는 참고용입니다 — 종합 판정은 면접관이 코멘트·맥락을 반영해 직접 선택해 주세요.</span>
+  </div>`;
+}
+document.querySelectorAll('#gradeBar button').forEach(b=>b.onclick=()=>{S.grade=b.dataset.g;document.querySelectorAll('#gradeBar button').forEach(x=>x.classList.toggle('on',x===b));});
+
+/* ── AI 지원자 종합 분석 ── */
+function renderAnalysis(){
+  const box=$('analysisBody');if(!box)return;
+  const a=S.analysis;
+  if(!a){box.innerHTML='';return;}
+  const li=x=>(x||[]).map(v=>`<li>${esc(v)}</li>`).join('');
+  box.innerHTML=`<div style="border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;background:#FBFBF9">
+    <p style="font-size:.92rem;margin-bottom:12px"><b>종합 요약</b> — ${esc(a.summary||'')}</p>
+    <div class="grid2" style="margin-bottom:12px">
+      <div><b style="font-size:.88rem;color:var(--forest)">✔ 강점</b><ul class="dot" style="font-size:.87rem;margin-top:5px">${li(a.strengths)}</ul></div>
+      <div><b style="font-size:.88rem;color:var(--red)">⚠ 리스크 · 보완점</b><ul class="dot" style="font-size:.87rem;margin-top:5px">${li(a.risks)}</ul></div>
+    </div>
+    <b style="font-size:.88rem">🔍 2차(대표이사) 면접 검증 포인트</b>
+    <ul class="dot" style="font-size:.87rem;margin:5px 0 12px">${li((a.verify||[]).map(v=>typeof v==='string'?v:v.q))}</ul>
+    ${a.onboarding?`<p style="font-size:.87rem;margin-bottom:8px"><b>🌱 채용 시 온보딩 제안</b> — ${esc(a.onboarding)}</p>`:''}
+    ${a.fit?`<p style="font-size:.87rem"><b>⚖ 판정 참고</b> — ${esc(a.fit)}</p>`:''}
+    <p class="hint" style="margin-top:10px">※ AI가 입력된 평가 데이터만으로 작성한 참고 자료입니다. 검토 후 사용하세요.</p>
+  </div>
+  <div style="margin-top:10px;display:flex;gap:8px">
+    <button class="btn ghost sm" onclick="applyVerifyToCEO()">검증 포인트를 '대표이사 면접 요청사항'에 추가</button>
+    <button class="btn plain sm" onclick="S.analysis=null;renderAnalysis()">분석 지우기</button>
+  </div>`;
+}
+function applyVerifyToCEO(){
+  const a=S.analysis;if(!a)return;
+  const lines=(a.verify||[]).map(v=>'- '+(typeof v==='string'?v:v.q)).join('\n');
+  const cur=$('cCEO').value.trim();
+  $('cCEO').value=(cur?cur+'\n':'')+'[2차 면접 검증 포인트]\n'+lines;
+  toast("'대표이사 면접 요청사항'에 추가했습니다");
+}
+$('btnAnalyze').onclick=async()=>{
+  const t=evalTargets();
+  if(!t.length){toast('먼저 ② 단계에서 직무·직급을 선택해 주세요');return;}
+  const btn=$('btnAnalyze'),stat=$('anStat');
+  const sc=scoreOf(t,S.ratings);
+  if(!sc.rated){toast('역량 점수를 먼저 입력해 주세요 — 점수가 분석의 근거가 됩니다');return;}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>분석 중…';stat.textContent='';
+  try{
+    const detail=t.filter(c=>S.ratings[c.name]!==undefined).slice(0,18)
+      .map(c=>`${c.name}(${c.cat}): ${S.ratings[c.name]==='NA'?'경험없음':S.ratings[c.name]+'/5'}${S.notes[c.name]?' — '+S.notes[c.name]:''}`).join('\n');
+    const prompt=`그레이트북스(유아동 도서·교육 기업) 실무진 면접 결과를 분석해 주세요. 핵심가치: 창의적 사고/소통과 협업/고객중심/긍정과 열정.
+직무: ${S.job||'-'} / 직급: ${S.level||'-'} / 카테고리 평균 — 공통 ${sc.c??'-'} · 역할 ${sc.r??'-'} · 직무 ${sc.j??'-'} · 종합 ${sc.total??'-'}
+역량별 평가:\n${detail}
+면접관 코멘트: 업무적합성[${$('cJob').value||'-'}] 조직적합성[${$('cOrg').value||'-'}] 회사적합성[${$('cCo').value||'-'}] 장단점[${$('cSW').value||'-'}]
+입력된 근거만 사용하고 추측·과장 금지, 각 항목 간결하게. 아래 JSON만 출력(코드블록 없이):
+{"summary":"3문장 종합","strengths":["강점1","강점2","강점3"],"risks":["리스크1","리스크2"],"verify":["2차면접 검증질문1","질문2","질문3"],"onboarding":"채용 시 온보딩 제안 1~2문장","fit":"점수와 코멘트에 근거한 판정 참고 1~2문장"}`;
+    S.analysis=parseJSON(await callClaude(prompt));
+    renderAnalysis();
+    stat.textContent='';
+    toast('분석 리포트가 생성되었습니다');
+  }catch(e){console.error(e);stat.textContent=errMsg(e);}
+  btn.disabled=false;btn.textContent='지원자 분석 리포트 생성';
+};
+
+/* AI 코멘트 초안 */
+$('btnAIComment').onclick=async()=>{
+  const t=evalTargets();
+  if(!t.length){toast('먼저 ② 단계에서 직무·직급을 선택해 주세요');return;}
+  const btn=$('btnAIComment'),stat=$('aiCommentStat');
+  btn.disabled=true;stat.textContent='초안 생성 중…';
+  try{
+    const rated=t.filter(c=>S.ratings[c.name]).map(c=>`${c.name}(${c.cat}): ${S.ratings[c.name]}/5${S.notes[c.name]?' — '+S.notes[c.name]:''}`);
+    const prompt=`그레이트북스 실무진 면접 평가 코멘트 초안을 작성해 주세요. 지원 직무: ${S.job||'-'} / 직급: ${S.level||'-'}.
+역량 평가 결과:\n${rated.length?rated.join('\n'):'(점수 미입력 — 일반적 관점에서 작성)'}
+아래 JSON만 출력 (각 항목 2~3문장, 존댓말 평서문, 근거 중심, 과장 금지):
+{"job":"업무 적합성 코멘트","org":"조직 적합성 코멘트","co":"회사 핵심가치 적합성 코멘트","sw":"장점: … / 단점(보완점): …"}`;
+    const p=parseJSON(await callClaude(prompt));
+    if(!$('cJob').value)$('cJob').value=p.job||'';
+    if(!$('cOrg').value)$('cOrg').value=p.org||'';
+    if(!$('cCo').value)$('cCo').value=p.co||'';
+    if(!$('cSW').value)$('cSW').value=p.sw||'';
+    stat.textContent='초안이 채워졌습니다. 반드시 검토·수정해 주세요.';
+  }catch(e){console.error(e);stat.textContent=errMsg(e);}
+  btn.disabled=false;
+};
+
+/* ══════════ 인쇄 ══════════ */
+function collect(){
+  return {name:$('fName').value,dept:$('fDept').value,role:$('fRole').value,type:$('fType').value,date:$('fDate').value,
+    level:S.level,reason:$('fReason').value,interviewer:$('fInterviewer').value,writer:$('fWriter').value,
+    cJob:$('cJob').value,cOrg:$('cOrg').value,cCo:$('cCo').value,cSW:$('cSW').value,cCEO:$('cCEO').value,
+    grade:S.grade,job:S.job,ratings:{...S.ratings},notes:{...S.notes},targets:evalTargets(),
+    analysis:S.analysis||null,customQ:S.customQ||'',
+    checkedQ:{...S.checkedQ},savedAt:new Date().toISOString()};
+}
+const GRADES={S:'S. 꼭 채용하고 싶다',A:'A. 보통 이상이다',B:'B. 평범하다',C:'C. 지원팀에는 부적격자이다',D:'D. 절대 채용하고 싶지 않다'};
+
+/* ══════════ 격리 인쇄 (빈 페이지 방지) ══════════ */
+const PRINT_CSS=`
+*{box-sizing:border-box;margin:0;padding:0}
+@page{size:A4;margin:12mm}
+html,body{height:auto}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:#000;font-size:10.5pt;line-height:1.55}
+body>*:last-child{margin-bottom:0}
+.p-title{text-align:center;font-weight:900;font-size:15pt;border:2px solid #000;background:#E8E4D8;padding:6px 30px;display:table;margin:0 auto 18px}
+p{margin-bottom:6px}
+table.p{width:100%;border-collapse:collapse;margin-bottom:12px}
+table.p th,table.p td{border:1px solid #444;padding:6px 8px;vertical-align:top;text-align:left}
+table.p th{background:#DDE1E6;font-weight:700;text-align:center;white-space:nowrap}
+table.p tr{page-break-inside:avoid}
+.p-sec{font-weight:900;margin:14px 0 6px;font-size:11.5pt}
+.p-pre{white-space:pre-wrap;min-height:34px}
+.p-grade{border:1px solid #444;background:#E8F1F5;padding:10px;text-align:center;font-weight:700}
+`;
+function printDoc(inner){
+  try{
+    const f=document.createElement('iframe');
+    f.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;visibility:hidden';
+    document.body.appendChild(f);
+    const d=f.contentDocument||f.contentWindow.document;
+    d.open();
+    d.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>GB 면접 인쇄</title><style>'+PRINT_CSS+'</style></head><body>'+inner+'</body></html>');
+    d.close();
+    setTimeout(()=>{
+      try{f.contentWindow.focus();f.contentWindow.print();}
+      catch(e){fallbackPrint(inner);}
+      setTimeout(()=>{try{f.remove();}catch(e){}},3000);
+    },300);
+  }catch(e){fallbackPrint(inner);}
+}
+function fallbackPrint(inner){
+  $('printArea').innerHTML=inner;
+  window.print();
+}
+
+function buildPrintHtml(d){
+  const rows=d.targets.map(c=>{
+    const r=d.ratings[c.name];
+    const rTxt=r==='NA'?'0 (경험없음)':(r?r+' / 5':'—');
+    return `<tr><td style="text-align:center">${esc(c.cat)}</td><td><b>${esc(c.name)}</b><br><span style="font-size:8.5pt;color:#333">${esc(c.def||'')}</span></td><td style="text-align:center;white-space:nowrap">${rTxt}</td><td>${esc(d.notes[c.name]||'')}</td></tr>`;
+  }).join('');
+  const gradeLine=['S','A','B','C','D'].map(g=>`${d.grade===g?'■':'□'} ${GRADES[g]}`).join(' &nbsp;&nbsp; ');
+  const sc=scoreOf(d.targets,d.ratings);
+  const scoreLine=sc.rated?`<table class="p"><tr><th>공통 역량 평균</th><th>역할 역량 평균</th><th>직무 역량 평균</th><th>종합 평균</th></tr>
+    <tr><td style="text-align:center">${sc.c??'—'}</td><td style="text-align:center">${sc.r??'—'}</td><td style="text-align:center">${sc.j??'—'}</td><td style="text-align:center"><b>${sc.total??'—'} / 5</b>${sc.na?` (경험없음 ${sc.na}개 제외)`:''}</td></tr></table>`:'';
+  const used=Object.values(d.checkedQ||{}).filter(v=>v&&v.q);
+  const customRows=(d.customQ||'').split('\n').map(x=>x.trim()).filter(x=>x.length>1).map(q=>({c:'개인 추가 질문',q}));
+  const allUsed=[...used,...customRows];
+  const usedBlock=allUsed.length?`<div class="p-sec">면접 질문 (사용)</div><table class="p"><tr><th style="width:20%">역량</th><th>질문</th></tr>${allUsed.map(v=>`<tr><td>${esc(v.c||'')}</td><td>${esc(v.q)}</td></tr>`).join('')}</table>`:'';
+  const an=d.analysis;
+  const anLi=x=>(x||[]).map(v=>'· '+esc(typeof v==='string'?v:v.q)).join('<br>');
+  const anBlock=an?`<div class="p-sec">Ⅱ. AI 지원자 분석 (참고 자료 — 면접관 검토 완료 후 활용)</div>
+  <table class="p"><tr><th style="width:16%">구분</th><th>내용</th></tr>
+  <tr><td style="text-align:center;background:#EEE">종합 요약</td><td>${esc(an.summary||'')}</td></tr>
+  <tr><td style="text-align:center;background:#EEE">강점</td><td>${anLi(an.strengths)}</td></tr>
+  <tr><td style="text-align:center;background:#EEE">리스크·보완점</td><td>${anLi(an.risks)}</td></tr>
+  <tr><td style="text-align:center;background:#EEE">2차 면접<br>검증 포인트</td><td>${anLi(an.verify)}</td></tr>
+  ${an.onboarding?`<tr><td style="text-align:center;background:#EEE">온보딩 제안</td><td>${esc(an.onboarding)}</td></tr>`:''}
+  ${an.fit?`<tr><td style="text-align:center;background:#EEE">판정 참고</td><td>${esc(an.fit)}</td></tr>`:''}</table>`:'';
+  return `
+  <div class="p-title">실무진 면접 요약표</div>
+  <p style="margin-bottom:6px">● 면접 일정 : ${esc(d.date||'')}</p>
+  <table class="p"><tr><th style="width:14%">지원자 성명</th><th style="width:16%">채용부서</th><th style="width:18%">담당업무</th><th style="width:12%">고용형태</th><th>채용사유</th></tr>
+  <tr><td>${esc(d.name)}</td><td>${esc(d.dept)}</td><td>${esc(d.role)}${d.level?' ('+esc(d.level)+')':''}</td><td>${esc(d.type)}</td><td>${esc(d.reason)}</td></tr></table>
+  <div class="p-sec">Ⅰ. 실무진면접 (면접자 : ${esc(d.interviewer||'　　　　')} / 면접 요약표 작성 : ${esc(d.writer||'　　　　')})</div>
+  ${rows?`<table class="p"><tr><th style="width:9%">구분</th><th>역량명 · 정의</th><th style="width:13%">평가</th><th style="width:28%">관찰 메모</th></tr>${rows}</table>`:''}
+  ${scoreLine}
+  ${usedBlock}
+  <table class="p"><tr><th style="width:16%">구분</th><th>내용</th></tr>
+  <tr><td style="text-align:center;background:#EEE">면접 평가<br>코멘트</td><td>
+    <b>* 업무(직무) 적합성</b> — 채용 포지션에 맞는 직무역량 보유 여부 / 필요한 업무 스킬 보유 여부<div class="p-pre">${esc(d.cJob)}</div>
+    <b>* 조직 적합성</b> — 조직 내 팀원, 협업 부서, 업무관련자와 문제없이 업무 수행이 가능한 인재인지<div class="p-pre">${esc(d.cOrg)}</div>
+    <b>* 회사 적합성</b> — 핵심가치 부합 여부 (창의적 사고 / 소통과 협업 / 고객중심 / 긍정과 열정)<div class="p-pre">${esc(d.cCo)}</div>
+    <b>* 면접 대상자의 장점과 단점</b><div class="p-pre">${esc(d.cSW)}</div></td></tr>
+  <tr><td style="text-align:center;background:#EEE">대표이사 면접 시<br>고려/평가<br>요청사항</td><td><div class="p-pre" style="min-height:70px">${esc(d.cCEO)}</div></td></tr></table>
+  <div class="p-grade">${gradeLine}</div>
+  ${anBlock}`;
+}
+$('btnPrint').onclick=()=>{
+  printDoc(buildPrintHtml(collect()));
+};
+async function printEvalKey(evalKey){
+  try{
+    const st=await store();const g=await st.get(evalKey);
+    printDoc(buildPrintHtml(JSON.parse(g.value)));
+  }catch(e){toast('평가표를 불러오지 못했습니다 — 세션 저장 모드에서는 화면을 닫으면 데이터가 사라집니다');}
+}
+
+/* ══════════ 저장/보관함 ══════════ */
+$('btnSave').onclick=async()=>{
+  const d=collect();
+  if(!d.name){toast('지원자 성명을 입력해 주세요');return;}
+  const id='eval:'+Date.now();
+  try{const st=await store();await st.set(id,JSON.stringify(d));
+    /* 진행 중 대상자가 있으면 평가표 자동 연결 */
+    if(S.activeCand){
+      try{const g=await st.get(S.activeCand);const c=JSON.parse(g.value);c.evalKey=id;await st.set(S.activeCand,JSON.stringify(c));}catch(e){}
+    }
+    toast(PERSIST!=='session'?'보관함에 저장되었습니다'+(S.activeCand?' · 대상자에 평가표가 연결되었습니다':''):'세션에 임시 저장되었습니다 — 백업(JSON)으로 파일 보관을 권장합니다');}
+  catch(e){console.error(e);toast('저장에 실패했습니다');}
+};
+$('btnClear').onclick=()=>{
+  ['fName','fDept','fReason','fInterviewer','fWriter','cJob','cOrg','cCo','cSW','cCEO'].forEach(i=>$(i).value='');
+  S.ratings={};S.notes={};S.grade='';S.checkedQ={};S.analysis=null;
+  document.querySelectorAll('#gradeBar button').forEach(x=>x.classList.remove('on'));
+  renderEvalComps();toast('새 평가를 시작합니다');
+};
+/* ── 저장소 래퍼: 영구 저장 불가 시 세션 임시 저장으로 대체 ── */
+const memStore={m:{},
+ async get(k){if(!(k in this.m))throw new Error('not found');return{key:k,value:this.m[k]};},
+ async set(k,v){this.m[k]=v;return{key:k,value:v};},
+ async delete(k){delete this.m[k];return{key:k,deleted:true};},
+ async list(p){return{keys:Object.keys(this.m).filter(k=>k.startsWith(p||''))};}};
+const SHARED_API='/api/store';
+const TEAM={code:''};
+const sharedStore={
+ h(extra){const o=extra||{};if(TEAM.code)o['x-team-code']=TEAM.code;return o;},
+ async ping(){
+   const r=await fetch(SHARED_API+'?op=ping',{headers:this.h()});
+   if(r.status===401)return 401;
+   if(!r.ok)throw new Error('no shared');
+   const j=await r.json();return j&&j.ok?true:false;
+ },
+ async get(k){const r=await fetch(SHARED_API+'?key='+encodeURIComponent(k),{headers:this.h()});if(!r.ok)throw new Error('not found');return await r.json();},
+ async set(k,v){const r=await fetch(SHARED_API,{method:'POST',headers:this.h({'Content-Type':'application/json'}),body:JSON.stringify({key:k,value:v})});if(!r.ok)throw new Error('set fail');return{key:k,value:v};},
+ async delete(k){await fetch(SHARED_API+'?key='+encodeURIComponent(k),{method:'DELETE',headers:this.h()});return{key:k,deleted:true};},
+ async list(p){const r=await fetch(SHARED_API+'?prefix='+encodeURIComponent(p||''),{headers:this.h()});if(!r.ok)throw new Error('list fail');return await r.json();}
+};
+const localStore={
+ ok(){try{localStorage.setItem('gb_probe','1');localStorage.removeItem('gb_probe');return true;}catch(e){return false;}},
+ async get(k){const v=localStorage.getItem('gbapp:'+k);if(v===null)throw new Error('not found');return{key:k,value:v};},
+ async set(k,v){localStorage.setItem('gbapp:'+k,v);return{key:k,value:v};},
+ async delete(k){localStorage.removeItem('gbapp:'+k);return{key:k,deleted:true};},
+ async list(p){const keys=[];for(let i=0;i<localStorage.length;i++){const kk=localStorage.key(i);if(kk&&kk.startsWith('gbapp:'+(p||'')))keys.push(kk.slice(6));}return{keys};}
+};
+let PERSIST=null; /* 'shared'=팀 공유 | 'cloud'=계정 | 'local'=브라우저 | 'session'=세션 임시 */
+async function store(){
+  if(PERSIST==='shared')return sharedStore;
+  if(PERSIST==='cloud')return window.storage;
+  if(PERSIST==='local')return localStore;
+  if(PERSIST==='session')return memStore;
+  /* 1순위: 팀 공유 저장소 (Netlify 배포 시 자동 감지) */
+  try{TEAM.code=localStorage.getItem('gbteam')||'';}catch(e){}
+  try{
+    let p=await sharedStore.ping();
+    if(p===401){
+      const c=prompt('팀 공유 저장소 접속 코드를 입력해 주세요.\n(인재경영팀에서 안내받은 코드 — 한 번만 입력하면 저장됩니다)');
+      if(c&&c.trim()){
+        TEAM.code=c.trim();
+        try{localStorage.setItem('gbteam',TEAM.code);}catch(e){}
+        p=await sharedStore.ping();
+      }
+    }
+    if(p===true){PERSIST='shared';return sharedStore;}
+  }catch(e){}
+  /* 2~4순위 */
+  try{
+    if(!window.storage)throw new Error('no storage');
+    await window.storage.list('ping');PERSIST='cloud';return window.storage;
+  }catch(e){}
+  try{if(localStore.ok()){PERSIST='local';return localStore;}}catch(e){}
+  PERSIST='session';return memStore;
+}
+function persistLabel(){
+  return PERSIST==='shared'?['🟢','팀 공유 저장소 — 모든 면접관이 같은 대상자 목록과 평가 보관함을 봅니다']
+    :PERSIST==='cloud'?['🟢','계정에 영구 저장 중 — 다시 들어와도 유지됩니다']
+    :PERSIST==='local'?['🟡','이 브라우저에만 저장 중 — 다른 면접관의 평가는 보이지 않습니다 (백업/복원으로 공유)']
+    :['🟠','세션 임시 저장 — 화면을 닫으면 사라집니다. 아래 백업(JSON)으로 파일 보관을 권장합니다'];
+}
+
+/* ── 보관함 비밀번호 게이트 ── */
+let boxUnlocked=false;
+async function sha(s){
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('gbsalt:'+s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function getPwHash(){try{const st=await store();const g=await st.get('boxpw');return g?g.value:null;}catch(e){return null;}}
+async function renderBox(){
+  const gate=$('boxGate'),list=$('boxList');
+  const st=await store();
+  const notice=PERSIST!=='session'?'' :`<div class="lawbox" style="margin-bottom:14px">⚠ 이 실행 환경은 영구 저장을 지원하지 않아 <b>세션 임시 저장</b>으로 동작합니다. 화면을 닫으면 사라지므로, 저장 후 <b>JSON 내보내기</b>로 파일을 보관하고 다음에 <b>가져오기</b>로 불러오세요. (비밀번호도 세션 동안만 유지됩니다)</div>`;
+  const pw=await getPwHash();
+  if(!pw){ /* 최초 설정 */
+    list.hidden=true;
+    gate.innerHTML=notice+`<div class="card" style="max-width:460px">
+      <h3><span class="tag a">최초 설정</span>보관함 비밀번호 설정</h3>
+      <p class="hint" style="margin-bottom:12px">담당자만 접근할 수 있도록 비밀번호를 설정해 주세요. (4자 이상)</p>
+      <label class="fld">새 비밀번호</label><input type="password" id="pwNew1" style="margin-bottom:8px">
+      <label class="fld">비밀번호 확인</label><input type="password" id="pwNew2" style="margin-bottom:12px">
+      <button class="btn primary" onclick="setupPw()">설정하고 열기</button>
+      <p class="hint" id="pwMsg" style="margin-top:8px"></p></div>`;
+    return;
+  }
+  if(!boxUnlocked){ /* 잠금 상태 */
+    list.hidden=true;
+    gate.innerHTML=notice+`<div class="card" style="max-width:460px">
+      <h3><span class="tag r">잠금</span>비밀번호를 입력해 주세요</h3>
+      <input type="password" id="pwIn" style="margin-bottom:12px" onkeydown="if(event.key==='Enter')unlockBox()" autocomplete="off">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primary" onclick="unlockBox()">열기</button>
+        <button class="btn plain sm" onclick="resetPw()" style="margin-left:auto">비밀번호 초기화 (분실 시)</button>
+      </div>
+      <p class="hint" id="pwMsg" style="margin-top:8px"></p></div>`;
+    return;
+  }
+  /* 잠금 해제 상태 */
+  gate.innerHTML=notice+`<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="btn plain sm" onclick="lockBox()">🔒 잠그기</button>
+    <button class="btn plain sm" onclick="changePw()">비밀번호 변경</button>
+    <button class="btn ghost sm" onclick="exportEvals()" style="margin-left:auto">⬇ JSON 내보내기</button>
+    <label class="btn ghost sm" style="cursor:pointer">⬆ 가져오기<input type="file" accept="application/json" style="display:none" onchange="importEvals(this)"></label></div>`;
+  list.hidden=false;
+  const r=await st.list('eval:');
+  const keys=(r&&r.keys)||[];
+  if(!keys.length){list.innerHTML='<p class="hint">저장된 평가가 없습니다.</p>';return;}
+  const items=[];
+  for(const k of keys.sort().reverse()){
+    try{const g=await st.get(k);items.push({k,d:JSON.parse(g.value)});}catch(e){}
+  }
+  list.innerHTML=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+    <button class="btn amber sm" onclick="compareEvals()">📊 선택 지원자 비교 (2~4명 체크)</button>
+    <span class="hint">같은 직무·직급 지원자끼리 비교하면 가장 유의미합니다</span></div>
+  <div id="cmpArea"></div>`+
+  items.map(({k,d})=>`<div class="saved"><div style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" class="cmpChk" value="${k}" style="width:17px;height:17px;margin-top:4px;accent-color:var(--forest);cursor:pointer"><div><b>${esc(d.name||'(이름 없음)')}</b> <span class="tag n">${esc(d.job||'-')}</span> <span class="tag a">${esc(d.level||'-')}</span>${d.grade?` <span class="tag g">${esc(d.grade)}등급</span>`:''}
+  <div class="meta">${esc(d.date||'')} · 저장 ${new Date(d.savedAt).toLocaleString('ko-KR')}</div></div></div>
+  <div style="display:flex;gap:6px"><button class="btn ghost sm" onclick="loadEval('${k}')">불러오기</button><button class="btn plain sm" onclick="delEval('${k}')">삭제</button></div></div>`).join('');
+}
+async function compareEvals(){
+  const keys=[...document.querySelectorAll('.cmpChk:checked')].map(x=>x.value);
+  const area=$('cmpArea');
+  if(keys.length<2||keys.length>4){toast('비교할 지원자를 2~4명 선택해 주세요');return;}
+  const st=await store();const rows=[];
+  for(const k of keys){try{const g=await st.get(k);rows.push(JSON.parse(g.value));}catch(e){}}
+  if(rows.length<2){toast('데이터를 불러오지 못했습니다');return;}
+  const scs=rows.map(d=>scoreOf(d.targets,d.ratings));
+  const th=rows.map(d=>`<th>${esc(d.name||'-')}<br><span style="font-weight:400;font-size:.75rem">${esc(d.job||'-')} · ${esc(d.level||'-')}</span></th>`).join('');
+  const line=(label,vals,fmt)=>`<tr><td style="font-weight:700;background:#F4F5F3">${label}</td>${vals.map(v=>`<td style="text-align:center">${fmt?fmt(v):(v??'—')}</td>`).join('')}</tr>`;
+  const best=(arr)=>{const nums=arr.map(v=>v??-1);const m=Math.max(...nums);return arr.map(v=>v!==null&&v===m&&m>=0);};
+  const hl=(vals)=>{const b=best(vals);return vals.map((v,i)=>`<td style="text-align:center;${b[i]?'background:var(--forest-lt);font-weight:700':''}">${v===null?'—':v.toFixed(1)}</td>`).join('');};
+  area.innerHTML=`<div class="card" style="overflow-x:auto"><h3>지원자 비교</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:.88rem" border="0">
+  <tr style="border-bottom:2px solid var(--line)"><th style="text-align:left;padding:8px">항목</th>${th}</tr>
+  ${line('면접일',rows.map(d=>esc(d.date||'—')))}
+  <tr><td style="font-weight:700;background:#F4F5F3;padding:8px">공통 역량</td>${hl(scs.map(s=>s.c))}</tr>
+  <tr><td style="font-weight:700;background:#F4F5F3;padding:8px">역할 역량</td>${hl(scs.map(s=>s.r))}</tr>
+  <tr><td style="font-weight:700;background:#F4F5F3;padding:8px">직무 역량</td>${hl(scs.map(s=>s.j))}</tr>
+  <tr><td style="font-weight:700;background:#F4F5F3;padding:8px">종합 평균</td>${hl(scs.map(s=>s.total))}</tr>
+  ${line('경험없음 개수',scs.map(s=>s.na),v=>v||0)}
+  ${line('종합 판정',rows.map(d=>d.grade?esc(d.grade)+'등급':'—'))}
+  ${line('장단점 메모',rows.map(d=>esc((d.cSW||'').slice(0,70))+((d.cSW||'').length>70?'…':'')))}
+  </table>
+  <style>#cmpArea td,#cmpArea th{padding:8px;border-bottom:1px solid var(--line)}</style>
+  <p class="hint" style="margin-top:10px">진한 초록 배경 = 항목별 최고 점수. 점수는 참고 지표이며, 코멘트·맥락을 함께 검토해 주세요.</p></div>`;
+  area.scrollIntoView({behavior:'smooth'});
+}
+async function setupPw(){
+  const a=$('pwNew1').value,b=$('pwNew2').value,m=$('pwMsg');
+  if(a.length<4){m.textContent='비밀번호는 4자 이상이어야 합니다.';return;}
+  if(a!==b){m.textContent='비밀번호가 서로 일치하지 않습니다.';return;}
+  try{const st=await store();await st.set('boxpw',await sha(a));boxUnlocked=true;toast('비밀번호가 설정되었습니다');renderBox();}
+  catch(e){m.textContent='저장에 실패했습니다. 다시 시도해 주세요.';}
+}
+async function unlockBox(){
+  const v=$('pwIn').value,m=$('pwMsg');
+  const pw=await getPwHash();
+  if(pw&&await sha(v)===pw){boxUnlocked=true;renderBox();}
+  else{m.textContent='비밀번호가 올바르지 않습니다.';$('pwIn').value='';$('pwIn').focus();}
+}
+function lockBox(){boxUnlocked=false;renderBox();toast('보관함을 잠갔습니다');}
+async function resetPw(){
+  if(!confirm('비밀번호를 초기화하시겠습니까?\n초기화 후 새 비밀번호를 설정해야 보관함에 접근할 수 있습니다.\n(저장된 평가 데이터는 삭제되지 않습니다)'))return;
+  try{const st=await store();await st.delete('boxpw');boxUnlocked=false;toast('비밀번호가 초기화되었습니다. 새로 설정해 주세요.');renderBox();}
+  catch(e){toast('초기화에 실패했습니다');}
+}
+async function changePw(){
+  const cur=prompt('현재 비밀번호를 입력해 주세요.');
+  if(cur===null)return;
+  const pw=await getPwHash();
+  if(!pw||await sha(cur)!==pw){toast('현재 비밀번호가 올바르지 않습니다');return;}
+  const nw=prompt('새 비밀번호를 입력해 주세요. (4자 이상)');
+  if(nw===null)return;
+  if(nw.length<4){toast('비밀번호는 4자 이상이어야 합니다');return;}
+  try{const st=await store();await st.set('boxpw',await sha(nw));toast('비밀번호가 변경되었습니다');}
+  catch(e){toast('변경에 실패했습니다');}
+}
+async function loadEval(k){
+  try{
+    const st=await store();const g=await st.get(k);const d=JSON.parse(g.value);
+    S.job=d.job||'';S.level=d.level||'';S.ratings=d.ratings||{};S.notes=d.notes||{};S.grade=d.grade||'';S.checkedQ=d.checkedQ||{};S.analysis=d.analysis||null;S.customQ=d.customQ||'';
+    selJob.value=S.job;document.querySelectorAll('#lvBtns button').forEach(x=>x.classList.toggle('on',x.dataset.lv===S.level));
+    $('fName').value=d.name||'';$('fDept').value=d.dept||'';$('fRole').value=d.role||'';$('fType').value=d.type||'정규직';
+    $('fDate').value=d.date||'';$('fLevel').value=d.level||'';$('fReason').value=d.reason||'';
+    $('fInterviewer').value=d.interviewer||'';$('fWriter').value=d.writer||'';
+    $('cJob').value=d.cJob||'';$('cOrg').value=d.cOrg||'';$('cCo').value=d.cCo||'';$('cSW').value=d.cSW||'';$('cCEO').value=d.cCEO||'';
+    document.querySelectorAll('#gradeBar button').forEach(x=>x.classList.toggle('on',x.dataset.g===S.grade));
+    renderQuest();go('eval');toast('평가를 불러왔습니다');
+  }catch(e){toast('불러오기에 실패했습니다');}
+}
+async function delEval(k){
+  try{const st=await store();await st.delete(k);renderBox();toast('삭제되었습니다');}catch(e){toast('삭제에 실패했습니다');}
+}
+async function exportEvals(){
+  try{
+    const st=await store();
+    const out={};
+    for(const pf of ['eval:','cand:']){
+      const r=await st.list(pf);
+      for(const k of (r.keys||[])){try{const g=await st.get(k);out[k]=JSON.parse(g.value);}catch(e){}}
+    }
+    const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='GB면접평가_백업_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+    URL.revokeObjectURL(a.href);toast('JSON 파일로 내보냈습니다');
+  }catch(e){toast('내보내기에 실패했습니다');}
+}
+async function importEvals(input){
+  const file=input.files[0];if(!file)return;
+  try{
+    const text=await file.text();const data=JSON.parse(text);
+    const st=await store();let n=0;
+    for(const[k,v]of Object.entries(data)){if(k.startsWith('eval:')||k.startsWith('cand:')){await st.set(k,JSON.stringify(v));n++;}}
+    input.value='';renderBox();toast(n+'건을 가져왔습니다');
+  }catch(e){toast('가져오기에 실패했습니다 — 올바른 백업 파일인지 확인해 주세요');input.value='';}
+}
+
+/* ══════════ 면접 대상자 ══════════ */
+function fmtTime(t){
+  if(!t)return '';
+  try{const d=new Date(t);return d.toLocaleDateString('ko-KR',{month:'numeric',day:'numeric',weekday:'short'})+' '+d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});}catch(e){return t;}
+}
+async function candAll(){
+  try{
+    const st=await store();const r=await st.list('cand:');
+    const out=[];
+    for(const k of (r.keys||[])){try{const g=await st.get(k);out.push({k,...JSON.parse(g.value)});}catch(e){}}
+    out.sort((a,b)=>(a.time||'9999').localeCompare(b.time||'9999'));
+    return out;
+  }catch(e){return null;}
+}
+$('btnAddCand').onclick=async()=>{
+  const name=$('cdName').value.trim(),job=$('cdJob').value,lv=$('cdLevel').value;
+  if(!name){toast('대상자 성명을 입력해 주세요');return;}
+  if(!job||!lv){toast('직무와 직급을 선택해 주세요 — 질문 자동 생성의 기준이 됩니다');return;}
+  const c={name,dept:$('cdDept').value.trim(),job,level:lv,time:$('cdTime').value,place:$('cdPlace').value.trim(),status:'대기',evalKey:'',createdAt:new Date().toISOString()};
+  try{
+    const st=await store();await st.set('cand:'+Date.now(),JSON.stringify(c));
+    ['cdName','cdDept','cdTime','cdPlace'].forEach(i=>$(i).value='');
+    toast(PERSIST!=='session'?name+'님을 등록했습니다':name+'님을 세션에 등록했습니다 (화면을 닫으면 사라집니다)');
+    renderCand();
+  }catch(e){toast('등록에 실패했습니다');}
+};
+async function renderCand(){
+  const box=$('candList');
+  if(!$('cdJob').options.length||$('cdJob').options.length<2)
+    $('cdJob').innerHTML='<option value="">선택…</option>'+Object.keys(JOBS).map(j=>`<option>${esc(j)}</option>`).join('');
+  const items=await candAll();
+  const [dot,label]=persistLabel();
+  const bar=`<div class="card" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 18px;${PERSIST==='session'?'border-color:#EAD9AE;background:#FDF6E9':''}">
+    <span style="font-size:.85rem">${dot} <b>저장 상태:</b> ${label}</span>
+    <span style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn ghost sm" onclick="exportEvals()">⬇ 백업(JSON)</button>
+      <label class="btn ghost sm" style="cursor:pointer">⬆ 복원<input type="file" accept="application/json" style="display:none" onchange="importEvals(this);setTimeout(renderCand,300)"></label>
+    </span></div>`;
+  if(items===null){box.innerHTML=bar+'<p class="hint">이 환경에서는 저장소를 사용할 수 없습니다.</p>';return;}
+  if(!items.length){box.innerHTML=bar+'<p class="hint">등록된 면접 대상자가 없습니다.</p>';return;}
+  box.innerHTML=bar+items.map(c=>{
+    const active=S.activeCand===c.k;
+    const done=c.status==='완료';
+    return `<div class="saved" style="${active?'border-color:var(--forest);border-width:2px;':''}">
+    <div>
+      <a href="javascript:void(0)" onclick="startCand('${c.k}')" style="color:var(--forest);text-decoration:underline;font-weight:700;font-size:1rem">${esc(c.name)}</a>
+      <span class="tag n">${esc(c.dept||'-')}</span> <span class="tag g">${esc(c.job)}</span> <span class="tag a">${esc(c.level)}</span>
+      ${done?'<span class="tag g">✔ 면접 완료</span>':active?'<span class="tag a">진행 중</span>':'<span class="tag n">대기</span>'}
+      ${c.evalKey?'<span class="tag a">📄 평가표 등록됨</span>':''}
+      <div class="meta">${c.time?'🕐 '+fmtTime(c.time)+' · ':''}${c.place?'📍 '+esc(c.place):''}</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn primary sm" onclick="startCand('${c.k}')">${active?'▶ 이어하기':done?'다시 보기':'▶ 면접 시작'}</button>
+      ${c.evalKey?`<button class="btn ghost sm" onclick="printEvalKey('${esc(c.evalKey)}')">🖨 평가표 인쇄·PDF</button>`:''}
+      ${active&&!done?`<button class="btn amber sm" onclick="completeCand('${c.k}')">🏁 면접 완료</button>`:''}
+      <button class="btn plain sm" onclick="delCand('${c.k}')">삭제</button>
+    </div></div>`;
+  }).join('');
+}
+async function startCand(k){
+  try{
+    const st=await store();const g=await st.get(k);const c=JSON.parse(g.value);
+    S.activeCand=k;
+    /* 직무·직급 자동 적용 */
+    S.job=c.job;S.level=c.level;S.aiQ=null;S.aiQMeta=null;S.resumeQ=null;S.checkedQ={};S.customQ='';
+    selJob.value=c.job;
+    document.querySelectorAll('#lvBtns button').forEach(x=>x.classList.toggle('on',x.dataset.lv===c.level));
+    /* 평가표 기본정보 자동 입력 */
+    $('fName').value=c.name;$('fDept').value=c.dept||'';$('fRole').value=c.job;$('fLevel').value=c.level;
+    if(c.time)$('fDate').value=c.time.slice(0,10);
+    renderQuest();
+    go('guide');
+    toast(c.name+'님 면접 준비 — '+c.job+' '+c.level+' 기준으로 자동 설정되었습니다. 가이드 확인 후 ③ 질문으로 이동하세요.');
+  }catch(e){toast('대상자 정보를 불러오지 못했습니다');}
+}
+async function completeCand(k){
+  try{
+    const st=await store();const g=await st.get(k);const c=JSON.parse(g.value);
+    const d=collect();
+    if(!d.name)d.name=c.name;
+    if(!S.grade){if(!confirm('종합 판정(S~D)이 선택되지 않았습니다. 그래도 완료 처리할까요?'))return;}
+    const evalKey='eval:'+Date.now();
+    await st.set(evalKey,JSON.stringify(d));
+    c.status='완료';c.evalKey=evalKey;
+    await st.set(k,JSON.stringify(c));
+    S.activeCand=null;
+    toast(c.name+'님 면접 완료 — 평가표가 보관함에 저장되고 대상자에 연결되었습니다');
+    renderCand();go('cand');
+  }catch(e){console.error(e);toast('완료 처리에 실패했습니다');}
+}
+async function delCand(k){
+  if(!confirm('이 대상자를 삭제할까요? (연결된 평가표는 보관함에 남습니다)'))return;
+  try{const st=await store();await st.delete(k);if(S.activeCand===k)S.activeCand=null;renderCand();toast('삭제되었습니다');}
+  catch(e){toast('삭제에 실패했습니다');}
+}
+function renderCandBanner(){
+  const b=$('candBanner');if(!b)return;
+  if(!S.activeCand){b.innerHTML='';return;}
+  b.innerHTML=`<div class="card" style="border-left:4px solid var(--forest);display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 18px">
+    <b>🟢 진행 중: ${esc($('fName').value||'대상자')}님 (${esc(S.job||'-')} · ${esc(S.level||'-')})</b>
+    <span class="hint">작성을 마치면 완료 버튼을 눌러 주세요 — 평가표가 보관함에 저장되고 대상자 목록에 연결됩니다.</span>
+    <button class="btn amber" onclick="completeCand(S.activeCand)" style="margin-left:auto">🏁 면접 완료 · 보관함 저장</button>
+  </div>`;
+}
+
+/* ── 선택 질문지 인쇄 ── */
+function printQSheet(){
+  const list=checkedList();
+  const custom=customList();
+  if(!list.length&&!custom.length){toast('사용할 질문에 체크하거나 개인 추가 질문을 입력해 주세요');return;}
+  const byComp={};
+  list.forEach(v=>{(byComp[v.c||'기타']=byComp[v.c||'기타']||[]).push(v);});
+  custom.forEach(q=>{(byComp['개인 추가 질문']=byComp['개인 추가 질문']||[]).push({q,f:''});});
+  const name=$('fName').value||'　　　　　';
+  let body='';
+  Object.entries(byComp).forEach(([c,qs])=>{
+    body+=`<div class="p-sec">■ ${esc(c)}</div><table class="p">`;
+    qs.forEach(v=>{body+=`<tr><td><b>Q.</b> ${esc(v.q)}${v.f?`<br><span style="font-size:9pt;color:#444">↳ ${esc(v.f)}</span>`:''}<div style="border-top:1px dotted #999;margin-top:26px;padding-top:2px;font-size:8.5pt;color:#777">답변 메모 (상황 · 과제 · 행동 · 결과)</div></td></tr>`;});
+    body+='</table>';
+  });
+  printDoc(`<div class="p-title">면접 질문지</div>
+  <table class="p"><tr><th style="width:14%">지원자</th><td>${esc(name)}</td><th style="width:14%">직무/직급</th><td>${esc(S.job||'-')} / ${esc(S.level||'-')}</td><th style="width:12%">면접일</th><td>${esc($('fDate').value||'')}</td></tr></table>
+  ${body}
+  <p style="font-size:8.5pt;color:#666;margin-top:8px">※ 채용절차법 준수: 직무와 무관한 개인정보(가족·혼인·출신지역·신체조건 등) 질문 금지</p>`);
+}
+
+/* ── 면접 타이머 ── */
+let tmSec=0,tmRun=null;
+function tmDisp(){
+  const d=$('timerDisp');if(!d)return;
+  const m=String(Math.floor(tmSec/60)).padStart(2,'0'),s2=String(tmSec%60).padStart(2,'0');
+  d.textContent=m+':'+s2;
+  d.style.color=tmSec>=2700?'var(--red)':tmSec>=2100?'var(--amber)':'var(--ink)';
+}
+$('btnTimer').onclick=()=>{
+  if(tmRun){clearInterval(tmRun);tmRun=null;$('btnTimer').textContent='재개';}
+  else{tmRun=setInterval(()=>{tmSec++;tmDisp();},1000);$('btnTimer').textContent='일시정지';}
+};
+$('btnTimerReset').onclick=()=>{clearInterval(tmRun);tmRun=null;tmSec=0;tmDisp();$('btnTimer').textContent='시작';};
+
+/* 오늘 날짜 기본값 */
+$('fDate').value=new Date().toISOString().slice(0,10);
+/* 시작 페이지: 면접 대상자 */
+go('cand');
+</script>
+</body>
+</html>
