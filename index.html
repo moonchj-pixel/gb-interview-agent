@@ -399,7 +399,8 @@ ul.dot li{margin-bottom:6px}
   </div>
 
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-    <button class="btn primary" id="btnPrint">🖨 인쇄 · PDF 저장</button>
+    <button class="btn primary" id="btnPrint">🖨 인쇄 · PDF (전체)</button>
+    <button class="btn ghost" id="btnPrintReport">📋 보고용 인쇄 (요약)</button>
     <button class="btn amber" id="btnSave">💾 보관함에 저장</button>
     <button class="btn plain" id="btnClear">새 평가 시작</button>
   </div>
@@ -1217,6 +1218,8 @@ table.p{width:100%;border-collapse:collapse;margin-bottom:12px}
 table.p th,table.p td{border:1px solid #444;padding:6px 8px;vertical-align:top;text-align:left}
 table.p th{background:#DDE1E6;font-weight:700;text-align:center;white-space:nowrap}
 table.p tr{page-break-inside:avoid}
+table.p.split, table.p.split tr, table.p.split td{page-break-inside:auto}
+table.p.split th{page-break-after:avoid}
 .p-sec{font-weight:900;margin:14px 0 6px;font-size:11.5pt}
 .p-pre{white-space:pre-wrap;min-height:34px}
 .p-grade{border:1px solid #444;background:#E8F1F5;padding:10px;text-align:center;font-weight:700}
@@ -1242,7 +1245,8 @@ function fallbackPrint(inner){
   window.print();
 }
 
-function buildPrintHtml(d){
+function buildPrintHtml(d,mode){
+  const report=(mode==='report');
   const rows=d.targets.map(c=>{
     const r=d.ratings[c.name];
     const rTxt=r==='NA'?'0 (경험없음)':(r?r+' / 5':'—');
@@ -1259,7 +1263,7 @@ function buildPrintHtml(d){
   const an=d.analysis;
   const anLi=x=>(x||[]).map(v=>'· '+esc(typeof v==='string'?v:v.q)).join('<br>');
   const anBlock=an?`<div class="p-sec">Ⅱ. AI 지원자 분석 (참고 자료 — 면접관 검토 완료 후 활용)</div>
-  <table class="p"><tr><th style="width:16%">구분</th><th>내용</th></tr>
+  <table class="p split"><tr><th style="width:16%">구분</th><th>내용</th></tr>
   <tr><td style="text-align:center;background:#EEE">종합 요약</td><td>${esc(an.summary||'')}</td></tr>
   <tr><td style="text-align:center;background:#EEE">강점</td><td>${anLi(an.strengths)}</td></tr>
   <tr><td style="text-align:center;background:#EEE">리스크·보완점</td><td>${anLi(an.risks)}</td></tr>
@@ -1267,15 +1271,15 @@ function buildPrintHtml(d){
   ${an.onboarding?`<tr><td style="text-align:center;background:#EEE">온보딩 제안</td><td>${esc(an.onboarding)}</td></tr>`:''}
   ${an.fit?`<tr><td style="text-align:center;background:#EEE">판정 참고</td><td>${esc(an.fit)}</td></tr>`:''}</table>`:'';
   return `
-  <div class="p-title">실무진 면접 요약표</div>
+  <div class="p-title">실무진 면접 요약표${report?' (보고용)':''}</div>
   <p style="margin-bottom:6px">● 면접 일정 : ${esc(d.date||'')}</p>
   <table class="p"><tr><th style="width:14%">지원자 성명</th><th style="width:16%">채용부서</th><th style="width:18%">담당업무</th><th style="width:12%">고용형태</th><th>채용사유</th></tr>
   <tr><td>${esc(d.name)}</td><td>${esc(d.dept)}</td><td>${esc(d.role)}${d.level?' ('+esc(d.level)+')':''}</td><td>${esc(d.type)}</td><td>${esc(d.reason)}</td></tr></table>
   <div class="p-sec">Ⅰ. 실무진면접 (면접자 : ${esc(d.interviewer||'　　　　')} / 면접 요약표 작성 : ${esc(d.writer||'　　　　')})</div>
   ${rows?`<table class="p"><tr><th style="width:9%">구분</th><th>역량명 · 정의</th><th style="width:13%">평가</th><th style="width:28%">관찰 메모</th></tr>${rows}</table>`:''}
   ${scoreLine}
-  ${usedBlock}
-  <table class="p"><tr><th style="width:16%">구분</th><th>내용</th></tr>
+  ${report?'':usedBlock}
+  <table class="p split"><tr><th style="width:16%">구분</th><th>내용</th></tr>
   <tr><td style="text-align:center;background:#EEE">면접 평가<br>코멘트</td><td>
     <b>* 업무(직무) 적합성</b> — 채용 포지션에 맞는 직무역량 보유 여부 / 필요한 업무 스킬 보유 여부<div class="p-pre">${esc(d.cJob)}</div>
     <b>* 조직 적합성</b> — 조직 내 팀원, 협업 부서, 업무관련자와 문제없이 업무 수행이 가능한 인재인지<div class="p-pre">${esc(d.cOrg)}</div>
@@ -1286,12 +1290,15 @@ function buildPrintHtml(d){
   ${anBlock}`;
 }
 $('btnPrint').onclick=()=>{
-  printDoc(buildPrintHtml(collect()));
+  printDoc(buildPrintHtml(collect(),'full'));
 };
-async function printEvalKey(evalKey){
+$('btnPrintReport').onclick=()=>{
+  printDoc(buildPrintHtml(collect(),'report'));
+};
+async function printEvalKey(evalKey,mode){
   try{
     const st=await store();const g=await st.get(evalKey);
-    printDoc(buildPrintHtml(JSON.parse(g.value)));
+    printDoc(buildPrintHtml(JSON.parse(g.value),mode||'full'));
   }catch(e){toast('평가표를 불러오지 못했습니다 — 세션 저장 모드에서는 화면을 닫으면 데이터가 사라집니다');}
 }
 
@@ -1418,7 +1425,8 @@ async function renderBox(){
     <button class="btn plain sm" onclick="lockBox()">🔒 잠그기</button>
     <button class="btn plain sm" onclick="changePw()">비밀번호 변경</button>
     <button class="btn ghost sm" onclick="exportEvals()" style="margin-left:auto">⬇ JSON 내보내기</button>
-    <label class="btn ghost sm" style="cursor:pointer">⬆ 가져오기<input type="file" accept="application/json" style="display:none" onchange="importEvals(this)"></label></div>`;
+    <label class="btn ghost sm" style="cursor:pointer">⬆ 가져오기<input type="file" accept="application/json" style="display:none" onchange="importEvals(this)"></label>
+    <button class="btn plain sm" onclick="clearAllEvals()" style="color:var(--red)">🗑 전체 비우기</button></div>`;
   list.hidden=false;
   const r=await st.list('eval:');
   const keys=(r&&r.keys)||[];
@@ -1506,8 +1514,40 @@ async function loadEval(k){
     renderQuest();go('eval');toast('평가를 불러왔습니다');
   }catch(e){toast('불러오기에 실패했습니다');}
 }
+async function unlinkEval(st,evalKey){
+  /* 이 평가표를 참조하는 대상자의 연결 해제 */
+  try{
+    const r=await st.list('cand:');
+    for(const ck of (r.keys||[])){
+      try{
+        const g=await st.get(ck);const c=JSON.parse(g.value);
+        if(c.evalKey===evalKey){c.evalKey='';await st.set(ck,JSON.stringify(c));}
+      }catch(e){}
+    }
+  }catch(e){}
+}
 async function delEval(k){
-  try{const st=await store();await st.delete(k);renderBox();toast('삭제되었습니다');}catch(e){toast('삭제에 실패했습니다');}
+  try{const st=await store();await st.delete(k);await unlinkEval(st,k);renderBox();toast('삭제되었습니다 (대상자 연결도 해제됨)');}catch(e){toast('삭제에 실패했습니다');}
+}
+async function clearAllEvals(){
+  try{
+    const st=await store();const r=await st.list('eval:');
+    const keys=r.keys||[];
+    if(!keys.length){toast('삭제할 평가가 없습니다');return;}
+    if(!confirm('보관함의 평가 '+keys.length+'건을 전부 삭제할까요?\n(팀 공유 모드에서는 모든 면접관에게서 삭제됩니다. 되돌릴 수 없습니다)'))return;
+    for(const k of keys){await st.delete(k);await unlinkEval(st,k);}
+    renderBox();toast('평가 '+keys.length+'건을 모두 삭제했습니다');
+  }catch(e){toast('전체 삭제에 실패했습니다');}
+}
+async function clearAllCands(){
+  try{
+    const st=await store();const r=await st.list('cand:');
+    const keys=r.keys||[];
+    if(!keys.length){toast('삭제할 대상자가 없습니다');return;}
+    if(!confirm('면접 대상자 '+keys.length+'명을 전부 삭제할까요?\n(연결된 평가표는 보관함에 남습니다. 되돌릴 수 없습니다)'))return;
+    for(const k of keys){await st.delete(k);}
+    S.activeCand=null;renderCand();toast('대상자 '+keys.length+'명을 모두 삭제했습니다');
+  }catch(e){toast('전체 삭제에 실패했습니다');}
 }
 async function exportEvals(){
   try{
@@ -1570,6 +1610,7 @@ async function renderCand(){
     <span style="margin-left:auto;display:flex;gap:6px">
       <button class="btn ghost sm" onclick="exportEvals()">⬇ 백업(JSON)</button>
       <label class="btn ghost sm" style="cursor:pointer">⬆ 복원<input type="file" accept="application/json" style="display:none" onchange="importEvals(this);setTimeout(renderCand,300)"></label>
+      <button class="btn plain sm" onclick="clearAllCands()" style="color:var(--red)">🗑 전체 삭제</button>
     </span></div>`;
   if(items===null){box.innerHTML=bar+'<p class="hint">이 환경에서는 저장소를 사용할 수 없습니다.</p>';return;}
   if(!items.length){box.innerHTML=bar+'<p class="hint">등록된 면접 대상자가 없습니다.</p>';return;}
@@ -1586,7 +1627,7 @@ async function renderCand(){
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
       <button class="btn primary sm" onclick="startCand('${c.k}')">${active?'▶ 이어하기':done?'다시 보기':'▶ 면접 시작'}</button>
-      ${c.evalKey?`<button class="btn ghost sm" onclick="printEvalKey('${esc(c.evalKey)}')">🖨 평가표 인쇄·PDF</button>`:''}
+      ${c.evalKey?`<button class="btn ghost sm" onclick="printEvalKey('${esc(c.evalKey)}','full')">🖨 전체 인쇄</button><button class="btn ghost sm" onclick="printEvalKey('${esc(c.evalKey)}','report')">📋 보고용 인쇄</button>`:''}
       ${active&&!done?`<button class="btn amber sm" onclick="completeCand('${c.k}')">🏁 면접 완료</button>`:''}
       <button class="btn plain sm" onclick="delCand('${c.k}')">삭제</button>
     </div></div>`;
