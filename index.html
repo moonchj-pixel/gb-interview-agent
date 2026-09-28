@@ -169,7 +169,7 @@ ul.dot li{margin-bottom:6px}
     <button class="rail-step" data-page="eval"><span class="num">四</span>면접 평가표</button>
     <button class="rail-step" data-page="box"><span class="num">五</span>평가 보관함</button>
   </div>
-  <div class="rail-foot"><span id="storeFoot">연결 확인 중…</span><br>GB 역량사전 v2 · 직무역량사전 v3 기반<br>채용절차법 제4조 준수<br>v1.3 · 2026-09-28</div>
+  <div class="rail-foot"><span id="storeFoot">연결 확인 중…</span><br>GB 역량사전 v2 · 직무역량사전 v3 기반<br>채용절차법 제4조 준수<br>v1.3.1 · 2026-09-28</div>
 </nav>
 
 <main>
@@ -1447,6 +1447,8 @@ const localStore={
 let PERSIST=null; /* 'shared'=팀 공유 | 'cloud'=계정 | 'local'=브라우저 | 'session'=세션 임시 */
 let SHARED_ERR=''; /* ''=정상 | 'code'=팀코드 미확인 | 'server:…'=서버 오류 | 'file'=파일로 열림 */
 let STORE_INIT=null;
+let SHARED_DIAG=''; /* 공유 저장소 미연결 사유(진단용) */
+const validCode=c=>/^[\x21-\x7E]+$/.test(c||'');   /* 영문·숫자·기호만 (한글·공백 불가) */
 async function store(){
   if(!PERSIST){if(!STORE_INIT)STORE_INIT=initStore();await STORE_INIT;}
   return {shared:sharedStore,cloud:window.storage,local:localStore,session:memStore}[PERSIST];
@@ -1457,13 +1459,17 @@ async function initStore(){
   if(location.protocol==='file:')SHARED_ERR='file';
   if(onWeb){
     try{TEAM.code=localStorage.getItem('gbteam')||'';}catch(e){}
+    if(TEAM.code&&!validCode(TEAM.code)){TEAM.code='';try{localStorage.removeItem('gbteam');}catch(e){}}
     try{
       let p=await sharedStore.ping();
-      let tries=0;
+      let tries=0,hint='';
       while(p===401&&tries<3){
-        const c=prompt((tries?'⚠ 팀 코드가 올바르지 않습니다. 다시 입력해 주세요.\n\n':'')+'팀 공유 저장소 접속 코드를 입력해 주세요.\n(인재경영팀 안내 코드 — 확인되면 이 브라우저에 저장되어 다음부터는 묻지 않습니다)');
+        const c=prompt(hint+'팀 공유 저장소 접속 코드를 입력해 주세요.\n(인재경영팀 안내 코드 — 확인되면 이 브라우저에 저장되어 다음부터는 묻지 않습니다)');
         if(!c||!c.trim())break;
-        TEAM.code=c.trim();p=await sharedStore.ping();tries++;
+        const v=c.trim();tries++;
+        if(!validCode(v)){hint='⚠ 한글 또는 공백이 입력되었습니다. [한/영] 키로 영문 상태로 바꾼 뒤 다시 입력해 주세요.\n\n';continue;}
+        TEAM.code=v;p=await sharedStore.ping();
+        hint='⚠ 팀 코드가 올바르지 않습니다. 다시 입력해 주세요.\n\n';
       }
       if(p===true){
         try{localStorage.setItem('gbteam',TEAM.code);}catch(e){}   /* 확인된 코드만 저장 */
@@ -1473,7 +1479,7 @@ async function initStore(){
       }
       try{localStorage.removeItem('gbteam');}catch(e){}               /* 틀린 코드는 남기지 않음 */
       SHARED_ERR=(p===401)?'code':'server:'+String(p).replace(/^err:/,'');
-    }catch(e){/* 공유 저장소가 없는 환경(미리보기 등) — 경고 없이 아래로 */}
+    }catch(e){SHARED_DIAG=(e&&e.message==='nodeploy')?'공유 서버 없음':'연결 오류: '+((e&&e.message)||e);}
   }
   try{
     if(!window.storage)throw new Error('no storage');
@@ -1514,7 +1520,7 @@ function refreshPage(){
 }
 function renderStoreBanner(){
   const b=$('storeBanner'),ft=$('storeFoot');
-  if(ft)ft.textContent=PERSIST==='shared'?'🟢 팀 공유 저장소 연결됨':SHARED_ERR?'🔴 팀 공유 미연결 — 이 PC에만 저장':'⚪ 개별 저장 모드';
+  if(ft)ft.textContent=PERSIST==='shared'?'🟢 팀 공유 저장소 연결됨':SHARED_ERR?'🔴 팀 공유 미연결 — 이 PC에만 저장':'⚪ 개별 저장 모드'+(SHARED_DIAG?' ('+SHARED_DIAG+')':'');
   if(!b)return;
   let msg='',btn='';
   if(SHARED_ERR==='code'){
@@ -1761,6 +1767,7 @@ async function renderCand(){
   const bar=`<div class="card" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 18px;${PERSIST==='session'?'border-color:#EAD9AE;background:#FDF6E9':''}">
     <span style="font-size:.85rem">${dot} <b>저장 상태:</b> ${label}</span>
     <span style="margin-left:auto;display:flex;gap:6px">
+      ${(PERSIST!=='shared'&&/^https?:$/.test(location.protocol))?'<button class="btn primary sm" onclick="retryShared()">🔑 팀 코드 다시 입력</button>':''}
       <button class="btn ghost sm" onclick="renderCand();toast('목록을 새로 불러왔습니다')">🔄 새로고침</button>
       <button class="btn ghost sm" onclick="exportEvals()">⬇ 백업(JSON)</button>
       <label class="btn ghost sm" style="cursor:pointer">⬆ 복원<input type="file" accept="application/json" style="display:none" onchange="importEvals(this);setTimeout(renderCand,300)"></label>
