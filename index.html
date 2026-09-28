@@ -169,10 +169,11 @@ ul.dot li{margin-bottom:6px}
     <button class="rail-step" data-page="eval"><span class="num">四</span>면접 평가표</button>
     <button class="rail-step" data-page="box"><span class="num">五</span>평가 보관함</button>
   </div>
-  <div class="rail-foot">GB 역량사전 v2 · 직무역량사전 v3 기반<br>채용절차법 제4조 준수</div>
+  <div class="rail-foot"><span id="storeFoot">연결 확인 중…</span><br>GB 역량사전 v2 · 직무역량사전 v3 기반<br>채용절차법 제4조 준수<br>v1.3 · 2026-09-28</div>
 </nav>
 
 <main>
+<div id="storeBanner"></div>
 <!-- ═══════════ ⓪ 면접 대상자 ═══════════ -->
 <section id="page-cand">
   <h2 class="page-title">면접 대상자</h2>
@@ -399,8 +400,9 @@ ul.dot li{margin-bottom:6px}
   </div>
 
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-    <button class="btn primary" id="btnPrint">🖨 인쇄 · PDF (전체)</button>
-    <button class="btn ghost" id="btnPrintReport">📋 보고용 인쇄 (요약)</button>
+    <button class="btn primary" id="btnPdf">⬇ PDF 저장 (전체)</button>
+    <button class="btn ghost" id="btnPdfReport">⬇ PDF 저장 (보고용)</button>
+    <button class="btn ghost" id="btnPrint">🖨 인쇄</button>
     <button class="btn amber" id="btnSave">💾 보관함에 저장</button>
     <button class="btn plain" id="btnClear">새 평가 시작</button>
   </div>
@@ -1240,6 +1242,88 @@ function printDoc(inner){
     },300);
   }catch(e){fallbackPrint(inner);}
 }
+/* ══════════ PDF 직접 저장 (인쇄창 없이 .pdf 파일 다운로드) ══════════
+   방식: PDF 전용 문서(iframe)에 내용만 그려 캡처 → 표의 행 경계에서 A4 페이지를 나눠 PDF로 조립
+   (앱 화면 레이아웃과 완전히 분리 → 위치 어긋남·백지 없음, 행 중간 잘림 없음) */
+const PDF_W=703;                         /* 본문 폭 186mm (A4 210mm - 좌우 여백 12mm×2) @96dpi */
+const PX_PER_MM=PDF_W/186;
+const PAGE_H=Math.floor(273*PX_PER_MM);  /* 본문 높이 273mm (297mm - 상하 여백 12mm×2) */
+const PDF_EXTRA_CSS=`html,body{margin:0;padding:0;background:#fff;width:${PDF_W}px}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR','Noto Sans CJK KR',sans-serif}
+.p-grade{margin-bottom:12px}`;
+function loadScript(src){return new Promise((res,rej)=>{const x=document.createElement('script');x.src=src;x.onload=res;x.onerror=rej;document.head.appendChild(x);});}
+async function tryLoad(srcs,chk){if(chk())return true;for(const u of srcs){try{await loadScript(u);if(chk())return true;}catch(e){}}return false;}
+async function ensurePdfLibs(){
+  const h=await tryLoad(['html2canvas.min.js','https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'],()=>!!window.html2canvas);
+  const j=await tryLoad(['jspdf.umd.min.js','https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js'],()=>!!(window.jspdf&&window.jspdf.jsPDF));
+  return h&&j;
+}
+/* 페이지 나눔 지점: 표 행·제목·판정 박스의 아래 경계만 사용 (제목·표 머리행 바로 뒤에서는 나누지 않음) */
+function pdfBreaks(doc,total){
+  const top=doc.body.getBoundingClientRect().top;
+  const bot=el=>Math.round(el.getBoundingClientRect().bottom-top);
+  const cands=new Set([total]);
+  doc.querySelectorAll('tr,.p-grade,table,p').forEach(el=>cands.add(bot(el)));
+  doc.querySelectorAll('tr').forEach(tr=>{if(tr.querySelector('th')&&!tr.querySelector('td'))cands.delete(bot(tr));});
+  doc.querySelectorAll('.p-sec,.p-title').forEach(el=>cands.delete(bot(el)));
+  const sorted=[...cands].filter(v=>v>0&&v<=total).sort((x,y)=>x-y);
+  const slices=[];let y=0;
+  while(y<total-1){
+    const lim=y+PAGE_H;
+    if(lim>=total){slices.push([y,total]);break;}
+    let bp=0;for(const c of sorted){if(c>y+40&&c<=lim)bp=c;}
+    if(!bp)bp=lim;               /* 한 행이 한 쪽보다 긴 예외적인 경우에만 행 중간에서 나눔 */
+    slices.push([y,bp]);y=bp;
+  }
+  return slices;
+}
+function pdfName(d,mode){
+  const nm=String(d.name||'지원자').replace(/[\\/:*?"<>|]/g,'').trim()||'지원자';
+  const dt=(d.date||new Date().toISOString().slice(0,10)).replace(/-/g,'');
+  return '면접평가표'+(mode==='report'?'(보고용)':'')+'_'+nm+'_'+dt+'.pdf';
+}
+let PDF_BUSY=false;
+async function buildPdf(inner){
+  if(!await ensurePdfLibs())throw new Error('lib');
+  const f=document.createElement('iframe');
+  f.style.cssText='position:fixed;left:-10000px;top:0;width:'+PDF_W+'px;height:200px;border:0;visibility:visible';
+  document.body.appendChild(f);
+  try{
+    const d=f.contentDocument;
+    d.open();d.write('<!DOCTYPE html><html><head><meta charset="utf-8"><style>'+PRINT_CSS+PDF_EXTRA_CSS+'</style></head><body>'+inner+'</body></html>');d.close();
+    try{await d.fonts.ready;}catch(e){}
+    await new Promise(r=>setTimeout(r,60));
+    const total=Math.ceil(d.body.scrollHeight);
+    f.style.height=total+'px';
+    await new Promise(r=>setTimeout(r,30));
+    const slices=pdfBreaks(d,total);
+    const scale=Math.min(2,30000/total);
+    const canvas=await window.html2canvas(d.body,{scale,backgroundColor:'#ffffff',width:PDF_W,height:total,windowWidth:PDF_W,windowHeight:total,logging:false});
+    const pdf=new window.jspdf.jsPDF({unit:'mm',format:'a4',orientation:'portrait'});
+    slices.forEach(([a,b],i)=>{
+      const pc=document.createElement('canvas');
+      pc.width=canvas.width;pc.height=Math.max(1,Math.round((b-a)*scale));
+      const g=pc.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,pc.width,pc.height);
+      g.drawImage(canvas,0,Math.round(a*scale),canvas.width,pc.height,0,0,pc.width,pc.height);
+      if(i)pdf.addPage();
+      pdf.addImage(pc.toDataURL('image/jpeg',0.82),'JPEG',12,12,186,(b-a)/PX_PER_MM,undefined,'FAST');
+    });
+    return {pdf,pages:slices.length};
+  }finally{f.remove();}
+}
+async function savePdf(inner,filename){
+  if(PDF_BUSY){toast('PDF를 만드는 중입니다. 잠시만 기다려 주세요');return;}
+  PDF_BUSY=true;toast('PDF 파일을 만드는 중입니다…');
+  try{
+    const {pdf,pages}=await buildPdf(inner);
+    pdf.save(filename);
+    toast('PDF 저장 완료 ('+pages+'쪽) — 다운로드 폴더의 '+filename);
+  }catch(e){
+    console.error('[PDF]',e);
+    toast('PDF를 바로 만들지 못해 인쇄창으로 엽니다 — 대상을 "PDF로 저장"으로 선택하세요');
+    printDoc(inner);
+  }finally{PDF_BUSY=false;}
+}
 function fallbackPrint(inner){
   $('printArea').innerHTML=inner;
   window.print();
@@ -1252,7 +1336,8 @@ function buildPrintHtml(d,mode){
     const rTxt=r==='NA'?'0 (경험없음)':(r?r+' / 5':'—');
     return `<tr><td style="text-align:center">${esc(c.cat)}</td><td><b>${esc(c.name)}</b><br><span style="font-size:8.5pt;color:#333">${esc(c.def||'')}</span></td><td style="text-align:center;white-space:nowrap">${rTxt}</td><td>${esc(d.notes[c.name]||'')}</td></tr>`;
   }).join('');
-  const gradeLine=['S','A','B','C','D'].map(g=>`${d.grade===g?'■':'□'} ${GRADES[g]}`).join(' &nbsp;&nbsp; ');
+  const gl=g=>`${d.grade===g?'■':'□'} ${GRADES[g]}`;
+  const gradeLine=['S','A','B'].map(gl).join(' &nbsp;&nbsp;&nbsp; ')+'<br>'+['C','D'].map(gl).join(' &nbsp;&nbsp;&nbsp; ');
   const sc=scoreOf(d.targets,d.ratings);
   const scoreLine=sc.rated?`<table class="p"><tr><th>공통 역량 평균</th><th>역할 역량 평균</th><th>직무 역량 평균</th><th>종합 평균</th></tr>
     <tr><td style="text-align:center">${sc.c??'—'}</td><td style="text-align:center">${sc.r??'—'}</td><td style="text-align:center">${sc.j??'—'}</td><td style="text-align:center"><b>${sc.total??'—'} / 5</b>${sc.na?` (경험없음 ${sc.na}개 제외)`:''}</td></tr></table>`:'';
@@ -1280,26 +1365,31 @@ function buildPrintHtml(d,mode){
   ${scoreLine}
   ${report?'':usedBlock}
   <table class="p split"><tr><th style="width:16%">구분</th><th>내용</th></tr>
-  <tr><td style="text-align:center;background:#EEE">면접 평가<br>코멘트</td><td>
-    <b>* 업무(직무) 적합성</b> — 채용 포지션에 맞는 직무역량 보유 여부 / 필요한 업무 스킬 보유 여부<div class="p-pre">${esc(d.cJob)}</div>
-    <b>* 조직 적합성</b> — 조직 내 팀원, 협업 부서, 업무관련자와 문제없이 업무 수행이 가능한 인재인지<div class="p-pre">${esc(d.cOrg)}</div>
-    <b>* 회사 적합성</b> — 핵심가치 부합 여부 (창의적 사고 / 소통과 협업 / 고객중심 / 긍정과 열정)<div class="p-pre">${esc(d.cCo)}</div>
-    <b>* 면접 대상자의 장점과 단점</b><div class="p-pre">${esc(d.cSW)}</div></td></tr>
-  <tr><td style="text-align:center;background:#EEE">대표이사 면접 시<br>고려/평가<br>요청사항</td><td><div class="p-pre" style="min-height:70px">${esc(d.cCEO)}</div></td></tr></table>
+  <tr><td rowspan="4" style="text-align:center;vertical-align:top;padding-top:14px;background:#EEE">면접 평가<br>코멘트</td><td>
+    <b>* 업무(직무) 적합성</b> — 채용 포지션에 맞는 직무역량 보유 여부 / 필요한 업무 스킬 보유 여부<div class="p-pre">${esc(d.cJob)}</div></td></tr>
+  <tr><td><b>* 조직 적합성</b> — 조직 내 팀원, 협업 부서, 업무관련자와 문제없이 업무 수행이 가능한 인재인지<div class="p-pre">${esc(d.cOrg)}</div></td></tr>
+  <tr><td><b>* 회사 적합성</b> — 핵심가치 부합 여부 (창의적 사고 / 소통과 협업 / 고객중심 / 긍정과 열정)<div class="p-pre">${esc(d.cCo)}</div></td></tr>
+  <tr><td><b>* 면접 대상자의 장점과 단점</b><div class="p-pre">${esc(d.cSW)}</div></td></tr>
+  <tr><td style="text-align:center;background:#EEE">대표이사<br>면접 시 고려/<br>평가 요청사항</td><td><div class="p-pre" style="min-height:70px">${esc(d.cCEO)}</div></td></tr></table>
   <div class="p-grade">${gradeLine}</div>
   ${anBlock}`;
 }
 $('btnPrint').onclick=()=>{
   printDoc(buildPrintHtml(collect(),'full'));
 };
-$('btnPrintReport').onclick=()=>{
-  printDoc(buildPrintHtml(collect(),'report'));
-};
+$('btnPdf').onclick=()=>{const d=collect();savePdf(buildPrintHtml(d,'full'),pdfName(d,'full'));};
+$('btnPdfReport').onclick=()=>{const d=collect();savePdf(buildPrintHtml(d,'report'),pdfName(d,'report'));};
 async function printEvalKey(evalKey,mode){
   try{
     const st=await store();const g=await st.get(evalKey);
     printDoc(buildPrintHtml(JSON.parse(g.value),mode||'full'));
-  }catch(e){toast('평가표를 불러오지 못했습니다 — 세션 저장 모드에서는 화면을 닫으면 데이터가 사라집니다');}
+  }catch(e){toast('평가표를 불러오지 못했습니다 — 삭제되었거나 저장소 연결이 끊겼을 수 있습니다');}
+}
+async function pdfEvalKey(evalKey,mode){
+  try{
+    const st=await store();const g=await st.get(evalKey);const d=JSON.parse(g.value);
+    savePdf(buildPrintHtml(d,mode||'full'),pdfName(d,mode||'full'));
+  }catch(e){toast('평가표를 불러오지 못했습니다 — 삭제되었거나 저장소 연결이 끊겼을 수 있습니다');}
 }
 
 /* ══════════ 저장/보관함 ══════════ */
@@ -1333,14 +1423,18 @@ const TEAM={code:''};
 const sharedStore={
  h(extra){const o=extra||{};if(TEAM.code)o['x-team-code']=TEAM.code;return o;},
  async ping(){
-   const r=await fetch(SHARED_API+'?op=ping',{headers:this.h()});
+   /* true=연결 | 401=팀코드 불일치 | 'err:…'=서버 오류 | throw=공유 저장소 없는 환경(파일·미리보기) */
+   const r=await fetch(SHARED_API+'?op=ping',{headers:this.h(),cache:'no-store'});
    if(r.status===401)return 401;
-   if(!r.ok)throw new Error('no shared');
-   const j=await r.json();return j&&j.ok?true:false;
+   if(r.status===404)throw new Error('nodeploy');
+   let j=null;try{j=await r.json();}catch(e){}
+   if(r.status>=500)return 'err:'+((j&&j.error)||('HTTP '+r.status));
+   if(!j)throw new Error('nodeploy');
+   return (r.ok&&j.ok)?true:'err:'+(j.error||('HTTP '+r.status));
  },
  async get(k){const r=await fetch(SHARED_API+'?key='+encodeURIComponent(k),{headers:this.h()});if(!r.ok)throw new Error('not found');return await r.json();},
  async set(k,v){const r=await fetch(SHARED_API,{method:'POST',headers:this.h({'Content-Type':'application/json'}),body:JSON.stringify({key:k,value:v})});if(!r.ok)throw new Error('set fail');return{key:k,value:v};},
- async delete(k){await fetch(SHARED_API+'?key='+encodeURIComponent(k),{method:'DELETE',headers:this.h()});return{key:k,deleted:true};},
+ async delete(k){const r=await fetch(SHARED_API+'?key='+encodeURIComponent(k),{method:'DELETE',headers:this.h()});if(!r.ok)throw new Error('delete fail');return{key:k,deleted:true};},
  async list(p){const r=await fetch(SHARED_API+'?prefix='+encodeURIComponent(p||''),{headers:this.h()});if(!r.ok)throw new Error('list fail');return await r.json();}
 };
 const localStore={
@@ -1351,37 +1445,95 @@ const localStore={
  async list(p){const keys=[];for(let i=0;i<localStorage.length;i++){const kk=localStorage.key(i);if(kk&&kk.startsWith('gbapp:'+(p||'')))keys.push(kk.slice(6));}return{keys};}
 };
 let PERSIST=null; /* 'shared'=팀 공유 | 'cloud'=계정 | 'local'=브라우저 | 'session'=세션 임시 */
+let SHARED_ERR=''; /* ''=정상 | 'code'=팀코드 미확인 | 'server:…'=서버 오류 | 'file'=파일로 열림 */
+let STORE_INIT=null;
 async function store(){
-  if(PERSIST==='shared')return sharedStore;
-  if(PERSIST==='cloud')return window.storage;
-  if(PERSIST==='local')return localStore;
-  if(PERSIST==='session')return memStore;
-  /* 1순위: 팀 공유 저장소 (Netlify 배포 시 자동 감지) */
-  try{TEAM.code=localStorage.getItem('gbteam')||'';}catch(e){}
-  try{
-    let p=await sharedStore.ping();
-    if(p===401){
-      const c=prompt('팀 공유 저장소 접속 코드를 입력해 주세요.\n(인재경영팀에서 안내받은 코드 — 한 번만 입력하면 저장됩니다)');
-      if(c&&c.trim()){
-        TEAM.code=c.trim();
-        try{localStorage.setItem('gbteam',TEAM.code);}catch(e){}
-        p=await sharedStore.ping();
+  if(!PERSIST){if(!STORE_INIT)STORE_INIT=initStore();await STORE_INIT;}
+  return {shared:sharedStore,cloud:window.storage,local:localStore,session:memStore}[PERSIST];
+}
+async function initStore(){
+  SHARED_ERR='';
+  const onWeb=(location.protocol==='http:'||location.protocol==='https:');
+  if(location.protocol==='file:')SHARED_ERR='file';
+  if(onWeb){
+    try{TEAM.code=localStorage.getItem('gbteam')||'';}catch(e){}
+    try{
+      let p=await sharedStore.ping();
+      let tries=0;
+      while(p===401&&tries<3){
+        const c=prompt((tries?'⚠ 팀 코드가 올바르지 않습니다. 다시 입력해 주세요.\n\n':'')+'팀 공유 저장소 접속 코드를 입력해 주세요.\n(인재경영팀 안내 코드 — 확인되면 이 브라우저에 저장되어 다음부터는 묻지 않습니다)');
+        if(!c||!c.trim())break;
+        TEAM.code=c.trim();p=await sharedStore.ping();tries++;
       }
-    }
-    if(p===true){PERSIST='shared';return sharedStore;}
-  }catch(e){}
-  /* 2~4순위 */
+      if(p===true){
+        try{localStorage.setItem('gbteam',TEAM.code);}catch(e){}   /* 확인된 코드만 저장 */
+        PERSIST='shared';
+        setTimeout(()=>{renderStoreBanner();syncLocalToShared();},0);
+        return;
+      }
+      try{localStorage.removeItem('gbteam');}catch(e){}               /* 틀린 코드는 남기지 않음 */
+      SHARED_ERR=(p===401)?'code':'server:'+String(p).replace(/^err:/,'');
+    }catch(e){/* 공유 저장소가 없는 환경(미리보기 등) — 경고 없이 아래로 */}
+  }
   try{
     if(!window.storage)throw new Error('no storage');
-    await window.storage.list('ping');PERSIST='cloud';return window.storage;
-  }catch(e){}
-  try{if(localStore.ok()){PERSIST='local';return localStore;}}catch(e){}
-  PERSIST='session';return memStore;
+    await window.storage.list('ping');PERSIST='cloud';
+  }catch(e){
+    try{PERSIST=localStore.ok()?'local':'session';}catch(e2){PERSIST='session';}
+  }
+  setTimeout(renderStoreBanner,0);
+}
+/* 팀 코드 재입력 / 재연결 */
+async function retryShared(){
+  PERSIST=null;STORE_INIT=null;TEAM.code='';
+  try{localStorage.removeItem('gbteam');}catch(e){}
+  await store();renderStoreBanner();refreshPage();
+}
+/* 이 PC(브라우저)에만 저장돼 있던 평가·대상자를 팀 저장소로 올림 — 원본은 백업 키로 보존 */
+async function syncLocalToShared(){
+  if(PERSIST!=='shared')return 0;
+  const keys=[];
+  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&(k.startsWith('gbapp:eval:')||k.startsWith('gbapp:cand:')))keys.push(k);}}catch(e){return 0;}
+  let n=0;
+  for(const lk of keys){
+    const k=lk.slice(6),v=localStorage.getItem(lk);
+    try{
+      let exists=false;try{await sharedStore.get(k);exists=true;}catch(e){}
+      if(!exists)await sharedStore.set(k,v);
+      localStorage.setItem('gbapp-bak:'+k,v);localStorage.removeItem(lk);n++;
+    }catch(e){/* 실패분은 로컬에 남겨 다음 접속 때 재시도 */}
+  }
+  if(n){toast('이 PC에만 저장돼 있던 기록 '+n+'건을 팀 공유 저장소로 올렸습니다');refreshPage();}
+  return n;
+}
+function refreshPage(){
+  const vis=[...document.querySelectorAll('main>section')].find(x=>!x.hidden);
+  if(!vis)return;
+  if(vis.id==='page-cand')renderCand();
+  if(vis.id==='page-box')renderBox();
+}
+function renderStoreBanner(){
+  const b=$('storeBanner'),ft=$('storeFoot');
+  if(ft)ft.textContent=PERSIST==='shared'?'🟢 팀 공유 저장소 연결됨':SHARED_ERR?'🔴 팀 공유 미연결 — 이 PC에만 저장':'⚪ 개별 저장 모드';
+  if(!b)return;
+  let msg='',btn='';
+  if(SHARED_ERR==='code'){
+    msg='팀 코드가 확인되지 않아 <b>이 PC에만 저장</b>되고 있습니다. 이 상태로 저장한 평가는 <b>인사담당자 등 다른 사람에게 보이지 않습니다.</b>';
+    btn='<button class="btn primary sm" onclick="retryShared()">팀 코드 입력</button>';
+  }else if(SHARED_ERR.startsWith('server:')){
+    msg='팀 공유 저장소에 연결하지 못했습니다 ('+esc(SHARED_ERR.slice(7))+'). 지금 저장하는 내용은 <b>이 PC에만 임시 저장</b>되며, 연결이 복구되면 다음 접속 시 <b>자동으로 팀 저장소에 올라갑니다.</b>';
+    btn='<button class="btn primary sm" onclick="retryShared()">다시 연결</button>';
+  }else if(SHARED_ERR==='file'){
+    msg='이 화면은 <b>PC에 저장된 파일</b>로 열려 있어 팀 공유가 되지 않습니다. 인재경영팀이 안내한 <b>사이트 주소(https://…)</b>로 접속해 주세요. 이 화면에서 작성한 평가는 백업 파일로 내보내 인사담당자에게 전달할 수 있습니다.';
+    btn='<button class="btn ghost sm" onclick="exportEvals()">⬇ 이 PC 기록 백업(JSON)</button>';
+  }
+  b.innerHTML=msg?`<div class="card" style="border:1.5px solid var(--red);background:#FDF3F1;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 18px">
+    <span style="font-size:.88rem;flex:1;min-width:260px">⚠ ${msg}</span>${btn}</div>`:'';
 }
 function persistLabel(){
   return PERSIST==='shared'?['🟢','팀 공유 저장소 — 모든 면접관이 같은 대상자 목록과 평가 보관함을 봅니다']
     :PERSIST==='cloud'?['🟢','계정에 영구 저장 중 — 다시 들어와도 유지됩니다']
-    :PERSIST==='local'?['🟡','이 브라우저에만 저장 중 — 다른 면접관의 평가는 보이지 않습니다 (백업/복원으로 공유)']
+    :PERSIST==='local'?[SHARED_ERR?'🔴':'🟡',SHARED_ERR?'팀 공유 미연결 — 이 PC에만 저장 중 (위 경고 참고)':'이 브라우저에만 저장 중 — 다른 면접관의 평가는 보이지 않습니다 (백업/복원으로 공유)']
     :['🟠','세션 임시 저장 — 화면을 닫으면 사라집니다. 아래 백업(JSON)으로 파일 보관을 권장합니다'];
 }
 
@@ -1424,6 +1576,7 @@ async function renderBox(){
   gate.innerHTML=notice+`<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
     <button class="btn plain sm" onclick="lockBox()">🔒 잠그기</button>
     <button class="btn plain sm" onclick="changePw()">비밀번호 변경</button>
+    <button class="btn ghost sm" onclick="renderBox();toast('보관함을 새로 불러왔습니다')">🔄 새로고침</button>
     <button class="btn ghost sm" onclick="exportEvals()" style="margin-left:auto">⬇ JSON 내보내기</button>
     <label class="btn ghost sm" style="cursor:pointer">⬆ 가져오기<input type="file" accept="application/json" style="display:none" onchange="importEvals(this)"></label>
     <button class="btn plain sm" onclick="clearAllEvals()" style="color:var(--red)">🗑 전체 비우기</button></div>`;
@@ -1608,6 +1761,7 @@ async function renderCand(){
   const bar=`<div class="card" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 18px;${PERSIST==='session'?'border-color:#EAD9AE;background:#FDF6E9':''}">
     <span style="font-size:.85rem">${dot} <b>저장 상태:</b> ${label}</span>
     <span style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn ghost sm" onclick="renderCand();toast('목록을 새로 불러왔습니다')">🔄 새로고침</button>
       <button class="btn ghost sm" onclick="exportEvals()">⬇ 백업(JSON)</button>
       <label class="btn ghost sm" style="cursor:pointer">⬆ 복원<input type="file" accept="application/json" style="display:none" onchange="importEvals(this);setTimeout(renderCand,300)"></label>
       <button class="btn plain sm" onclick="clearAllCands()" style="color:var(--red)">🗑 전체 삭제</button>
@@ -1627,7 +1781,7 @@ async function renderCand(){
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
       <button class="btn primary sm" onclick="startCand('${c.k}')">${active?'▶ 이어하기':done?'다시 보기':'▶ 면접 시작'}</button>
-      ${c.evalKey?`<button class="btn ghost sm" onclick="printEvalKey('${esc(c.evalKey)}','full')">🖨 전체 인쇄</button><button class="btn ghost sm" onclick="printEvalKey('${esc(c.evalKey)}','report')">📋 보고용 인쇄</button>`:''}
+      ${c.evalKey?`<button class="btn ghost sm" onclick="pdfEvalKey('${esc(c.evalKey)}','full')">⬇ PDF 전체</button><button class="btn ghost sm" onclick="pdfEvalKey('${esc(c.evalKey)}','report')">⬇ PDF 보고용</button><button class="btn plain sm" onclick="printEvalKey('${esc(c.evalKey)}','full')">🖨 인쇄</button>`:''}
       ${active&&!done?`<button class="btn amber sm" onclick="completeCand('${c.k}')">🏁 면접 완료</button>`:''}
       <button class="btn plain sm" onclick="delCand('${c.k}')">삭제</button>
     </div></div>`;
